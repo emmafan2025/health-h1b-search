@@ -1,12 +1,12 @@
+
 import { useState } from "react";
-import { Search, Filter, Building2, MapPin, DollarSign, Users, Upload } from "lucide-react";
+import { Search, Filter, Building2, MapPin, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SearchFilters from "@/components/SearchFilters";
 import SearchResults from "@/components/SearchResults";
-import DataImport from "@/components/DataImport";
 
 interface H1BCase {
   id: string;
@@ -66,20 +66,11 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [showImport, setShowImport] = useState(false);
-  const [allData, setAllData] = useState<H1BCase[]>(mockData);
   const [filteredData, setFilteredData] = useState<H1BCase[]>(mockData);
-
-  const handleDataImport = (importedData: H1BCase[]) => {
-    console.log("Importing data:", importedData);
-    setAllData(importedData);
-    setFilteredData(importedData);
-    setShowResults(true);
-  };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      const filtered = allData.filter(item =>
+      const filtered = mockData.filter(item =>
         item.employerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.location.toLowerCase().includes(searchQuery.toLowerCase())
@@ -96,7 +87,7 @@ const Index = () => {
   };
 
   const applyFilters = (filters: any) => {
-    let filtered = allData;
+    let filtered = mockData;
     
     if (searchQuery.trim()) {
       filtered = filtered.filter(item =>
@@ -127,19 +118,6 @@ const Index = () => {
     setFilteredData(filtered);
   };
 
-  if (showImport) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="w-full max-w-4xl mx-auto px-4">
-          <DataImport 
-            onDataImport={handleDataImport}
-            onClose={() => setShowImport(false)}
-          />
-        </div>
-      </div>
-    );
-  }
-
   if (showResults) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -148,21 +126,13 @@ const Index = () => {
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
             <div className="flex items-center gap-4 mb-4">
               <h1 className="text-2xl font-bold text-blue-800">H1B Healthcare Search</h1>
-              <div className="ml-auto flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowImport(true)}
-                >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Import Data
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowResults(false)}
-                >
-                  New Search
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                onClick={() => setShowResults(false)}
+                className="ml-auto"
+              >
+                New Search
+              </Button>
             </div>
             
             <div className="flex gap-4 items-center">
@@ -240,13 +210,6 @@ const Index = () => {
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Advanced Search
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => setShowImport(true)}
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                Import Excel Data
               </Button>
             </div>
           </CardContent>
