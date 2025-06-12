@@ -7,70 +7,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SearchFilters from "@/components/SearchFilters";
 import SearchResults from "@/components/SearchResults";
-
-interface H1BCase {
-  id: string;
-  employerName: string;
-  jobTitle: string;
-  location: string;
-  salary: number;
-  caseStatus: string;
-  submissionDate: string;
-  employerType: string;
-}
-
-const mockData: H1BCase[] = [
-  {
-    id: "1",
-    employerName: "Mayo Clinic",
-    jobTitle: "Clinical Research Scientist",
-    location: "Rochester, MN",
-    salary: 95000,
-    caseStatus: "Approved",
-    submissionDate: "2024-03-15",
-    employerType: "Hospital"
-  },
-  {
-    id: "2",
-    employerName: "Kaiser Permanente",
-    jobTitle: "Data Analyst - Healthcare",
-    location: "Oakland, CA",
-    salary: 87000,
-    caseStatus: "Approved",
-    submissionDate: "2024-02-20",
-    employerType: "Health Insurance"
-  },
-  {
-    id: "3",
-    employerName: "Johns Hopkins Hospital",
-    jobTitle: "Biomedical Engineer",
-    location: "Baltimore, MD",
-    salary: 102000,
-    caseStatus: "Approved",
-    submissionDate: "2024-01-10",
-    employerType: "Hospital"
-  },
-  {
-    id: "4",
-    employerName: "Pfizer Inc",
-    jobTitle: "Clinical Trial Manager",
-    location: "New York, NY",
-    salary: 115000,
-    caseStatus: "Approved",
-    submissionDate: "2024-04-05",
-    employerType: "Pharmaceutical"
-  }
-];
+import { h1bHealthcareData, dataStats, popularEmployers, type H1BCase } from "@/data/h1bData";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filteredData, setFilteredData] = useState<H1BCase[]>(mockData);
+  const [filteredData, setFilteredData] = useState<H1BCase[]>(h1bHealthcareData);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      const filtered = mockData.filter(item =>
+      const filtered = h1bHealthcareData.filter(item =>
         item.employerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.location.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,7 +34,7 @@ const Index = () => {
   };
 
   const applyFilters = (filters: any) => {
-    let filtered = mockData;
+    let filtered = h1bHealthcareData;
     
     if (searchQuery.trim()) {
       filtered = filtered.filter(item =>
@@ -224,25 +171,25 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
             <Building2 className="h-8 w-8 text-blue-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-800">1,250+</h3>
+            <h3 className="font-semibold text-gray-800">{dataStats.totalEmployers.toLocaleString()}+</h3>
             <p className="text-sm text-gray-600">Healthcare Employers</p>
           </Card>
           
           <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
             <Users className="h-8 w-8 text-green-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-800">15,600+</h3>
+            <h3 className="font-semibold text-gray-800">{dataStats.totalCases.toLocaleString()}+</h3>
             <p className="text-sm text-gray-600">H1B Cases</p>
           </Card>
           
           <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
             <MapPin className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-800">50</h3>
+            <h3 className="font-semibold text-gray-800">{dataStats.statesCovered}</h3>
             <p className="text-sm text-gray-600">States Covered</p>
           </Card>
           
           <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
             <DollarSign className="h-8 w-8 text-orange-600 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-800">$95K</h3>
+            <h3 className="font-semibold text-gray-800">${(dataStats.averageSalary / 1000).toFixed(0)}K</h3>
             <p className="text-sm text-gray-600">Average Salary</p>
           </Card>
         </div>
@@ -254,7 +201,7 @@ const Index = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap justify-center gap-3">
-              {["Mayo Clinic", "Kaiser Permanente", "Johns Hopkins", "Cleveland Clinic", "Pfizer", "Johnson & Johnson"].map((employer) => (
+              {popularEmployers.map((employer) => (
                 <Badge 
                   key={employer}
                   variant="outline" 
