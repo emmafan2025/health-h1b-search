@@ -37,26 +37,24 @@ const TopRankings = () => {
   ];
 
   return (
-    <div className="w-full bg-gray-50 py-12">
+    <div className="w-full bg-gray-50 py-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Top H1B Sponsors */}
           <Card className="bg-white shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg text-center text-blue-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base text-center text-blue-800">
                 Top H1B Sponsors in Healthcare 2025
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
+            <CardContent className="pt-0">
+              <div className="space-y-2">
                 {topSponsors.map((sponsor, index) => (
-                  <div key={sponsor} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="w-8 h-8 rounded-full flex items-center justify-center text-sm">
-                        {index + 1}
-                      </Badge>
-                      <span className="text-gray-700">{sponsor}</span>
-                    </div>
+                  <div key={sponsor} className="flex items-center gap-2">
+                    <Badge variant="outline" className="w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                      {index + 1}
+                    </Badge>
+                    <span className="text-gray-700 text-sm truncate">{sponsor}</span>
                   </div>
                 ))}
               </div>
@@ -65,21 +63,19 @@ const TopRankings = () => {
 
           {/* Top Job Titles */}
           <Card className="bg-white shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg text-center text-blue-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base text-center text-blue-800">
                 Top H1B Job Titles in Healthcare 2025
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
+            <CardContent className="pt-0">
+              <div className="space-y-2">
                 {topJobTitles.map((title, index) => (
-                  <div key={title} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="w-8 h-8 rounded-full flex items-center justify-center text-sm">
-                        {index + 1}
-                      </Badge>
-                      <span className="text-gray-700 text-sm">{title}</span>
-                    </div>
+                  <div key={title} className="flex items-center gap-2">
+                    <Badge variant="outline" className="w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                      {index + 1}
+                    </Badge>
+                    <span className="text-gray-700 text-sm truncate">{title}</span>
                   </div>
                 ))}
               </div>
@@ -88,21 +84,19 @@ const TopRankings = () => {
 
           {/* Top Cities */}
           <Card className="bg-white shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg text-center text-blue-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base text-center text-blue-800">
                 Top H1B Cities in Healthcare 2025
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
+            <CardContent className="pt-0">
+              <div className="space-y-2">
                 {topCities.map((city, index) => (
-                  <div key={city} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="w-8 h-8 rounded-full flex items-center justify-center text-sm">
-                        {index + 1}
-                      </Badge>
-                      <span className="text-gray-700">{city}</span>
-                    </div>
+                  <div key={city} className="flex items-center gap-2">
+                    <Badge variant="outline" className="w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0">
+                      {index + 1}
+                    </Badge>
+                    <span className="text-gray-700 text-sm truncate">{city}</span>
                   </div>
                 ))}
               </div>
