@@ -9,6 +9,7 @@ import SearchResults from "@/components/SearchResults";
 import Navigation from "@/components/Navigation";
 import TopRankings from "@/components/TopRankings";
 import { h1bHealthcareData, dataStats, popularEmployers, type H1BCase } from "@/data/h1bData";
+import EmailSubscription from "@/components/EmailSubscription";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -119,6 +120,9 @@ const Index = () => {
         
         {/* Add Rankings at bottom */}
         <TopRankings />
+        
+        {/* Add Email Subscription */}
+        <EmailSubscription />
       </div>
     );
   }
@@ -229,6 +233,9 @@ const Index = () => {
       
       {/* Add Rankings at bottom */}
       <TopRankings />
+      
+      {/* Add Email Subscription */}
+      <EmailSubscription />
     </div>
   );
 };
