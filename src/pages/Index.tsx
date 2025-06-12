@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Filter, Building2, MapPin, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import SearchFilters from "@/components/SearchFilters";
 import SearchResults from "@/components/SearchResults";
 import Navigation from "@/components/Navigation";
+import TopRankings from "@/components/TopRankings";
 import { h1bHealthcareData, dataStats, popularEmployers, type H1BCase } from "@/data/h1bData";
 
 const Index = () => {
@@ -116,6 +116,9 @@ const Index = () => {
           {/* Results */}
           <SearchResults data={filteredData} />
         </div>
+        
+        {/* Add Rankings at bottom */}
+        <TopRankings />
       </div>
     );
   }
@@ -223,6 +226,9 @@ const Index = () => {
           </Card>
         </div>
       </div>
+      
+      {/* Add Rankings at bottom */}
+      <TopRankings />
     </div>
   );
 };
