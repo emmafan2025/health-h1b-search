@@ -14,29 +14,34 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
-      let query = supabase
+      // Start with base query
+      const baseQuery = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
+      let query = baseQuery;
+
       // Apply search filters for soc_title and employer_name
       if (filters?.searchQuery && filters.searchQuery.trim()) {
-        query = query.or(`soc_title.ilike.%${filters.searchQuery}%,employer_name.ilike.%${filters.searchQuery}%`);
+        const searchTerm = filters.searchQuery.trim();
+        query = query.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
-        query = query.or(`worksite_city.ilike.%${filters.location}%,worksite_state.ilike.%${filters.location}%`);
+        const locationTerm = filters.location.trim();
+        query = query.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
       }
 
       // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
         query = query
           .gte('wage_rate_of_pay_from', filters.minSalary)
-          .lte('wage_rate_of_pay_to', filters.maxSalary);
+          .lte('wage_rate_of_pay_from', filters.maxSalary);
       } else if (filters?.minSalary) {
         query = query.gte('wage_rate_of_pay_from', filters.minSalary);
       } else if (filters?.maxSalary) {
-        query = query.lte('wage_rate_of_pay_to', filters.maxSalary);
+        query = query.lte('wage_rate_of_pay_from', filters.maxSalary);
       }
 
       // Apply job title filter
@@ -60,23 +65,20 @@ export const useH1BData = () => {
       }
 
       // Apply sorting
-      if (sortBy) {
-        query = query.order(sortBy, { ascending: sortOrder === 'asc' });
-      } else {
-        query = query.order('created_at', { ascending: false });
-      }
+      const sortColumn = sortBy || 'created_at';
+      query = query.order(sortColumn, { ascending: sortOrder === 'asc' });
 
       // Apply pagination
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
       query = query.range(from, to);
 
-      const { data: result, error, count } = await query;
+      const { data: result, error: queryError, count } = await query;
 
-      console.log('Query result:', { result, error, count });
+      console.log('Query result:', { result, error: queryError, count });
 
-      if (error) {
-        throw error;
+      if (queryError) {
+        throw queryError;
       }
 
       setData(result || []);
