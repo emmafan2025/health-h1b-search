@@ -84,31 +84,8 @@ export const useH1BData = () => {
         throw queryError;
       }
 
-      // Map database rows to H1BCase format using the database field names directly
-      const mappedData: H1BCase[] = (queryResult || []).map(item => ({
-        id: item.id,
-        case_number: item.CASE_NUMBER,
-        employer_name: item.EMPLOYER_NAME,
-        job_title: item.JOB_TITLE,
-        soc_code: item.SOC_CODE,
-        soc_title: item.SOC_TITLE,
-        full_time_position: item.FULL_TIME_POSITION,
-        begin_date: item.BEGIN_DATE,
-        end_date: item.END_DATE,
-        worksite_address1: item.WORKSITE_ADDRESS1,
-        worksite_city: item.WORKSITE_CITY,
-        worksite_county: item.WORKSITE_COUNTY,
-        worksite_state: item.WORKSITE_STATE,
-        worksite_postal_code: item.WORKSITE_POSTAL_CODE,
-        wage_rate_of_pay_from: item.WAGE_RATE_OF_PAY_FROM,
-        wage_rate_of_pay_to: item.WAGE_RATE_OF_PAY_TO,
-        wage_unit_of_pay: item.WAGE_UNIT_OF_PAY,
-        pw_wage_level: item.PW_WAGE_LEVEL,
-        year: item.Year,
-        quarter: item.Quarter,
-        trade_name_dba: item.TRADE_NAME_DBA,
-        created_at: item.created_at
-      }));
+      // Use data directly since field names now match
+      const mappedData: H1BCase[] = (queryResult || []) as H1BCase[];
       
       setData(mappedData);
       setTotalCount(count || 0);

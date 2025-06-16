@@ -1,26 +1,26 @@
 
 export interface H1BCase {
   id: number;
-  case_number?: string;
-  employer_name?: string;
-  job_title?: string;
-  soc_code?: string;
-  soc_title?: string;
-  full_time_position?: boolean;
-  begin_date?: string;
-  end_date?: string;
-  worksite_address1?: string;
-  worksite_city?: string;
-  worksite_county?: string;
-  worksite_state?: string;
-  worksite_postal_code?: string;
-  wage_rate_of_pay_from?: number;
-  wage_rate_of_pay_to?: number;
-  wage_unit_of_pay?: string;
-  pw_wage_level?: string;
-  year?: number;
-  quarter?: string;
-  trade_name_dba?: string;
+  CASE_NUMBER?: string;
+  EMPLOYER_NAME?: string;
+  JOB_TITLE?: string;
+  SOC_CODE?: string;
+  SOC_TITLE?: string;
+  FULL_TIME_POSITION?: boolean;
+  BEGIN_DATE?: string;
+  END_DATE?: string;
+  WORKSITE_ADDRESS1?: string;
+  WORKSITE_CITY?: string;
+  WORKSITE_COUNTY?: string;
+  WORKSITE_STATE?: string;
+  WORKSITE_POSTAL_CODE?: string;
+  WAGE_RATE_OF_PAY_FROM?: number;
+  WAGE_RATE_OF_PAY_TO?: number;
+  WAGE_UNIT_OF_PAY?: string;
+  PW_WAGE_LEVEL?: string;
+  Year?: number;
+  Quarter?: string;
+  TRADE_NAME_DBA?: string;
   created_at: string;
 }
 

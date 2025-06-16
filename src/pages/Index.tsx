@@ -34,19 +34,19 @@ const Index = () => {
     totalPages: Math.ceil(totalCount / pageSize)
   };
 
-  // Stats based on actual data
+  // Stats based on actual data - updated to use uppercase field names
   const dataStats = {
-    totalEmployers: new Set(h1bData.map(item => item.employer_name)).size,
+    totalEmployers: new Set(h1bData.map(item => item.EMPLOYER_NAME)).size,
     totalCases: totalCount,
-    statesCovered: new Set(h1bData.map(item => item.worksite_state)).size,
+    statesCovered: new Set(h1bData.map(item => item.WORKSITE_STATE)).size,
     averageSalary: h1bData.length > 0 ? 
-      h1bData.reduce((sum, item) => sum + (item.wage_rate_of_pay_from || 0), 0) / h1bData.length : 0
+      h1bData.reduce((sum, item) => sum + (item.WAGE_RATE_OF_PAY_FROM || 0), 0) / h1bData.length : 0
   };
 
-  // Popular employers from actual data
+  // Popular employers from actual data - updated to use uppercase field names
   const employerCounts = h1bData.reduce((acc, item) => {
-    if (item.employer_name) {
-      acc[item.employer_name] = (acc[item.employer_name] || 0) + 1;
+    if (item.EMPLOYER_NAME) {
+      acc[item.EMPLOYER_NAME] = (acc[item.EMPLOYER_NAME] || 0) + 1;
     }
     return acc;
   }, {} as Record<string, number>);
