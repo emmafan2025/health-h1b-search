@@ -7,24 +7,38 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SearchFilters from "@/components/SearchFilters";
 import SearchResults from "@/components/SearchResults";
+import PaginationControls from "@/components/PaginationControls";
+import SortControls from "@/components/SortControls";
 import Navigation from "@/components/Navigation";
 import TopRankings from "@/components/TopRankings";
 import EmailSubscription from "@/components/EmailSubscription";
 import { useH1BData } from "@/hooks/useH1BData";
-import { SearchFilters as SearchFiltersType } from "@/types/h1b";
+import { SearchFilters as SearchFiltersType, PaginationInfo } from "@/types/h1b";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [currentFilters, setCurrentFilters] = useState<SearchFiltersType>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [sortBy, setSortBy] = useState('WAGE_RATE_OF_PAY_FROM');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
-  const { data: h1bData, loading, error, refetch } = useH1BData();
+  const { data: h1bData, loading, error, totalCount, refetch } = useH1BData();
+
+  // Pagination info
+  const paginationInfo: PaginationInfo = {
+    currentPage,
+    pageSize,
+    totalCount,
+    totalPages: Math.ceil(totalCount / pageSize)
+  };
 
   // Stats based on actual data
   const dataStats = {
     totalEmployers: new Set(h1bData.map(item => item.EMPLOYER_NAME)).size,
-    totalCases: h1bData.length,
+    totalCases: totalCount,
     statesCovered: new Set(h1bData.map(item => item.WORKSITE_STATE)).size,
     averageSalary: h1bData.length > 0 ? 
       h1bData.reduce((sum, item) => sum + (item.WAGE_RATE_OF_PAY_FROM || 0), 0) / h1bData.length : 0
@@ -43,15 +57,19 @@ const Index = () => {
     .slice(0, 8)
     .map(([name]) => name);
 
+  const performSearch = (filters: SearchFiltersType, page: number = 1) => {
+    const combinedFilters = {
+      ...filters,
+      searchQuery: searchQuery.trim()
+    };
+    setCurrentFilters(filters);
+    setCurrentPage(page);
+    refetch(combinedFilters, page, pageSize, sortBy, sortOrder);
+    setShowResults(true);
+  };
+
   const handleSearch = () => {
-    if (searchQuery.trim() || Object.keys(currentFilters).length > 0) {
-      const filters = {
-        ...currentFilters,
-        searchQuery: searchQuery.trim()
-      };
-      refetch(filters);
-      setShowResults(true);
-    }
+    performSearch(currentFilters, 1);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -61,13 +79,22 @@ const Index = () => {
   };
 
   const applyFilters = (filters: SearchFiltersType) => {
-    const combinedFilters = {
-      ...filters,
-      searchQuery: searchQuery.trim()
-    };
-    setCurrentFilters(filters);
-    refetch(combinedFilters);
-    setShowResults(true);
+    performSearch(filters, 1);
+  };
+
+  const handlePageChange = (page: number) => {
+    performSearch(currentFilters, page);
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setPageSize(newPageSize);
+    performSearch(currentFilters, 1);
+  };
+
+  const handleSortChange = (newSortBy: string, newSortOrder: 'asc' | 'desc') => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder);
+    refetch(currentFilters, currentPage, pageSize, newSortBy, newSortOrder);
   };
 
   if (loading && !showResults) {
@@ -75,7 +102,7 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading H1B data...</p>
+          <p className="text-gray-600">正在加载 H1B 数据...</p>
         </div>
       </div>
     );
@@ -85,8 +112,8 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Error loading data: {error}</p>
-          <Button onClick={() => refetch()}>Try Again</Button>
+          <p className="text-red-600 mb-4">数据加载失败: {error}</p>
+          <Button onClick={() => refetch()}>重试</Button>
         </div>
       </div>
     );
@@ -100,13 +127,13 @@ const Index = () => {
           {/* Header with Search */}
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
             <div className="flex items-center gap-4 mb-4">
-              <h1 className="text-2xl font-bold text-blue-800">H1B Healthcare Search</h1>
+              <h1 className="text-2xl font-bold text-blue-800">美国医疗保健 H1B 搜索</h1>
               <Button
                 variant="outline"
                 onClick={() => setShowResults(false)}
                 className="ml-auto"
               >
-                New Search
+                新搜索
               </Button>
             </div>
             
@@ -114,7 +141,7 @@ const Index = () => {
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Search for employers, job titles, or locations..."
+                  placeholder="搜索雇主名称或职业类别..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -122,14 +149,14 @@ const Index = () => {
                 />
               </div>
               <Button onClick={handleSearch} className="bg-blue-600 hover:bg-blue-700">
-                Search
+                搜索
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter className="h-4 w-4 mr-2" />
-                Filters
+                筛选
               </Button>
             </div>
           </div>
@@ -139,14 +166,35 @@ const Index = () => {
             <SearchFilters onApplyFilters={applyFilters} />
           )}
 
+          {/* Sort Controls */}
+          <SortControls 
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={handleSortChange}
+          />
+
           {/* Results */}
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Searching...</p>
+              <p className="text-gray-600">搜索中...</p>
             </div>
           ) : (
-            <SearchResults data={h1bData} />
+            <>
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-blue-800">
+                  搜索结果 (共找到 {totalCount} 条记录)
+                </h2>
+              </div>
+              <SearchResults data={h1bData} />
+              {totalCount > 0 && (
+                <PaginationControls
+                  pagination={paginationInfo}
+                  onPageChange={handlePageChange}
+                  onPageSizeChange={handlePageSizeChange}
+                />
+              )}
+            </>
           )}
         </div>
         
@@ -164,10 +212,10 @@ const Index = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold text-blue-800 mb-4">
-              H1B Healthcare Search
+              美国医疗保健 H1B 搜索
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Discover H1B case data and employer information in the healthcare industry
+              探索医疗保健行业的 H1B 案例数据和雇主信息
             </p>
           </div>
 
@@ -177,7 +225,7 @@ const Index = () => {
               <div className="relative">
                 <Search className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                 <Input
-                  placeholder="Search for employers, job titles, or locations..."
+                  placeholder="搜索雇主名称或职业类别..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -189,14 +237,14 @@ const Index = () => {
                   onClick={handleSearch}
                   className="bg-blue-600 hover:bg-blue-700 px-8"
                 >
-                  Search H1B Data
+                  搜索 H1B 数据
                 </Button>
                 <Button 
                   variant="outline"
                   onClick={() => setShowFilters(!showFilters)}
                 >
                   <Filter className="h-4 w-4 mr-2" />
-                  Advanced Search
+                  高级搜索
                 </Button>
               </div>
             </CardContent>
@@ -212,51 +260,53 @@ const Index = () => {
             <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
               <Building2 className="h-8 w-8 text-blue-600 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-800">{dataStats.totalEmployers.toLocaleString()}+</h3>
-              <p className="text-sm text-gray-600">Healthcare Employers</p>
+              <p className="text-sm text-gray-600">医疗保健雇主</p>
             </Card>
             
             <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
               <Users className="h-8 w-8 text-green-600 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-800">{dataStats.totalCases.toLocaleString()}+</h3>
-              <p className="text-sm text-gray-600">H1B Cases</p>
+              <p className="text-sm text-gray-600">H1B 案例</p>
             </Card>
             
             <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
               <MapPin className="h-8 w-8 text-purple-600 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-800">{dataStats.statesCovered}</h3>
-              <p className="text-sm text-gray-600">States Covered</p>
+              <p className="text-sm text-gray-600">覆盖州数</p>
             </Card>
             
             <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
               <DollarSign className="h-8 w-8 text-orange-600 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-800">${(dataStats.averageSalary / 1000).toFixed(0)}K</h3>
-              <p className="text-sm text-gray-600">Average Salary</p>
+              <p className="text-sm text-gray-600">平均薪资</p>
             </Card>
           </div>
 
           {/* Popular Searches */}
-          <Card className="bg-white shadow-md">
-            <CardHeader>
-              <CardTitle className="text-center text-gray-800">Popular Healthcare Employers</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap justify-center gap-3">
-                {popularEmployers.map((employer) => (
-                  <Badge 
-                    key={employer}
-                    variant="outline" 
-                    className="cursor-pointer hover:bg-blue-50 text-blue-700 border-blue-200"
-                    onClick={() => {
-                      setSearchQuery(employer);
-                      handleSearch();
-                    }}
-                  >
-                    {employer}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {popularEmployers.length > 0 && (
+            <Card className="bg-white shadow-md">
+              <CardHeader>
+                <CardTitle className="text-center text-gray-800">热门医疗保健雇主</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {popularEmployers.map((employer) => (
+                    <Badge 
+                      key={employer}
+                      variant="outline" 
+                      className="cursor-pointer hover:bg-blue-50 text-blue-700 border-blue-200"
+                      onClick={() => {
+                        setSearchQuery(employer);
+                        handleSearch();
+                      }}
+                    >
+                      {employer}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
       

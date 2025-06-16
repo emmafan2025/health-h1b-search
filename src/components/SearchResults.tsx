@@ -22,7 +22,7 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('zh-CN', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -40,8 +40,8 @@ const SearchResults = ({ data }: SearchResultsProps) => {
     return (
       <Card className="text-center p-8">
         <CardContent>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No Results Found</h3>
-          <p className="text-gray-500">Try adjusting your search criteria or filters.</p>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">未找到结果</h3>
+          <p className="text-gray-500">请尝试调整搜索条件或筛选器。</p>
         </CardContent>
       </Card>
     );
@@ -49,12 +49,6 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-blue-800">
-          Search Results ({data.length} found)
-        </h2>
-      </div>
-
       <div className="grid gap-4">
         {data.map((item) => (
           <Card key={item.id} className="hover:shadow-lg transition-shadow duration-200">
@@ -78,12 +72,17 @@ const SearchResults = ({ data }: SearchResultsProps) => {
                 <div className="flex items-center gap-2">
                   {item.FULL_TIME_POSITION !== undefined && (
                     <Badge variant={item.FULL_TIME_POSITION ? "default" : "secondary"}>
-                      {item.FULL_TIME_POSITION ? "Full Time" : "Part Time"}
+                      {item.FULL_TIME_POSITION ? "全职" : "兼职"}
                     </Badge>
                   )}
                   {item.Year && (
                     <Badge variant="outline">
-                      {item.Year}
+                      {item.Year}年
+                    </Badge>
+                  )}
+                  {item.Quarter && (
+                    <Badge variant="outline">
+                      {item.Quarter}
                     </Badge>
                   )}
                 </div>
@@ -117,13 +116,13 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
               {item.CASE_NUMBER && (
                 <div className="text-sm text-gray-500 mb-4">
-                  Case #: {item.CASE_NUMBER}
+                  案例编号: {item.CASE_NUMBER}
                 </div>
               )}
 
               <div className="flex justify-end">
                 <Button variant="outline" size="sm">
-                  View Details
+                  查看详情
                 </Button>
               </div>
             </CardContent>

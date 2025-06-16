@@ -7,23 +7,28 @@ export const useH1BData = () => {
   const [data, setData] = useState<H1BCase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const fetchData = async (filters?: SearchFilters) => {
+  const fetchData = async (filters?: SearchFilters, page: number = 1, pageSize: number = 20, sortBy?: string, sortOrder: 'asc' | 'desc' = 'desc') => {
     try {
       setLoading(true);
+      console.log('Fetching data with filters:', filters);
+      
       let query = supabase
         .from('healthcare_h1b_cases')
-        .select('*');
+        .select('*', { count: 'exact' });
 
-      // Apply filters if provided
+      // Apply search filters for SOC_TITLE and EMPLOYER_NAME
       if (filters?.searchQuery) {
-        query = query.or(`EMPLOYER_NAME.ilike.%${filters.searchQuery}%,JOB_TITLE.ilike.%${filters.searchQuery}%,WORKSITE_CITY.ilike.%${filters.searchQuery}%,WORKSITE_STATE.ilike.%${filters.searchQuery}%`);
+        query = query.or(`SOC_TITLE.ilike.%${filters.searchQuery}%,EMPLOYER_NAME.ilike.%${filters.searchQuery}%`);
       }
 
+      // Apply location filter
       if (filters?.location) {
         query = query.or(`WORKSITE_CITY.ilike.%${filters.location}%,WORKSITE_STATE.ilike.%${filters.location}%`);
       }
 
+      // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
         query = query
           .gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary)
@@ -34,21 +39,54 @@ export const useH1BData = () => {
         query = query.lte('WAGE_RATE_OF_PAY_TO', filters.maxSalary);
       }
 
-      // Limit results for performance
-      query = query.limit(100);
+      // Apply job title filter
+      if (filters?.jobTitle) {
+        query = query.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
+      }
 
-      const { data: result, error } = await query;
+      // Apply state filter
+      if (filters?.state) {
+        query = query.eq('WORKSITE_STATE', filters.state);
+      }
+
+      // Apply year filter
+      if (filters?.year) {
+        query = query.eq('Year', filters.year);
+      }
+
+      // Apply quarter filter
+      if (filters?.quarter) {
+        query = query.eq('Quarter', filters.quarter);
+      }
+
+      // Apply sorting
+      if (sortBy) {
+        query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+      } else {
+        query = query.order('created_at', { ascending: false });
+      }
+
+      // Apply pagination
+      const from = (page - 1) * pageSize;
+      const to = from + pageSize - 1;
+      query = query.range(from, to);
+
+      const { data: result, error, count } = await query;
+
+      console.log('Query result:', { result, error, count });
 
       if (error) {
         throw error;
       }
 
       setData(result || []);
+      setTotalCount(count || 0);
       setError(null);
     } catch (err) {
       console.error('Error fetching H1B data:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
       setData([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
@@ -62,6 +100,7 @@ export const useH1BData = () => {
     data,
     loading,
     error,
+    totalCount,
     refetch: fetchData
   };
 };

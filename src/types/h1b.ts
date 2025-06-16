@@ -31,4 +31,15 @@ export interface SearchFilters {
   maxSalary?: number;
   caseStatus?: string;
   searchQuery?: string;
+  jobTitle?: string;
+  state?: string;
+  year?: number;
+  quarter?: string;
+}
+
+export interface PaginationInfo {
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }
