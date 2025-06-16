@@ -14,66 +14,65 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
-      // Build query step by step to avoid complex type inference
-      let queryBuilder = supabase
+      // Build query with explicit type handling
+      let query = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
       // Apply search filters for soc_title and employer_name
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        queryBuilder = queryBuilder.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
+        query = query.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
-        queryBuilder = queryBuilder.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
+        query = query.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
       }
 
       // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
-        queryBuilder = queryBuilder
+        query = query
           .gte('wage_rate_of_pay_from', filters.minSalary)
           .lte('wage_rate_of_pay_from', filters.maxSalary);
       } else if (filters?.minSalary) {
-        queryBuilder = queryBuilder.gte('wage_rate_of_pay_from', filters.minSalary);
+        query = query.gte('wage_rate_of_pay_from', filters.minSalary);
       } else if (filters?.maxSalary) {
-        queryBuilder = queryBuilder.lte('wage_rate_of_pay_from', filters.maxSalary);
+        query = query.lte('wage_rate_of_pay_from', filters.maxSalary);
       }
 
       // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
-        queryBuilder = queryBuilder.ilike('job_title', `%${filters.jobTitle}%`);
+        query = query.ilike('job_title', `%${filters.jobTitle}%`);
       }
 
       // Apply state filter
       if (filters?.state && filters.state.trim()) {
-        queryBuilder = queryBuilder.eq('worksite_state', filters.state);
+        query = query.eq('worksite_state', filters.state);
       }
 
       // Apply year filter
       if (filters?.year) {
-        queryBuilder = queryBuilder.eq('year', filters.year);
+        query = query.eq('year', filters.year);
       }
 
       // Apply quarter filter
       if (filters?.quarter && filters.quarter.trim()) {
-        queryBuilder = queryBuilder.eq('quarter', filters.quarter);
+        query = query.eq('quarter', filters.quarter);
       }
 
       // Apply sorting
       const sortColumn = sortBy || 'created_at';
-      queryBuilder = queryBuilder.order(sortColumn, { ascending: sortOrder === 'asc' });
+      query = query.order(sortColumn, { ascending: sortOrder === 'asc' });
 
       // Apply pagination
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
-      queryBuilder = queryBuilder.range(from, to);
+      query = query.range(from, to);
 
-      // Execute query with type assertion
-      const result = await queryBuilder;
-      const { data: queryResult, error: queryError, count } = result;
+      // Execute query
+      const { data: queryResult, error: queryError, count } = await query;
 
       console.log('Query result:', { result: queryResult, error: queryError, count });
 
@@ -81,8 +80,8 @@ export const useH1BData = () => {
         throw queryError;
       }
 
-      // Type assertion to avoid complex type inference
-      setData((queryResult as any[])?.map(item => ({
+      // Map Supabase data to frontend H1BCase structure
+      const mappedData: H1BCase[] = (queryResult as any[])?.map(item => ({
         id: item.id,
         case_number: item.case_number,
         employer_name: item.employer_name,
@@ -105,8 +104,9 @@ export const useH1BData = () => {
         quarter: item.quarter,
         trade_name_dba: item.trade_name_dba,
         created_at: item.created_at
-      })) || []);
+      })) || [];
       
+      setData(mappedData);
       setTotalCount(count || 0);
       setError(null);
     } catch (err) {
