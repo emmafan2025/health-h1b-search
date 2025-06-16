@@ -11,10 +11,10 @@ interface SortControlsProps {
 
 const SortControls = ({ sortBy, sortOrder, onSortChange }: SortControlsProps) => {
   const sortOptions = [
-    { value: 'WAGE_RATE_OF_PAY_FROM', label: '工资' },
-    { value: 'EMPLOYER_NAME', label: '雇主名称' },
-    { value: 'Year', label: '年份' },
-    { value: 'created_at', label: '创建时间' }
+    { value: 'WAGE_RATE_OF_PAY_FROM', label: 'Salary' },
+    { value: 'EMPLOYER_NAME', label: 'Employer Name' },
+    { value: 'Year', label: 'Year' },
+    { value: 'created_at', label: 'Created Date' }
   ];
 
   const toggleSortOrder = () => {
@@ -23,7 +23,7 @@ const SortControls = ({ sortBy, sortOrder, onSortChange }: SortControlsProps) =>
 
   return (
     <div className="flex items-center gap-4 mb-4">
-      <span className="text-sm font-medium text-gray-700">排序方式:</span>
+      <span className="text-sm font-medium text-gray-700">Sort by:</span>
       <Select value={sortBy} onValueChange={(value) => onSortChange(value, sortOrder)}>
         <SelectTrigger className="w-40">
           <SelectValue />
@@ -41,12 +41,12 @@ const SortControls = ({ sortBy, sortOrder, onSortChange }: SortControlsProps) =>
         {sortOrder === 'asc' ? (
           <>
             <ArrowUp className="h-4 w-4 mr-1" />
-            升序
+            Ascending
           </>
         ) : (
           <>
             <ArrowDown className="h-4 w-4 mr-1" />
-            降序
+            Descending
           </>
         )}
       </Button>

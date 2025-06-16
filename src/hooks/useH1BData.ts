@@ -19,12 +19,12 @@ export const useH1BData = () => {
         .select('*', { count: 'exact' });
 
       // Apply search filters for SOC_TITLE and EMPLOYER_NAME
-      if (filters?.searchQuery) {
+      if (filters?.searchQuery && filters.searchQuery.trim()) {
         query = query.or(`SOC_TITLE.ilike.%${filters.searchQuery}%,EMPLOYER_NAME.ilike.%${filters.searchQuery}%`);
       }
 
       // Apply location filter
-      if (filters?.location) {
+      if (filters?.location && filters.location.trim()) {
         query = query.or(`WORKSITE_CITY.ilike.%${filters.location}%,WORKSITE_STATE.ilike.%${filters.location}%`);
       }
 
@@ -40,12 +40,12 @@ export const useH1BData = () => {
       }
 
       // Apply job title filter
-      if (filters?.jobTitle) {
+      if (filters?.jobTitle && filters.jobTitle.trim()) {
         query = query.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
       }
 
       // Apply state filter
-      if (filters?.state) {
+      if (filters?.state && filters.state.trim()) {
         query = query.eq('WORKSITE_STATE', filters.state);
       }
 
@@ -55,7 +55,7 @@ export const useH1BData = () => {
       }
 
       // Apply quarter filter
-      if (filters?.quarter) {
+      if (filters?.quarter && filters.quarter.trim()) {
         query = query.eq('Quarter', filters.quarter);
       }
 

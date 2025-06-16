@@ -22,7 +22,7 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString('zh-CN', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -40,8 +40,8 @@ const SearchResults = ({ data }: SearchResultsProps) => {
     return (
       <Card className="text-center p-8">
         <CardContent>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">未找到结果</h3>
-          <p className="text-gray-500">请尝试调整搜索条件或筛选器。</p>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">No results found</h3>
+          <p className="text-gray-500">Try adjusting your search criteria or filters.</p>
         </CardContent>
       </Card>
     );
@@ -72,12 +72,12 @@ const SearchResults = ({ data }: SearchResultsProps) => {
                 <div className="flex items-center gap-2">
                   {item.FULL_TIME_POSITION !== undefined && (
                     <Badge variant={item.FULL_TIME_POSITION ? "default" : "secondary"}>
-                      {item.FULL_TIME_POSITION ? "全职" : "兼职"}
+                      {item.FULL_TIME_POSITION ? "Full-time" : "Part-time"}
                     </Badge>
                   )}
                   {item.Year && (
                     <Badge variant="outline">
-                      {item.Year}年
+                      {item.Year}
                     </Badge>
                   )}
                   {item.Quarter && (
@@ -116,13 +116,13 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
               {item.CASE_NUMBER && (
                 <div className="text-sm text-gray-500 mb-4">
-                  案例编号: {item.CASE_NUMBER}
+                  Case Number: {item.CASE_NUMBER}
                 </div>
               )}
 
               <div className="flex justify-end">
                 <Button variant="outline" size="sm">
-                  查看详情
+                  View Details
                 </Button>
               </div>
             </CardContent>

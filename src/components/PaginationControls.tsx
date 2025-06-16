@@ -20,10 +20,10 @@ const PaginationControls = ({ pagination, onPageChange, onPageSizeChange }: Pagi
     <div className="flex items-center justify-between mt-6 p-4 bg-white rounded-lg shadow-sm">
       <div className="flex items-center gap-4">
         <span className="text-sm text-gray-700">
-          显示第 {startItem}-{endItem} 项，共 {totalCount} 项
+          Showing {startItem}-{endItem} of {totalCount} items
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-700">每页显示:</span>
+          <span className="text-sm text-gray-700">Items per page:</span>
           <Select value={pageSize.toString()} onValueChange={(value) => onPageSizeChange(parseInt(value))}>
             <SelectTrigger className="w-20">
               <SelectValue />
@@ -46,7 +46,7 @@ const PaginationControls = ({ pagination, onPageChange, onPageSizeChange }: Pagi
           disabled={currentPage === 1}
         >
           <ChevronLeft className="h-4 w-4" />
-          上一页
+          Previous
         </Button>
         
         <div className="flex items-center gap-1">
@@ -82,7 +82,7 @@ const PaginationControls = ({ pagination, onPageChange, onPageSizeChange }: Pagi
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          下一页
+          Next
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>

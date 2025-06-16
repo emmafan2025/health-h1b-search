@@ -52,27 +52,27 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
   return (
     <Card className="mb-6 shadow-md">
       <CardHeader>
-        <CardTitle className="text-lg text-blue-800">高级搜索筛选</CardTitle>
+        <CardTitle className="text-lg text-blue-800">Advanced Search Filters</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
-            <Label>职位名称</Label>
+            <Label>Job Title</Label>
             <Input
-              placeholder="输入职位名称"
+              placeholder="Enter job title"
               value={filters.jobTitle || ""}
               onChange={(e) => setFilters({...filters, jobTitle: e.target.value})}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>工作州</Label>
+            <Label>Work State</Label>
             <Select value={filters.state || ""} onValueChange={(value) => setFilters({...filters, state: value})}>
               <SelectTrigger>
-                <SelectValue placeholder="选择州" />
+                <SelectValue placeholder="Select state" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部州</SelectItem>
+                <SelectItem value="">All States</SelectItem>
                 {states.map((state) => (
                   <SelectItem key={state} value={state}>{state}</SelectItem>
                 ))}
@@ -81,13 +81,13 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>年份</Label>
+            <Label>Year</Label>
             <Select value={filters.year?.toString() || ""} onValueChange={(value) => setFilters({...filters, year: value ? parseInt(value) : undefined})}>
               <SelectTrigger>
-                <SelectValue placeholder="选择年份" />
+                <SelectValue placeholder="Select year" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部年份</SelectItem>
+                <SelectItem value="">All Years</SelectItem>
                 {years.map((year) => (
                   <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                 ))}
@@ -96,13 +96,13 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>季度</Label>
+            <Label>Quarter</Label>
             <Select value={filters.quarter || ""} onValueChange={(value) => setFilters({...filters, quarter: value})}>
               <SelectTrigger>
-                <SelectValue placeholder="选择季度" />
+                <SelectValue placeholder="Select quarter" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">全部季度</SelectItem>
+                <SelectItem value="">All Quarters</SelectItem>
                 {quarters.map((quarter) => (
                   <SelectItem key={quarter} value={quarter}>{quarter}</SelectItem>
                 ))}
@@ -111,16 +111,16 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>地点（城市/州）</Label>
+            <Label>Location (City/State)</Label>
             <Input
-              placeholder="输入城市或州"
+              placeholder="Enter city or state"
               value={filters.location || ""}
               onChange={(e) => setFilters({...filters, location: e.target.value})}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>最低工资 ($)</Label>
+            <Label>Min Salary ($)</Label>
             <Input
               type="number"
               placeholder="60000"
@@ -130,7 +130,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>最高工资 ($)</Label>
+            <Label>Max Salary ($)</Label>
             <Input
               type="number"
               placeholder="150000"
@@ -142,10 +142,10 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
         <div className="flex gap-4 mt-6">
           <Button onClick={handleApplyFilters} className="bg-blue-600 hover:bg-blue-700">
-            应用筛选
+            Apply Filters
           </Button>
           <Button variant="outline" onClick={handleReset}>
-            重置全部
+            Reset All
           </Button>
         </div>
       </CardContent>
