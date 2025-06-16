@@ -19,19 +19,19 @@ export const useH1BData = () => {
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
-      // Apply search filters
+      // Apply search filters - fix the OR query syntax
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        queryBuilder = queryBuilder.or(`"SOC_TITLE".ilike.%${searchTerm}%,"EMPLOYER_NAME".ilike.%${searchTerm}%`);
+        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%`);
       }
 
-      // Apply location filter
+      // Apply location filter - fix the OR query syntax
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
-        queryBuilder = queryBuilder.or(`"WORKSITE_CITY".ilike.%${locationTerm}%,"WORKSITE_STATE".ilike.%${locationTerm}%`);
+        queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
       }
 
-      // Apply salary range filters
+      // Apply salary range filters - remove quotes from field names
       if (filters?.minSalary && filters?.maxSalary) {
         queryBuilder = queryBuilder
           .gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary)
@@ -42,27 +42,27 @@ export const useH1BData = () => {
         queryBuilder = queryBuilder.lte('WAGE_RATE_OF_PAY_FROM', filters.maxSalary);
       }
 
-      // Apply job title filter
+      // Apply job title filter - remove quotes from field names
       if (filters?.jobTitle && filters.jobTitle.trim()) {
         queryBuilder = queryBuilder.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
       }
 
-      // Apply state filter
+      // Apply state filter - remove quotes from field names
       if (filters?.state && filters.state.trim()) {
         queryBuilder = queryBuilder.eq('WORKSITE_STATE', filters.state);
       }
 
-      // Apply year filter
+      // Apply year filter - remove quotes from field names
       if (filters?.year) {
         queryBuilder = queryBuilder.eq('Year', filters.year);
       }
 
-      // Apply quarter filter
+      // Apply quarter filter - remove quotes from field names
       if (filters?.quarter && filters.quarter.trim()) {
         queryBuilder = queryBuilder.eq('Quarter', filters.quarter);
       }
 
-      // Apply sorting with quoted column names
+      // Apply sorting - remove quotes from field names
       let sortColumn = 'created_at'; // default
       if (sortBy === 'wage_rate_of_pay_from') sortColumn = 'WAGE_RATE_OF_PAY_FROM';
       else if (sortBy === 'employer_name') sortColumn = 'EMPLOYER_NAME';
@@ -75,17 +75,29 @@ export const useH1BData = () => {
       const to = from + pageSize - 1;
       queryBuilder = queryBuilder.range(from, to);
 
-      // Execute query
+      // Execute query with detailed logging
+      console.log('About to execute query...');
       const { data: queryResult, error: queryError, count } = await queryBuilder;
 
-      console.log('Query result:', { result: queryResult, error: queryError, count });
+      console.log('Query executed:', { 
+        resultCount: queryResult?.length, 
+        totalCount: count, 
+        error: queryError,
+        firstRecord: queryResult?.[0]
+      });
 
       if (queryError) {
+        console.error('Supabase query error:', queryError);
         throw queryError;
       }
 
-      // Use data directly since field names now match
+      // Cast the data directly since field names now match
       const mappedData: H1BCase[] = (queryResult || []) as H1BCase[];
+      
+      console.log('Data mapped successfully:', { 
+        mappedCount: mappedData.length,
+        sampleRecord: mappedData[0]
+      });
       
       setData(mappedData);
       setTotalCount(count || 0);
@@ -101,6 +113,7 @@ export const useH1BData = () => {
   };
 
   useEffect(() => {
+    console.log('useH1BData: Initial data fetch');
     fetchData();
   }, []);
 
