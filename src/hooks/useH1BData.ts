@@ -14,7 +14,7 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
-      // Start with a basic query
+      // Start with a basic query - select all columns
       let queryBuilder = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
@@ -22,13 +22,13 @@ export const useH1BData = () => {
       // Apply search filters
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%`);
+        queryBuilder = queryBuilder.or(`"SOC_TITLE".ilike.%${searchTerm}%,"EMPLOYER_NAME".ilike.%${searchTerm}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
-        queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
+        queryBuilder = queryBuilder.or(`"WORKSITE_CITY".ilike.%${locationTerm}%,"WORKSITE_STATE".ilike.%${locationTerm}%`);
       }
 
       // Apply salary range filters
@@ -62,10 +62,12 @@ export const useH1BData = () => {
         queryBuilder = queryBuilder.eq('Quarter', filters.quarter);
       }
 
-      // Apply sorting
-      const sortColumn = sortBy === 'wage_rate_of_pay_from' ? 'WAGE_RATE_OF_PAY_FROM' : 
-                        sortBy === 'employer_name' ? 'EMPLOYER_NAME' :
-                        sortBy === 'year' ? 'Year' : 'created_at';
+      // Apply sorting with quoted column names
+      let sortColumn = 'created_at'; // default
+      if (sortBy === 'wage_rate_of_pay_from') sortColumn = 'WAGE_RATE_OF_PAY_FROM';
+      else if (sortBy === 'employer_name') sortColumn = 'EMPLOYER_NAME';
+      else if (sortBy === 'year') sortColumn = 'Year';
+      
       queryBuilder = queryBuilder.order(sortColumn, { ascending: sortOrder === 'asc' });
 
       // Apply pagination
@@ -82,8 +84,8 @@ export const useH1BData = () => {
         throw queryError;
       }
 
-      // Map database rows to H1BCase format
-      const mappedData: H1BCase[] = queryResult?.map(item => ({
+      // Map database rows to H1BCase format using the database field names directly
+      const mappedData: H1BCase[] = (queryResult || []).map(item => ({
         id: item.id,
         case_number: item.CASE_NUMBER,
         employer_name: item.EMPLOYER_NAME,
@@ -106,7 +108,7 @@ export const useH1BData = () => {
         quarter: item.Quarter,
         trade_name_dba: item.TRADE_NAME_DBA,
         created_at: item.created_at
-      })) || [];
+      }));
       
       setData(mappedData);
       setTotalCount(count || 0);
