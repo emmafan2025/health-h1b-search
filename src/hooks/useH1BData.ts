@@ -14,74 +14,99 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
-      // Start with base query
-      const baseQuery = supabase
+      // Build query step by step to avoid complex type inference
+      let queryBuilder = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
-
-      let query = baseQuery;
 
       // Apply search filters for soc_title and employer_name
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        query = query.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
+        queryBuilder = queryBuilder.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
-        query = query.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
+        queryBuilder = queryBuilder.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
       }
 
       // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
-        query = query
+        queryBuilder = queryBuilder
           .gte('wage_rate_of_pay_from', filters.minSalary)
           .lte('wage_rate_of_pay_from', filters.maxSalary);
       } else if (filters?.minSalary) {
-        query = query.gte('wage_rate_of_pay_from', filters.minSalary);
+        queryBuilder = queryBuilder.gte('wage_rate_of_pay_from', filters.minSalary);
       } else if (filters?.maxSalary) {
-        query = query.lte('wage_rate_of_pay_from', filters.maxSalary);
+        queryBuilder = queryBuilder.lte('wage_rate_of_pay_from', filters.maxSalary);
       }
 
       // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
-        query = query.ilike('job_title', `%${filters.jobTitle}%`);
+        queryBuilder = queryBuilder.ilike('job_title', `%${filters.jobTitle}%`);
       }
 
       // Apply state filter
       if (filters?.state && filters.state.trim()) {
-        query = query.eq('worksite_state', filters.state);
+        queryBuilder = queryBuilder.eq('worksite_state', filters.state);
       }
 
       // Apply year filter
       if (filters?.year) {
-        query = query.eq('year', filters.year);
+        queryBuilder = queryBuilder.eq('year', filters.year);
       }
 
       // Apply quarter filter
       if (filters?.quarter && filters.quarter.trim()) {
-        query = query.eq('quarter', filters.quarter);
+        queryBuilder = queryBuilder.eq('quarter', filters.quarter);
       }
 
       // Apply sorting
       const sortColumn = sortBy || 'created_at';
-      query = query.order(sortColumn, { ascending: sortOrder === 'asc' });
+      queryBuilder = queryBuilder.order(sortColumn, { ascending: sortOrder === 'asc' });
 
       // Apply pagination
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
-      query = query.range(from, to);
+      queryBuilder = queryBuilder.range(from, to);
 
-      const { data: result, error: queryError, count } = await query;
+      // Execute query with type assertion
+      const result = await queryBuilder;
+      const { data: queryResult, error: queryError, count } = result;
 
-      console.log('Query result:', { result, error: queryError, count });
+      console.log('Query result:', { result: queryResult, error: queryError, count });
 
       if (queryError) {
         throw queryError;
       }
 
-      setData(result || []);
+      // Type assertion to avoid complex type inference
+      setData((queryResult as any[])?.map(item => ({
+        id: item.id,
+        case_number: item.case_number,
+        employer_name: item.employer_name,
+        job_title: item.job_title,
+        soc_code: item.soc_code,
+        soc_title: item.soc_title,
+        full_time_position: item.full_time_position,
+        begin_date: item.begin_date,
+        end_date: item.end_date,
+        worksite_address1: item.worksite_address1,
+        worksite_city: item.worksite_city,
+        worksite_county: item.worksite_county,
+        worksite_state: item.worksite_state,
+        worksite_postal_code: item.worksite_postal_code,
+        wage_rate_of_pay_from: item.wage_rate_of_pay_from,
+        wage_rate_of_pay_to: item.wage_rate_of_pay_to,
+        wage_unit_of_pay: item.wage_unit_of_pay,
+        pw_wage_level: item.pw_wage_level,
+        year: item.year,
+        quarter: item.quarter,
+        trade_name_dba: item.trade_name_dba,
+        created_at: item.created_at
+      })) || []);
+      
       setTotalCount(count || 0);
       setError(null);
     } catch (err) {
