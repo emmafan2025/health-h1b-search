@@ -18,45 +18,45 @@ export const useH1BData = () => {
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
-      // Apply search filters for SOC_TITLE and EMPLOYER_NAME
+      // Apply search filters for soc_title and employer_name
       if (filters?.searchQuery && filters.searchQuery.trim()) {
-        query = query.or(`SOC_TITLE.ilike.%${filters.searchQuery}%,EMPLOYER_NAME.ilike.%${filters.searchQuery}%`);
+        query = query.or(`soc_title.ilike.%${filters.searchQuery}%,employer_name.ilike.%${filters.searchQuery}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
-        query = query.or(`WORKSITE_CITY.ilike.%${filters.location}%,WORKSITE_STATE.ilike.%${filters.location}%`);
+        query = query.or(`worksite_city.ilike.%${filters.location}%,worksite_state.ilike.%${filters.location}%`);
       }
 
       // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
         query = query
-          .gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary)
-          .lte('WAGE_RATE_OF_PAY_TO', filters.maxSalary);
+          .gte('wage_rate_of_pay_from', filters.minSalary)
+          .lte('wage_rate_of_pay_to', filters.maxSalary);
       } else if (filters?.minSalary) {
-        query = query.gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary);
+        query = query.gte('wage_rate_of_pay_from', filters.minSalary);
       } else if (filters?.maxSalary) {
-        query = query.lte('WAGE_RATE_OF_PAY_TO', filters.maxSalary);
+        query = query.lte('wage_rate_of_pay_to', filters.maxSalary);
       }
 
       // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
-        query = query.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
+        query = query.ilike('job_title', `%${filters.jobTitle}%`);
       }
 
       // Apply state filter
       if (filters?.state && filters.state.trim()) {
-        query = query.eq('WORKSITE_STATE', filters.state);
+        query = query.eq('worksite_state', filters.state);
       }
 
       // Apply year filter
       if (filters?.year) {
-        query = query.eq('Year', filters.year);
+        query = query.eq('year', filters.year);
       }
 
       // Apply quarter filter
       if (filters?.quarter && filters.quarter.trim()) {
-        query = query.eq('Quarter', filters.quarter);
+        query = query.eq('quarter', filters.quarter);
       }
 
       // Apply sorting

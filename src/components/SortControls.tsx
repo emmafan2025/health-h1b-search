@@ -11,9 +11,9 @@ interface SortControlsProps {
 
 const SortControls = ({ sortBy, sortOrder, onSortChange }: SortControlsProps) => {
   const sortOptions = [
-    { value: 'WAGE_RATE_OF_PAY_FROM', label: 'Salary' },
-    { value: 'EMPLOYER_NAME', label: 'Employer Name' },
-    { value: 'Year', label: 'Year' },
+    { value: 'wage_rate_of_pay_from', label: 'Salary' },
+    { value: 'employer_name', label: 'Employer Name' },
+    { value: 'year', label: 'Year' },
     { value: 'created_at', label: 'Created Date' }
   ];
 

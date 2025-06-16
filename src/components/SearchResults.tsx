@@ -31,8 +31,8 @@ const SearchResults = ({ data }: SearchResultsProps) => {
 
   const getLocation = (case_item: H1BCase) => {
     const parts = [];
-    if (case_item.WORKSITE_CITY) parts.push(case_item.WORKSITE_CITY);
-    if (case_item.WORKSITE_STATE) parts.push(case_item.WORKSITE_STATE);
+    if (case_item.worksite_city) parts.push(case_item.worksite_city);
+    if (case_item.worksite_state) parts.push(case_item.worksite_state);
     return parts.join(', ') || 'N/A';
   };
 
@@ -56,33 +56,33 @@ const SearchResults = ({ data }: SearchResultsProps) => {
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <h3 className="text-xl font-semibold text-blue-800 mb-2">
-                    {item.JOB_TITLE || 'N/A'}
+                    {item.job_title || 'N/A'}
                   </h3>
                   <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <Building2 className="h-4 w-4" />
-                    <span className="font-medium">{item.EMPLOYER_NAME || 'N/A'}</span>
+                    <span className="font-medium">{item.employer_name || 'N/A'}</span>
                   </div>
-                  {item.SOC_TITLE && (
+                  {item.soc_title && (
                     <div className="flex items-center gap-2 text-gray-600 mb-2">
                       <Briefcase className="h-4 w-4" />
-                      <span className="text-sm">{item.SOC_TITLE}</span>
+                      <span className="text-sm">{item.soc_title}</span>
                     </div>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  {item.FULL_TIME_POSITION !== undefined && (
-                    <Badge variant={item.FULL_TIME_POSITION ? "default" : "secondary"}>
-                      {item.FULL_TIME_POSITION ? "Full-time" : "Part-time"}
+                  {item.full_time_position !== undefined && (
+                    <Badge variant={item.full_time_position ? "default" : "secondary"}>
+                      {item.full_time_position ? "Full-time" : "Part-time"}
                     </Badge>
                   )}
-                  {item.Year && (
+                  {item.year && (
                     <Badge variant="outline">
-                      {item.Year}
+                      {item.year}
                     </Badge>
                   )}
-                  {item.Quarter && (
+                  {item.quarter && (
                     <Badge variant="outline">
-                      {item.Quarter}
+                      {item.quarter}
                     </Badge>
                   )}
                 </div>
@@ -96,27 +96,27 @@ const SearchResults = ({ data }: SearchResultsProps) => {
                 <div className="flex items-center gap-2 text-gray-600">
                   <DollarSign className="h-4 w-4" />
                   <span className="font-semibold text-green-600">
-                    {item.WAGE_RATE_OF_PAY_FROM && item.WAGE_RATE_OF_PAY_TO ? 
-                      `${formatSalary(item.WAGE_RATE_OF_PAY_FROM)} - ${formatSalary(item.WAGE_RATE_OF_PAY_TO)}` :
-                      formatSalary(item.WAGE_RATE_OF_PAY_FROM)
+                    {item.wage_rate_of_pay_from && item.wage_rate_of_pay_to ? 
+                      `${formatSalary(item.wage_rate_of_pay_from)} - ${formatSalary(item.wage_rate_of_pay_to)}` :
+                      formatSalary(item.wage_rate_of_pay_from)
                     }
                   </span>
-                  {item.WAGE_UNIT_OF_PAY && (
-                    <span className="text-sm text-gray-500">/{item.WAGE_UNIT_OF_PAY}</span>
+                  {item.wage_unit_of_pay && (
+                    <span className="text-sm text-gray-500">/{item.wage_unit_of_pay}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-gray-600">
                   <Calendar className="h-4 w-4" />
-                  <span>{formatDate(item.BEGIN_DATE)}</span>
-                  {item.END_DATE && (
-                    <span> - {formatDate(item.END_DATE)}</span>
+                  <span>{formatDate(item.begin_date)}</span>
+                  {item.end_date && (
+                    <span> - {formatDate(item.end_date)}</span>
                   )}
                 </div>
               </div>
 
-              {item.CASE_NUMBER && (
+              {item.case_number && (
                 <div className="text-sm text-gray-500 mb-4">
-                  Case Number: {item.CASE_NUMBER}
+                  Case Number: {item.case_number}
                 </div>
               )}
 

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Filter, Building2, MapPin, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ const Index = () => {
   const [currentFilters, setCurrentFilters] = useState<SearchFiltersType>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [sortBy, setSortBy] = useState('WAGE_RATE_OF_PAY_FROM');
+  const [sortBy, setSortBy] = useState('wage_rate_of_pay_from');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
   const { data: h1bData, loading, error, totalCount, refetch } = useH1BData();
@@ -37,17 +36,17 @@ const Index = () => {
 
   // Stats based on actual data
   const dataStats = {
-    totalEmployers: new Set(h1bData.map(item => item.EMPLOYER_NAME)).size,
+    totalEmployers: new Set(h1bData.map(item => item.employer_name)).size,
     totalCases: totalCount,
-    statesCovered: new Set(h1bData.map(item => item.WORKSITE_STATE)).size,
+    statesCovered: new Set(h1bData.map(item => item.worksite_state)).size,
     averageSalary: h1bData.length > 0 ? 
-      h1bData.reduce((sum, item) => sum + (item.WAGE_RATE_OF_PAY_FROM || 0), 0) / h1bData.length : 0
+      h1bData.reduce((sum, item) => sum + (item.wage_rate_of_pay_from || 0), 0) / h1bData.length : 0
   };
 
   // Popular employers from actual data
   const employerCounts = h1bData.reduce((acc, item) => {
-    if (item.EMPLOYER_NAME) {
-      acc[item.EMPLOYER_NAME] = (acc[item.EMPLOYER_NAME] || 0) + 1;
+    if (item.employer_name) {
+      acc[item.employer_name] = (acc[item.employer_name] || 0) + 1;
     }
     return acc;
   }, {} as Record<string, number>);
