@@ -3,6 +3,32 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { H1BCase, SearchFilters } from '@/types/h1b';
 
+// Define a simplified type for the raw database row to avoid complex type inference
+type DatabaseRow = {
+  id: number;
+  CASE_NUMBER?: string;
+  EMPLOYER_NAME?: string;
+  JOB_TITLE?: string;
+  SOC_CODE?: string;
+  SOC_TITLE?: string;
+  FULL_TIME_POSITION?: boolean;
+  BEGIN_DATE?: string;
+  END_DATE?: string;
+  WORKSITE_ADDRESS1?: string;
+  WORKSITE_CITY?: string;
+  WORKSITE_COUNTY?: string;
+  WORKSITE_STATE?: string;
+  WORKSITE_POSTAL_CODE?: string;
+  WAGE_RATE_OF_PAY_FROM?: number;
+  WAGE_RATE_OF_PAY_TO?: number;
+  WAGE_UNIT_OF_PAY?: string;
+  PW_WAGE_LEVEL?: string;
+  Year?: number;
+  Quarter?: string;
+  TRADE_NAME_DBA?: string;
+  created_at: string;
+};
+
 export const useH1BData = () => {
   const [data, setData] = useState<H1BCase[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,65 +40,70 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
-      // Build query with explicit type handling
-      let query = supabase
+      // Start with a basic query using explicit type
+      let queryBuilder = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
-      // Apply search filters for soc_title and employer_name
+      // Apply search filters - using correct uppercase column names
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        query = query.or(`soc_title.ilike.%${searchTerm}%,employer_name.ilike.%${searchTerm}%`);
+        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%`);
       }
 
       // Apply location filter
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
-        query = query.or(`worksite_city.ilike.%${locationTerm}%,worksite_state.ilike.%${locationTerm}%`);
+        queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
       }
 
       // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
-        query = query
-          .gte('wage_rate_of_pay_from', filters.minSalary)
-          .lte('wage_rate_of_pay_from', filters.maxSalary);
+        queryBuilder = queryBuilder
+          .gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary)
+          .lte('WAGE_RATE_OF_PAY_FROM', filters.maxSalary);
       } else if (filters?.minSalary) {
-        query = query.gte('wage_rate_of_pay_from', filters.minSalary);
+        queryBuilder = queryBuilder.gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary);
       } else if (filters?.maxSalary) {
-        query = query.lte('wage_rate_of_pay_from', filters.maxSalary);
+        queryBuilder = queryBuilder.lte('WAGE_RATE_OF_PAY_FROM', filters.maxSalary);
       }
 
       // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
-        query = query.ilike('job_title', `%${filters.jobTitle}%`);
+        queryBuilder = queryBuilder.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
       }
 
       // Apply state filter
       if (filters?.state && filters.state.trim()) {
-        query = query.eq('worksite_state', filters.state);
+        queryBuilder = queryBuilder.eq('WORKSITE_STATE', filters.state);
       }
 
       // Apply year filter
       if (filters?.year) {
-        query = query.eq('year', filters.year);
+        queryBuilder = queryBuilder.eq('Year', filters.year);
       }
 
       // Apply quarter filter
       if (filters?.quarter && filters.quarter.trim()) {
-        query = query.eq('quarter', filters.quarter);
+        queryBuilder = queryBuilder.eq('Quarter', filters.quarter);
       }
 
       // Apply sorting
-      const sortColumn = sortBy || 'created_at';
-      query = query.order(sortColumn, { ascending: sortOrder === 'asc' });
+      const sortColumn = sortBy === 'wage_rate_of_pay_from' ? 'WAGE_RATE_OF_PAY_FROM' : 
+                        sortBy === 'employer_name' ? 'EMPLOYER_NAME' :
+                        sortBy === 'year' ? 'Year' : 'created_at';
+      queryBuilder = queryBuilder.order(sortColumn, { ascending: sortOrder === 'asc' });
 
       // Apply pagination
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
-      query = query.range(from, to);
+      queryBuilder = queryBuilder.range(from, to);
 
-      // Execute query
-      const { data: queryResult, error: queryError, count } = await query;
+      // Execute query with explicit type assertion
+      const result = await queryBuilder;
+      const queryResult = result.data as DatabaseRow[] | null;
+      const queryError = result.error;
+      const count = result.count;
 
       console.log('Query result:', { result: queryResult, error: queryError, count });
 
@@ -80,29 +111,29 @@ export const useH1BData = () => {
         throw queryError;
       }
 
-      // Map Supabase data to frontend H1BCase structure
-      const mappedData: H1BCase[] = (queryResult as any[])?.map(item => ({
+      // Map database rows to H1BCase format
+      const mappedData: H1BCase[] = queryResult?.map(item => ({
         id: item.id,
-        case_number: item.case_number,
-        employer_name: item.employer_name,
-        job_title: item.job_title,
-        soc_code: item.soc_code,
-        soc_title: item.soc_title,
-        full_time_position: item.full_time_position,
-        begin_date: item.begin_date,
-        end_date: item.end_date,
-        worksite_address1: item.worksite_address1,
-        worksite_city: item.worksite_city,
-        worksite_county: item.worksite_county,
-        worksite_state: item.worksite_state,
-        worksite_postal_code: item.worksite_postal_code,
-        wage_rate_of_pay_from: item.wage_rate_of_pay_from,
-        wage_rate_of_pay_to: item.wage_rate_of_pay_to,
-        wage_unit_of_pay: item.wage_unit_of_pay,
-        pw_wage_level: item.pw_wage_level,
-        year: item.year,
-        quarter: item.quarter,
-        trade_name_dba: item.trade_name_dba,
+        case_number: item.CASE_NUMBER,
+        employer_name: item.EMPLOYER_NAME,
+        job_title: item.JOB_TITLE,
+        soc_code: item.SOC_CODE,
+        soc_title: item.SOC_TITLE,
+        full_time_position: item.FULL_TIME_POSITION,
+        begin_date: item.BEGIN_DATE,
+        end_date: item.END_DATE,
+        worksite_address1: item.WORKSITE_ADDRESS1,
+        worksite_city: item.WORKSITE_CITY,
+        worksite_county: item.WORKSITE_COUNTY,
+        worksite_state: item.WORKSITE_STATE,
+        worksite_postal_code: item.WORKSITE_POSTAL_CODE,
+        wage_rate_of_pay_from: item.WAGE_RATE_OF_PAY_FROM,
+        wage_rate_of_pay_to: item.WAGE_RATE_OF_PAY_TO,
+        wage_unit_of_pay: item.WAGE_UNIT_OF_PAY,
+        pw_wage_level: item.PW_WAGE_LEVEL,
+        year: item.Year,
+        quarter: item.Quarter,
+        trade_name_dba: item.TRADE_NAME_DBA,
         created_at: item.created_at
       })) || [];
       
