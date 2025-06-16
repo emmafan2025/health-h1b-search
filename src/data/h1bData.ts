@@ -1,15 +1,4 @@
 
-setData((queryResult as any[])?.map(item => ({
-  id: item.id,
-  employerName: item.employer_name,
-  jobTitle: item.job_title,
-  location: `${item.worksite_city}, ${item.worksite_state}`,
-  salary: item.wage_rate_of_pay_from,
-  caseStatus: 'Approved', // 如果你数据库没有这个字段，可以写死
-  submissionDate: item.begin_date,
-  employerType: item.trade_name_dba || 'Unknown'
-})) || []);
-
 // Replace this with your actual H1B healthcare data
 export interface H1BCase {
   id: string;
