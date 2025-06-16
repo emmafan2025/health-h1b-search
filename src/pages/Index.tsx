@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Filter, Building2, MapPin, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,23 +9,47 @@ import SearchFilters from "@/components/SearchFilters";
 import SearchResults from "@/components/SearchResults";
 import Navigation from "@/components/Navigation";
 import TopRankings from "@/components/TopRankings";
-import { h1bHealthcareData, dataStats, popularEmployers, type H1BCase } from "@/data/h1bData";
 import EmailSubscription from "@/components/EmailSubscription";
+import { useH1BData } from "@/hooks/useH1BData";
+import { SearchFilters as SearchFiltersType } from "@/types/h1b";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filteredData, setFilteredData] = useState<H1BCase[]>(h1bHealthcareData);
+  const [currentFilters, setCurrentFilters] = useState<SearchFiltersType>({});
+  
+  const { data: h1bData, loading, error, refetch } = useH1BData();
+
+  // Stats based on actual data
+  const dataStats = {
+    totalEmployers: new Set(h1bData.map(item => item.EMPLOYER_NAME)).size,
+    totalCases: h1bData.length,
+    statesCovered: new Set(h1bData.map(item => item.WORKSITE_STATE)).size,
+    averageSalary: h1bData.length > 0 ? 
+      h1bData.reduce((sum, item) => sum + (item.WAGE_RATE_OF_PAY_FROM || 0), 0) / h1bData.length : 0
+  };
+
+  // Popular employers from actual data
+  const employerCounts = h1bData.reduce((acc, item) => {
+    if (item.EMPLOYER_NAME) {
+      acc[item.EMPLOYER_NAME] = (acc[item.EMPLOYER_NAME] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const popularEmployers = Object.entries(employerCounts)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 8)
+    .map(([name]) => name);
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      const filtered = h1bHealthcareData.filter(item =>
-        item.employerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredData(filtered);
+    if (searchQuery.trim() || Object.keys(currentFilters).length > 0) {
+      const filters = {
+        ...currentFilters,
+        searchQuery: searchQuery.trim()
+      };
+      refetch(filters);
       setShowResults(true);
     }
   };
@@ -35,37 +60,37 @@ const Index = () => {
     }
   };
 
-  const applyFilters = (filters: any) => {
-    let filtered = h1bHealthcareData;
-    
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(item =>
-        item.employerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.jobTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (filters.employerType && filters.employerType !== "all") {
-      filtered = filtered.filter(item => item.employerType === filters.employerType);
-    }
-
-    if (filters.location) {
-      filtered = filtered.filter(item => 
-        item.location.toLowerCase().includes(filters.location.toLowerCase())
-      );
-    }
-
-    if (filters.minSalary) {
-      filtered = filtered.filter(item => item.salary >= filters.minSalary);
-    }
-
-    if (filters.maxSalary) {
-      filtered = filtered.filter(item => item.salary <= filters.maxSalary);
-    }
-
-    setFilteredData(filtered);
+  const applyFilters = (filters: SearchFiltersType) => {
+    const combinedFilters = {
+      ...filters,
+      searchQuery: searchQuery.trim()
+    };
+    setCurrentFilters(filters);
+    refetch(combinedFilters);
+    setShowResults(true);
   };
+
+  if (loading && !showResults) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading H1B data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !showResults) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error loading data: {error}</p>
+          <Button onClick={() => refetch()}>Try Again</Button>
+        </div>
+      </div>
+    );
+  }
 
   if (showResults) {
     return (
@@ -115,13 +140,17 @@ const Index = () => {
           )}
 
           {/* Results */}
-          <SearchResults data={filteredData} />
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Searching...</p>
+            </div>
+          ) : (
+            <SearchResults data={h1bData} />
+          )}
         </div>
         
-        {/* Add Rankings at bottom */}
         <TopRankings />
-        
-        {/* Add Email Subscription */}
         <EmailSubscription />
       </div>
     );
@@ -231,10 +260,7 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Add Rankings at bottom */}
       <TopRankings />
-      
-      {/* Add Email Subscription */}
       <EmailSubscription />
     </div>
   );

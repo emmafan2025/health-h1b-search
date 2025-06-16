@@ -5,42 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { SearchFilters as SearchFiltersType } from "@/types/h1b";
 
 interface SearchFiltersProps {
-  onApplyFilters: (filters: any) => void;
+  onApplyFilters: (filters: SearchFiltersType) => void;
 }
 
 const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
-  const [filters, setFilters] = useState({
-    employerType: "all",
+  const [filters, setFilters] = useState<SearchFiltersType>({
     location: "",
-    minSalary: "",
-    maxSalary: "",
-    caseStatus: "all"
+    minSalary: undefined,
+    maxSalary: undefined,
   });
 
   const handleApplyFilters = () => {
-    onApplyFilters({
-      ...filters,
-      minSalary: filters.minSalary ? parseInt(filters.minSalary) : null,
-      maxSalary: filters.maxSalary ? parseInt(filters.maxSalary) : null
-    });
+    onApplyFilters(filters);
   };
 
   const handleReset = () => {
-    const resetFilters = {
-      employerType: "all",
+    const resetFilters: SearchFiltersType = {
       location: "",
-      minSalary: "",
-      maxSalary: "",
-      caseStatus: "all"
+      minSalary: undefined,
+      maxSalary: undefined,
     };
     setFilters(resetFilters);
-    onApplyFilters({
-      ...resetFilters,
-      minSalary: null,
-      maxSalary: null
-    });
+    onApplyFilters(resetFilters);
   };
 
   return (
@@ -49,32 +38,12 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
         <CardTitle className="text-lg text-blue-800">Advanced Search Filters</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <div className="space-y-2">
-            <Label>Employer Type</Label>
-            <Select 
-              value={filters.employerType} 
-              onValueChange={(value) => setFilters({...filters, employerType: value})}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="Hospital">Hospital</SelectItem>
-                <SelectItem value="Pharmaceutical">Pharmaceutical</SelectItem>
-                <SelectItem value="Health Insurance">Health Insurance</SelectItem>
-                <SelectItem value="Medical Device">Medical Device</SelectItem>
-                <SelectItem value="Biotech">Biotechnology</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label>Location</Label>
             <Input
               placeholder="City, State"
-              value={filters.location}
+              value={filters.location || ""}
               onChange={(e) => setFilters({...filters, location: e.target.value})}
             />
           </div>
@@ -84,8 +53,8 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
             <Input
               type="number"
               placeholder="80000"
-              value={filters.minSalary}
-              onChange={(e) => setFilters({...filters, minSalary: e.target.value})}
+              value={filters.minSalary || ""}
+              onChange={(e) => setFilters({...filters, minSalary: e.target.value ? parseInt(e.target.value) : undefined})}
             />
           </div>
 
@@ -94,27 +63,9 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
             <Input
               type="number"
               placeholder="150000"
-              value={filters.maxSalary}
-              onChange={(e) => setFilters({...filters, maxSalary: e.target.value})}
+              value={filters.maxSalary || ""}
+              onChange={(e) => setFilters({...filters, maxSalary: e.target.value ? parseInt(e.target.value) : undefined})}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Case Status</Label>
-            <Select 
-              value={filters.caseStatus} 
-              onValueChange={(value) => setFilters({...filters, caseStatus: value})}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="Approved">Approved</SelectItem>
-                <SelectItem value="Denied">Denied</SelectItem>
-                <SelectItem value="Pending">Pending</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
 

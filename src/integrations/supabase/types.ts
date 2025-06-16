@@ -9,7 +9,81 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      healthcare_h1b_cases: {
+        Row: {
+          BEGIN_DATE: string | null
+          CASE_NUMBER: string | null
+          created_at: string
+          EMPLOYER_NAME: string | null
+          END_DATE: string | null
+          FULL_TIME_POSITION: boolean | null
+          id: number
+          JOB_TITLE: string | null
+          PW_WAGE_LEVEL: string | null
+          Quarter: string | null
+          SOC_CODE: string | null
+          SOC_TITLE: string | null
+          TRADE_NAME_DBA: string | null
+          WAGE_RATE_OF_PAY_FROM: number | null
+          WAGE_RATE_OF_PAY_TO: number | null
+          WAGE_UNIT_OF_PAY: string | null
+          WORKSITE_ADDRESS1: string | null
+          WORKSITE_CITY: string | null
+          WORKSITE_COUNTY: string | null
+          WORKSITE_POSTAL_CODE: string | null
+          WORKSITE_STATE: string | null
+          Year: number | null
+        }
+        Insert: {
+          BEGIN_DATE?: string | null
+          CASE_NUMBER?: string | null
+          created_at?: string
+          EMPLOYER_NAME?: string | null
+          END_DATE?: string | null
+          FULL_TIME_POSITION?: boolean | null
+          id?: number
+          JOB_TITLE?: string | null
+          PW_WAGE_LEVEL?: string | null
+          Quarter?: string | null
+          SOC_CODE?: string | null
+          SOC_TITLE?: string | null
+          TRADE_NAME_DBA?: string | null
+          WAGE_RATE_OF_PAY_FROM?: number | null
+          WAGE_RATE_OF_PAY_TO?: number | null
+          WAGE_UNIT_OF_PAY?: string | null
+          WORKSITE_ADDRESS1?: string | null
+          WORKSITE_CITY?: string | null
+          WORKSITE_COUNTY?: string | null
+          WORKSITE_POSTAL_CODE?: string | null
+          WORKSITE_STATE?: string | null
+          Year?: number | null
+        }
+        Update: {
+          BEGIN_DATE?: string | null
+          CASE_NUMBER?: string | null
+          created_at?: string
+          EMPLOYER_NAME?: string | null
+          END_DATE?: string | null
+          FULL_TIME_POSITION?: boolean | null
+          id?: number
+          JOB_TITLE?: string | null
+          PW_WAGE_LEVEL?: string | null
+          Quarter?: string | null
+          SOC_CODE?: string | null
+          SOC_TITLE?: string | null
+          TRADE_NAME_DBA?: string | null
+          WAGE_RATE_OF_PAY_FROM?: number | null
+          WAGE_RATE_OF_PAY_TO?: number | null
+          WAGE_UNIT_OF_PAY?: string | null
+          WORKSITE_ADDRESS1?: string | null
+          WORKSITE_CITY?: string | null
+          WORKSITE_COUNTY?: string | null
+          WORKSITE_POSTAL_CODE?: string | null
+          WORKSITE_STATE?: string | null
+          Year?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
