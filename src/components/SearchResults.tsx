@@ -51,7 +51,7 @@ const SearchResults = ({ data }: SearchResultsProps) => {
     <div className="space-y-4">
       <div className="grid gap-4">
         {data.map((item) => (
-          <Card key={item.id} className="hover:shadow-lg transition-shadow duration-200">
+          <Card key={item.CASE_NUMBER} className="hover:shadow-lg transition-shadow duration-200">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
@@ -70,9 +70,9 @@ const SearchResults = ({ data }: SearchResultsProps) => {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  {item.FULL_TIME_POSITION !== undefined && (
-                    <Badge variant={item.FULL_TIME_POSITION ? "default" : "secondary"}>
-                      {item.FULL_TIME_POSITION ? "Full-time" : "Part-time"}
+                  {item.FULL_TIME_POSITION && (
+                    <Badge variant={item.FULL_TIME_POSITION === 'Y' ? "default" : "secondary"}>
+                      {item.FULL_TIME_POSITION === 'Y' ? "Full-time" : "Part-time"}
                     </Badge>
                   )}
                   {item.Year && (

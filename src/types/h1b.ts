@@ -1,12 +1,11 @@
 
 export interface H1BCase {
-  id: number;
-  CASE_NUMBER?: string;
+  CASE_NUMBER: string; // Primary key
   EMPLOYER_NAME?: string;
   JOB_TITLE?: string;
   SOC_CODE?: string;
   SOC_TITLE?: string;
-  FULL_TIME_POSITION?: boolean;
+  FULL_TIME_POSITION?: string; // Changed from boolean to string (CHAR(1))
   BEGIN_DATE?: string;
   END_DATE?: string;
   WORKSITE_ADDRESS1?: string;
@@ -21,7 +20,6 @@ export interface H1BCase {
   Year?: number;
   Quarter?: string;
   TRADE_NAME_DBA?: string;
-  created_at: string;
 }
 
 export interface SearchFilters {

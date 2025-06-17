@@ -14,24 +14,65 @@ export const useH1BData = () => {
       setLoading(true);
       console.log('Fetching data with filters:', filters);
       
+      // First, test basic connection without any filters
+      if (!filters || Object.keys(filters).length === 0 || !filters.searchQuery) {
+        console.log('Testing basic connection - fetching first 5 records...');
+        
+        // Test if table exists by trying a simple query
+        console.log('Testing table existence and permissions...');
+        
+        const testQuery = await supabase
+          .from('healthcare_h1b_cases')
+          .select('*', { count: 'exact' })
+          .limit(5);
+        
+        console.log('Basic connection test result:', {
+          error: testQuery.error,
+          count: testQuery.count,
+          dataLength: testQuery.data?.length,
+          sampleRecord: testQuery.data?.[0]
+        });
+        
+        // Let's also try a different approach - check table structure
+        if (testQuery.count === 0) {
+          console.log('Table appears empty, checking table structure...');
+          const structureQuery = await supabase
+            .from('healthcare_h1b_cases')
+            .select('*')
+            .limit(0); // This will return no data but show if table exists
+          
+          console.log('Table structure check:', {
+            error: structureQuery.error,
+            statusText: structureQuery.statusText,
+            status: structureQuery.status
+          });
+        }
+        
+        if (testQuery.error) {
+          console.error('Basic connection failed:', testQuery.error);
+          throw testQuery.error;
+        }
+      }
+      
       // Start with a basic query - select all columns
       let queryBuilder = supabase
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
-      // Apply search filters - fix the OR query syntax
+      // Apply search filters - use proper OR query syntax
       if (filters?.searchQuery && filters.searchQuery.trim()) {
         const searchTerm = filters.searchQuery.trim();
-        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%`);
+        console.log(`Applying search filter for term: "${searchTerm}"`);
+        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%,JOB_TITLE.ilike.%${searchTerm}%`);
       }
 
-      // Apply location filter - fix the OR query syntax
+      // Apply location filter - use proper OR query syntax
       if (filters?.location && filters.location.trim()) {
         const locationTerm = filters.location.trim();
         queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
       }
 
-      // Apply salary range filters - remove quotes from field names
+      // Apply salary range filters
       if (filters?.minSalary && filters?.maxSalary) {
         queryBuilder = queryBuilder
           .gte('WAGE_RATE_OF_PAY_FROM', filters.minSalary)
@@ -42,31 +83,32 @@ export const useH1BData = () => {
         queryBuilder = queryBuilder.lte('WAGE_RATE_OF_PAY_FROM', filters.maxSalary);
       }
 
-      // Apply job title filter - remove quotes from field names
+      // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
         queryBuilder = queryBuilder.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
       }
 
-      // Apply state filter - remove quotes from field names
+      // Apply state filter
       if (filters?.state && filters.state.trim()) {
         queryBuilder = queryBuilder.eq('WORKSITE_STATE', filters.state);
       }
 
-      // Apply year filter - remove quotes from field names
+      // Apply year filter
       if (filters?.year) {
         queryBuilder = queryBuilder.eq('Year', filters.year);
       }
 
-      // Apply quarter filter - remove quotes from field names
+      // Apply quarter filter
       if (filters?.quarter && filters.quarter.trim()) {
         queryBuilder = queryBuilder.eq('Quarter', filters.quarter);
       }
 
-      // Apply sorting - remove quotes from field names
-      let sortColumn = 'created_at'; // default
+      // Apply sorting
+      let sortColumn = 'WAGE_RATE_OF_PAY_FROM'; // default to salary
       if (sortBy === 'wage_rate_of_pay_from') sortColumn = 'WAGE_RATE_OF_PAY_FROM';
       else if (sortBy === 'employer_name') sortColumn = 'EMPLOYER_NAME';
       else if (sortBy === 'year') sortColumn = 'Year';
+      else if (sortBy === 'case_number') sortColumn = 'CASE_NUMBER';
       
       queryBuilder = queryBuilder.order(sortColumn, { ascending: sortOrder === 'asc' });
 

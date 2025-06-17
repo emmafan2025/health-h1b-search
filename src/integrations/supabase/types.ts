@@ -12,12 +12,10 @@ export type Database = {
       healthcare_h1b_cases: {
         Row: {
           BEGIN_DATE: string | null
-          CASE_NUMBER: string | null
-          created_at: string
+          CASE_NUMBER: string
           EMPLOYER_NAME: string | null
           END_DATE: string | null
-          FULL_TIME_POSITION: boolean | null
-          id: number
+          FULL_TIME_POSITION: string | null
           JOB_TITLE: string | null
           PW_WAGE_LEVEL: string | null
           Quarter: string | null
@@ -36,12 +34,10 @@ export type Database = {
         }
         Insert: {
           BEGIN_DATE?: string | null
-          CASE_NUMBER?: string | null
-          created_at?: string
+          CASE_NUMBER: string
           EMPLOYER_NAME?: string | null
           END_DATE?: string | null
-          FULL_TIME_POSITION?: boolean | null
-          id?: number
+          FULL_TIME_POSITION?: string | null
           JOB_TITLE?: string | null
           PW_WAGE_LEVEL?: string | null
           Quarter?: string | null
@@ -60,12 +56,10 @@ export type Database = {
         }
         Update: {
           BEGIN_DATE?: string | null
-          CASE_NUMBER?: string | null
-          created_at?: string
+          CASE_NUMBER?: string
           EMPLOYER_NAME?: string | null
           END_DATE?: string | null
-          FULL_TIME_POSITION?: boolean | null
-          id?: number
+          FULL_TIME_POSITION?: string | null
           JOB_TITLE?: string | null
           PW_WAGE_LEVEL?: string | null
           Quarter?: string | null
