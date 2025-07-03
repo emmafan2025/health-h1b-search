@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   NavigationMenu,
@@ -8,6 +9,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 
 const Navigation = () => {
@@ -17,9 +24,11 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Website Name */}
           <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-blue-800">
-              H1B for Healthcare
-            </h1>
+            <Link to="/">
+              <h1 className="text-xl font-bold text-blue-800 hover:text-blue-900 transition-colors">
+                H1B for Healthcare
+              </h1>
+            </Link>
           </div>
 
           {/* Navigation Menu */}
@@ -27,15 +36,36 @@ const Navigation = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                    H1B Data
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
+                        H1B Data
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border shadow-lg">
+                      <DropdownMenuItem>Search</DropdownMenuItem>
+                      <DropdownMenuItem>Top Healthcare H1B Sponsor</DropdownMenuItem>
+                      <DropdownMenuItem>Top Healthcare H1B Job</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                    Green Card
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
+                        Green Card
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border shadow-lg">
+                      <DropdownMenuItem>Search</DropdownMenuItem>
+                      <DropdownMenuItem>Top Healthcare Green Card Sponsor</DropdownMenuItem>
+                      <DropdownMenuItem>Top Healthcare Green Card Job</DropdownMenuItem>
+                      <DropdownMenuItem>Current Visa Bulletin</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>

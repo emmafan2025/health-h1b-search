@@ -19,6 +19,7 @@ export type Database = {
           JOB_TITLE: string | null
           PW_WAGE_LEVEL: string | null
           Quarter: string | null
+          record_id: string
           SOC_CODE: string | null
           SOC_TITLE: string | null
           TRADE_NAME_DBA: string | null
@@ -41,6 +42,7 @@ export type Database = {
           JOB_TITLE?: string | null
           PW_WAGE_LEVEL?: string | null
           Quarter?: string | null
+          record_id?: string
           SOC_CODE?: string | null
           SOC_TITLE?: string | null
           TRADE_NAME_DBA?: string | null
@@ -63,6 +65,7 @@ export type Database = {
           JOB_TITLE?: string | null
           PW_WAGE_LEVEL?: string | null
           Quarter?: string | null
+          record_id?: string
           SOC_CODE?: string | null
           SOC_TITLE?: string | null
           TRADE_NAME_DBA?: string | null
