@@ -22,26 +22,34 @@ const HealthcareEmployers = () => {
       try {
         setLoading(true);
         
+        // Use SQL aggregation to get accurate counts
         const { data, error } = await supabase
-          .from('healthcare_h1b_cases')
-          .select('EMPLOYER_NAME')
-          .not('EMPLOYER_NAME', 'is', null);
+          .rpc('get_employer_counts');
 
-        if (error) throw error;
+        if (error) {
+          // Fallback to manual SQL query if RPC doesn't exist
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('healthcare_h1b_cases')
+            .select('EMPLOYER_NAME')
+            .not('EMPLOYER_NAME', 'is', null);
+          
+          if (fallbackError) throw fallbackError;
+          
+          // Count manually as fallback
+          const employerCounts = fallbackData.reduce((acc, item) => {
+            const employer = item.EMPLOYER_NAME;
+            acc[employer] = (acc[employer] || 0) + 1;
+            return acc;
+          }, {} as Record<string, number>);
 
-        // Count cases per employer
-        const employerCounts = data.reduce((acc, item) => {
-          const employer = item.EMPLOYER_NAME;
-          acc[employer] = (acc[employer] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
+          const sortedEmployers = Object.entries(employerCounts)
+            .map(([employer_name, case_count]) => ({ employer_name, case_count }))
+            .sort((a, b) => b.case_count - a.case_count);
 
-        // Convert to array and sort by case count
-        const sortedEmployers = Object.entries(employerCounts)
-          .map(([employer_name, case_count]) => ({ employer_name, case_count }))
-          .sort((a, b) => b.case_count - a.case_count);
-
-        setEmployers(sortedEmployers);
+          setEmployers(sortedEmployers);
+        } else {
+          setEmployers(data || []);
+        }
         setError(null);
       } catch (err) {
         console.error('Error fetching employers:', err);
