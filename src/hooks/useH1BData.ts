@@ -11,6 +11,7 @@ export const useH1BData = () => {
   const [totalEmployers, setTotalEmployers] = useState(0);
   const [totalStates, setTotalStates] = useState(0);
   const [averageSalary, setAverageSalary] = useState(0);
+  const [totalOccupations, setTotalOccupations] = useState(0);
 
   const fetchStats = async () => {
     try {
@@ -36,22 +37,16 @@ export const useH1BData = () => {
       const uniqueStates = new Set(statesData.map(item => item.WORKSITE_STATE)).size;
       setTotalStates(uniqueStates);
 
-      // Get average salary
-      const { data: salaryData, error: salaryError } = await supabase
+      // Get total unique occupations (using SOC_TITLE for healthcare occupations)
+      const { data: occupationsData, error: occupationsError } = await supabase
         .from('healthcare_h1b_cases')
-        .select('WAGE_RATE_OF_PAY_FROM')
-        .not('WAGE_RATE_OF_PAY_FROM', 'is', null);
+        .select('SOC_TITLE')
+        .not('SOC_TITLE', 'is', null);
 
-      if (salaryError) throw salaryError;
+      if (occupationsError) throw occupationsError;
 
-      const validSalaries = salaryData
-        .map(item => item.WAGE_RATE_OF_PAY_FROM)
-        .filter(salary => salary && salary > 0);
-      
-      const avgSalary = validSalaries.length > 0 ? 
-        validSalaries.reduce((sum, salary) => sum + salary, 0) / validSalaries.length : 0;
-      
-      setAverageSalary(avgSalary);
+      const uniqueOccupations = new Set(occupationsData.map(item => item.SOC_TITLE)).size;
+      setTotalOccupations(uniqueOccupations);
 
     } catch (err) {
       console.error('Error fetching stats:', err);
@@ -216,7 +211,7 @@ export const useH1BData = () => {
     totalCount,
     totalEmployers,
     totalStates,
-    averageSalary,
+    totalOccupations,
     refetch: fetchData
   };
 };

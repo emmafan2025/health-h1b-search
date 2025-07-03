@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Filter, Building2, MapPin, DollarSign, Users } from "lucide-react";
+import { Search, Filter, Building2, MapPin, Briefcase, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +24,7 @@ const Index = () => {
   const [sortBy, setSortBy] = useState('wage_rate_of_pay_from');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
-  const { data: h1bData, loading, error, totalCount, totalEmployers, totalStates, averageSalary, refetch } = useH1BData();
+  const { data: h1bData, loading, error, totalCount, totalEmployers, totalStates, totalOccupations, refetch } = useH1BData();
 
   // Pagination info
   const paginationInfo: PaginationInfo = {
@@ -39,7 +39,7 @@ const Index = () => {
     totalEmployers,
     totalCases: totalCount,
     statesCovered: totalStates,
-    averageSalary
+    totalOccupations
   };
 
   // Popular employers from actual data - updated to use uppercase field names
@@ -274,9 +274,9 @@ const Index = () => {
             </Card>
             
             <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-              <DollarSign className="h-8 w-8 text-orange-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-800">${(dataStats.averageSalary / 1000).toFixed(0)}K</h3>
-              <p className="text-sm text-gray-600">Average Salary</p>
+              <Briefcase className="h-8 w-8 text-orange-600 mx-auto mb-3" />
+              <h3 className="font-semibold text-gray-800">{dataStats.totalOccupations}</h3>
+              <p className="text-sm text-gray-600">Healthcare Occupations</p>
             </Card>
           </div>
 
