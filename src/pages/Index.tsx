@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, Filter, Building2, MapPin, Briefcase, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -255,29 +256,37 @@ const Index = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-              <Building2 className="h-8 w-8 text-blue-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-800">{dataStats.totalEmployers.toLocaleString()}+</h3>
-              <p className="text-sm text-gray-600">Healthcare Employers</p>
-            </Card>
+            <Link to="/healthcare-employers">
+              <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer">
+                <Building2 className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-800">{dataStats.totalEmployers.toLocaleString()}+</h3>
+                <p className="text-sm text-gray-600">Healthcare Employers</p>
+              </Card>
+            </Link>
             
-            <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-              <Users className="h-8 w-8 text-green-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-800">{dataStats.totalCases.toLocaleString()}+</h3>
-              <p className="text-sm text-gray-600">H1B Cases</p>
-            </Card>
+            <Link to="/h1b-cases">
+              <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer">
+                <Users className="h-8 w-8 text-green-600 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-800">{dataStats.totalCases.toLocaleString()}+</h3>
+                <p className="text-sm text-gray-600">H1B Cases</p>
+              </Card>
+            </Link>
             
-            <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-              <MapPin className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-800">{dataStats.statesCovered}</h3>
-              <p className="text-sm text-gray-600">States Covered</p>
-            </Card>
+            <Link to="/states-covered">
+              <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer">
+                <MapPin className="h-8 w-8 text-purple-600 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-800">{dataStats.statesCovered}</h3>
+                <p className="text-sm text-gray-600">States Covered</p>
+              </Card>
+            </Link>
             
-            <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow">
-              <Briefcase className="h-8 w-8 text-orange-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-800">{dataStats.totalOccupations}</h3>
-              <p className="text-sm text-gray-600">Healthcare Occupations</p>
-            </Card>
+            <Link to="/healthcare-occupations">
+              <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer">
+                <Briefcase className="h-8 w-8 text-orange-600 mx-auto mb-3" />
+                <h3 className="font-semibold text-gray-800">{dataStats.totalOccupations}</h3>
+                <p className="text-sm text-gray-600">Healthcare Occupations</p>
+              </Card>
+            </Link>
           </div>
 
           {/* Popular Searches */}
