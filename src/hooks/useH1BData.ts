@@ -8,6 +8,55 @@ export const useH1BData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [totalEmployers, setTotalEmployers] = useState(0);
+  const [totalStates, setTotalStates] = useState(0);
+  const [averageSalary, setAverageSalary] = useState(0);
+
+  const fetchStats = async () => {
+    try {
+      // Get total unique employers
+      const { data: employersData, error: employersError } = await supabase
+        .from('healthcare_h1b_cases')
+        .select('EMPLOYER_NAME')
+        .not('EMPLOYER_NAME', 'is', null);
+
+      if (employersError) throw employersError;
+
+      const uniqueEmployers = new Set(employersData.map(item => item.EMPLOYER_NAME)).size;
+      setTotalEmployers(uniqueEmployers);
+
+      // Get total unique states
+      const { data: statesData, error: statesError } = await supabase
+        .from('healthcare_h1b_cases')
+        .select('WORKSITE_STATE')
+        .not('WORKSITE_STATE', 'is', null);
+
+      if (statesError) throw statesError;
+
+      const uniqueStates = new Set(statesData.map(item => item.WORKSITE_STATE)).size;
+      setTotalStates(uniqueStates);
+
+      // Get average salary
+      const { data: salaryData, error: salaryError } = await supabase
+        .from('healthcare_h1b_cases')
+        .select('WAGE_RATE_OF_PAY_FROM')
+        .not('WAGE_RATE_OF_PAY_FROM', 'is', null);
+
+      if (salaryError) throw salaryError;
+
+      const validSalaries = salaryData
+        .map(item => item.WAGE_RATE_OF_PAY_FROM)
+        .filter(salary => salary && salary > 0);
+      
+      const avgSalary = validSalaries.length > 0 ? 
+        validSalaries.reduce((sum, salary) => sum + salary, 0) / validSalaries.length : 0;
+      
+      setAverageSalary(avgSalary);
+
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
 
   const fetchData = async (filters?: SearchFilters, page: number = 1, pageSize: number = 20, sortBy?: string, sortOrder: 'asc' | 'desc' = 'desc') => {
     try {
@@ -157,6 +206,7 @@ export const useH1BData = () => {
   useEffect(() => {
     console.log('useH1BData: Initial data fetch');
     fetchData();
+    fetchStats();
   }, []);
 
   return {
@@ -164,6 +214,9 @@ export const useH1BData = () => {
     loading,
     error,
     totalCount,
+    totalEmployers,
+    totalStates,
+    averageSalary,
     refetch: fetchData
   };
 };

@@ -24,7 +24,7 @@ const Index = () => {
   const [sortBy, setSortBy] = useState('wage_rate_of_pay_from');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
-  const { data: h1bData, loading, error, totalCount, refetch } = useH1BData();
+  const { data: h1bData, loading, error, totalCount, totalEmployers, totalStates, averageSalary, refetch } = useH1BData();
 
   // Pagination info
   const paginationInfo: PaginationInfo = {
@@ -34,13 +34,12 @@ const Index = () => {
     totalPages: Math.ceil(totalCount / pageSize)
   };
 
-  // Stats based on actual data - updated to use uppercase field names
+  // Stats based on accurate data from the entire database
   const dataStats = {
-    totalEmployers: new Set(h1bData.map(item => item.EMPLOYER_NAME)).size,
+    totalEmployers,
     totalCases: totalCount,
-    statesCovered: new Set(h1bData.map(item => item.WORKSITE_STATE)).size,
-    averageSalary: h1bData.length > 0 ? 
-      h1bData.reduce((sum, item) => sum + (item.WAGE_RATE_OF_PAY_FROM || 0), 0) / h1bData.length : 0
+    statesCovered: totalStates,
+    averageSalary
   };
 
   // Popular employers from actual data - updated to use uppercase field names
