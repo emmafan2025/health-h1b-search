@@ -86,7 +86,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_employer_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          employer_name: string
+          case_count: number
+        }[]
+      }
+      get_occupation_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          occupation: string
+          soc_code: string
+          case_count: number
+        }[]
+      }
+      get_state_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          state: string
+          case_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

@@ -37,28 +37,35 @@ const StatesCovered = () => {
       try {
         setLoading(true);
         
+        // Use SQL aggregation to get accurate counts
         const { data, error } = await supabase
-          .from('healthcare_h1b_cases')
-          .select('WORKSITE_STATE')
-          .not('WORKSITE_STATE', 'is', null);
+          .rpc('get_state_counts');
 
-        if (error) throw error;
+        if (error) {
+          // Fallback to manual counting if RPC doesn't exist
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('healthcare_h1b_cases')
+            .select('WORKSITE_STATE')
+            .not('WORKSITE_STATE', 'is', null);
+          
+          if (fallbackError) throw fallbackError;
+          
+          const stateCounts = fallbackData.reduce((acc, item) => {
+            const state = item.WORKSITE_STATE?.trim();
+            if (state) {
+              acc[state] = (acc[state] || 0) + 1;
+            }
+            return acc;
+          }, {} as Record<string, number>);
 
-        // Count cases per state
-        const stateCounts = data.reduce((acc, item) => {
-          const state = item.WORKSITE_STATE?.trim();
-          if (state) {
-            acc[state] = (acc[state] || 0) + 1;
-          }
-          return acc;
-        }, {} as Record<string, number>);
+          const sortedStates = Object.entries(stateCounts)
+            .map(([state, case_count]) => ({ state, case_count }))
+            .sort((a, b) => b.case_count - a.case_count);
 
-        // Convert to array and sort by case count
-        const sortedStates = Object.entries(stateCounts)
-          .map(([state, case_count]) => ({ state, case_count }))
-          .sort((a, b) => b.case_count - a.case_count);
-
-        setStates(sortedStates);
+          setStates(sortedStates);
+        } else {
+          setStates(data || []);
+        }
         setError(null);
       } catch (err) {
         console.error('Error fetching states:', err);

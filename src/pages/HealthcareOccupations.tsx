@@ -23,32 +23,39 @@ const HealthcareOccupations = () => {
       try {
         setLoading(true);
         
+        // Use SQL aggregation to get accurate counts
         const { data, error } = await supabase
-          .from('healthcare_h1b_cases')
-          .select('SOC_TITLE, SOC_CODE')
-          .not('SOC_TITLE', 'is', null);
+          .rpc('get_occupation_counts');
 
-        if (error) throw error;
-
-        // Count cases per occupation
-        const occupationCounts = data.reduce((acc, item) => {
-          const occupation = item.SOC_TITLE;
-          const socCode = item.SOC_CODE || '';
-          if (occupation) {
-            const key = `${occupation}|${socCode}`;
-            if (!acc[key]) {
-              acc[key] = { occupation, soc_code: socCode, case_count: 0 };
+        if (error) {
+          // Fallback to manual counting if RPC doesn't exist
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('healthcare_h1b_cases')
+            .select('SOC_TITLE, SOC_CODE')
+            .not('SOC_TITLE', 'is', null);
+          
+          if (fallbackError) throw fallbackError;
+          
+          const occupationCounts = fallbackData.reduce((acc, item) => {
+            const occupation = item.SOC_TITLE;
+            const socCode = item.SOC_CODE || '';
+            if (occupation) {
+              const key = `${occupation}|${socCode}`;
+              if (!acc[key]) {
+                acc[key] = { occupation, soc_code: socCode, case_count: 0 };
+              }
+              acc[key].case_count++;
             }
-            acc[key].case_count++;
-          }
-          return acc;
-        }, {} as Record<string, OccupationData>);
+            return acc;
+          }, {} as Record<string, OccupationData>);
 
-        // Convert to array and sort by case count
-        const sortedOccupations = Object.values(occupationCounts)
-          .sort((a, b) => b.case_count - a.case_count);
+          const sortedOccupations = Object.values(occupationCounts)
+            .sort((a, b) => b.case_count - a.case_count);
 
-        setOccupations(sortedOccupations);
+          setOccupations(sortedOccupations);
+        } else {
+          setOccupations(data || []);
+        }
         setError(null);
       } catch (err) {
         console.error('Error fetching occupations:', err);
