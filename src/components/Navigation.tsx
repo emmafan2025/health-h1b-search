@@ -63,7 +63,9 @@ const Navigation = () => {
                       <DropdownMenuItem>Search</DropdownMenuItem>
                       <DropdownMenuItem>Top Healthcare Green Card Sponsor</DropdownMenuItem>
                       <DropdownMenuItem>Top Healthcare Green Card Job</DropdownMenuItem>
-                      <DropdownMenuItem>Current Visa Bulletin</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/current-visa-bulletin">Current Visa Bulletin</Link>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </NavigationMenuItem>
