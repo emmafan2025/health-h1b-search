@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      green_card_priority_dates_action: {
+        Row: {
+          category: string | null
+          china_current: string | null
+          global_current: string | null
+          id: number
+          india_current: string | null
+          mexico_current: string | null
+          philippines_current: string | null
+        }
+        Insert: {
+          category?: string | null
+          china_current?: string | null
+          global_current?: string | null
+          id?: number
+          india_current?: string | null
+          mexico_current?: string | null
+          philippines_current?: string | null
+        }
+        Update: {
+          category?: string | null
+          china_current?: string | null
+          global_current?: string | null
+          id?: number
+          india_current?: string | null
+          mexico_current?: string | null
+          philippines_current?: string | null
+        }
+        Relationships: []
+      }
       healthcare_h1b_cases: {
         Row: {
           BEGIN_DATE: string | null

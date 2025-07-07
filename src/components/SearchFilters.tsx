@@ -67,12 +67,12 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
           <div className="space-y-2">
             <Label>Work State</Label>
-            <Select value={filters.state || ""} onValueChange={(value) => setFilters({...filters, state: value})}>
+            <Select value={filters.state || "all"} onValueChange={(value) => setFilters({...filters, state: value === "all" ? "" : value})}>
               <SelectTrigger>
                 <SelectValue placeholder="Select state" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All States</SelectItem>
+                <SelectItem value="all">All States</SelectItem>
                 {states.map((state) => (
                   <SelectItem key={state} value={state}>{state}</SelectItem>
                 ))}
@@ -82,12 +82,12 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
           <div className="space-y-2">
             <Label>Year</Label>
-            <Select value={filters.year?.toString() || ""} onValueChange={(value) => setFilters({...filters, year: value ? parseInt(value) : undefined})}>
+            <Select value={filters.year?.toString() || "all"} onValueChange={(value) => setFilters({...filters, year: value === "all" ? undefined : parseInt(value)})}>
               <SelectTrigger>
                 <SelectValue placeholder="Select year" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Years</SelectItem>
+                <SelectItem value="all">All Years</SelectItem>
                 {years.map((year) => (
                   <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                 ))}
@@ -97,12 +97,12 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
           <div className="space-y-2">
             <Label>Quarter</Label>
-            <Select value={filters.quarter || ""} onValueChange={(value) => setFilters({...filters, quarter: value})}>
+            <Select value={filters.quarter || "all"} onValueChange={(value) => setFilters({...filters, quarter: value === "all" ? "" : value})}>
               <SelectTrigger>
                 <SelectValue placeholder="Select quarter" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Quarters</SelectItem>
+                <SelectItem value="all">All Quarters</SelectItem>
                 {quarters.map((quarter) => (
                   <SelectItem key={quarter} value={quarter}>{quarter}</SelectItem>
                 ))}
