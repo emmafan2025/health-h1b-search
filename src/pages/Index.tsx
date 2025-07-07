@@ -284,7 +284,7 @@ const Index = () => {
               <Card className="text-center p-6 bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer">
                 <Briefcase className="h-8 w-8 text-orange-600 mx-auto mb-3" />
                 <h3 className="font-semibold text-gray-800">{dataStats.totalOccupations}</h3>
-                <p className="text-sm text-gray-600">Healthcare Occupations</p>
+                <p className="text-sm text-gray-600">Occupations</p>
               </Card>
             </Link>
           </div>
