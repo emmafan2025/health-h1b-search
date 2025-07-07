@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Users, ArrowLeft, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,8 @@ import { useH1BData } from "@/hooks/useH1BData";
 import { SearchFilters, PaginationInfo } from "@/types/h1b";
 
 const H1BCases = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
   const [currentFilters, setCurrentFilters] = useState<SearchFilters>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(50); // Show more cases per page
@@ -30,8 +31,15 @@ const H1BCases = () => {
 
   useEffect(() => {
     // Initial load with current settings
-    refetch(currentFilters, currentPage, pageSize, sortBy, sortOrder);
-  }, []);
+    const initialSearchQuery = searchParams.get('search');
+    if (initialSearchQuery) {
+      const initialFilters = { searchQuery: initialSearchQuery };
+      setCurrentFilters(initialFilters);
+      refetch(initialFilters, currentPage, pageSize, sortBy, sortOrder);
+    } else {
+      refetch(currentFilters, currentPage, pageSize, sortBy, sortOrder);
+    }
+  }, [searchParams]);
 
   const performSearch = (filters: SearchFilters, page: number = 1) => {
     const combinedFilters = {

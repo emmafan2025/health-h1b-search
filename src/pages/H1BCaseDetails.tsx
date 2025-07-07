@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Building2, MapPin, DollarSign, Calendar, Briefcase, FileText, Users, Clock } from "lucide-react";
+import { ArrowLeft, Building2, MapPin, DollarSign, Calendar, Briefcase, FileText, Users, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,10 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { H1BCase } from "@/types/h1b";
+import { useToast } from "@/hooks/use-toast";
 
 const H1BCaseDetails = () => {
   const { caseNumber } = useParams<{ caseNumber: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [caseData, setCaseData] = useState<H1BCase | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,6 +71,31 @@ const H1BCaseDetails = () => {
     return parts.join(', ') || 'N/A';
   };
 
+  const handleShareCase = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Case URL has been copied to clipboard",
+      });
+    } catch (err) {
+      toast({
+        title: "Failed to copy",
+        description: "Please copy the URL manually",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleBackToResults = () => {
+    // Try to go back in history first, if that fails go to H1B cases page
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/h1b-cases');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -109,7 +136,7 @@ const H1BCaseDetails = () => {
         <div className="flex items-center gap-4 mb-6">
           <Button
             variant="outline"
-            onClick={() => navigate(-1)}
+            onClick={handleBackToResults}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -284,22 +311,22 @@ const H1BCaseDetails = () => {
               <CardContent className="space-y-3">
                 <Button 
                   variant="outline" 
-                  className="w-full"
-                  onClick={() => {
-                    const url = window.location.href;
-                    navigator.clipboard.writeText(url);
-                  }}
+                  className="w-full flex items-center gap-2"
+                  onClick={handleShareCase}
                 >
+                  <Share2 className="h-4 w-4" />
                   Share Case
                 </Button>
-                <Link to={`/?search=${encodeURIComponent(caseData.EMPLOYER_NAME || '')}`}>
-                  <Button variant="outline" className="w-full">
+                <Link to={`/h1b-cases?search=${encodeURIComponent(caseData.EMPLOYER_NAME || '')}`}>
+                  <Button variant="outline" className="w-full flex items-center gap-2">
+                    <Building2 className="h-4 w-4" />
                     More from this Employer
                   </Button>
                 </Link>
-                <Link to={`/?search=${encodeURIComponent(caseData.SOC_TITLE || '')}`}>
-                  <Button variant="outline" className="w-full">
-                    Similar Occupations
+                <Link to={`/h1b-cases?search=${encodeURIComponent(caseData.JOB_TITLE || '')}`}>
+                  <Button variant="outline" className="w-full flex items-center gap-2">
+                    <Briefcase className="h-4 w-4" />
+                    Similar Jobs
                   </Button>
                 </Link>
               </CardContent>
