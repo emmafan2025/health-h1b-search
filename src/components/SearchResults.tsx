@@ -121,7 +121,11 @@ const SearchResults = ({ data }: SearchResultsProps) => {
               )}
 
               <div className="flex justify-end">
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => window.open(`/h1b-case/${encodeURIComponent(item.CASE_NUMBER)}`, '_blank')}
+                >
                   View Details
                 </Button>
               </div>
