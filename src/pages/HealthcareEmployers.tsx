@@ -23,11 +23,12 @@ const HealthcareEmployers = () => {
         setLoading(true);
         console.log('Fetching healthcare employers...');
         
-        // Fetch all healthcare cases with employer names
+        // Fetch all healthcare cases with employer names (remove default limit)
         const { data: caseData, error } = await supabase
           .from('healthcare_h1b_cases')
           .select('EMPLOYER_NAME')
-          .not('EMPLOYER_NAME', 'is', null);
+          .not('EMPLOYER_NAME', 'is', null)
+          .limit(50000); // Set high limit to get all records
         
         console.log('Query result:', { dataLength: caseData?.length, error });
         
