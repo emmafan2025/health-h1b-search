@@ -41,52 +41,44 @@ const HealthcareEmployers = () => {
       setLoading(true);
       console.log('Fetching healthcare employers for occupation:', occupation);
       
-      let query = supabase
-        .from('healthcare_h1b_cases')
-        .select('EMPLOYER_NAME, SOC_TITLE')
-        .not('EMPLOYER_NAME', 'is', null);
-
-      // Filter by occupation if not "all"
+      // Get the occupation title for filtering
+      let occupationTitle = null;
       if (occupation !== "all") {
         const selectedOccupation = TOP_OCCUPATIONS.find(occ => occ.value === occupation);
-        if (selectedOccupation) {
-          query = query.eq('SOC_TITLE', selectedOccupation.title);
-        }
+        occupationTitle = selectedOccupation?.title || null;
       }
       
-      const { data: caseData, error } = await query;
+      // Use RPC function to get employer counts, bypassing 1000-record limit
+      const { data: employerData, error } = await supabase
+        .rpc('get_employers_by_occupation_with_counts', {
+          occupation_title: occupationTitle
+        });
       
-      console.log('Query result:', { dataLength: caseData?.length, error, occupation });
+      console.log('RPC result:', { dataLength: employerData?.length, error, occupation });
       
       if (error) throw error;
       
-      if (!caseData || caseData.length === 0) {
-        console.log('No healthcare cases found for occupation:', occupation);
+      if (!employerData || employerData.length === 0) {
+        console.log('No employers found for occupation:', occupation);
         setEmployers([]);
         setTotalCases(0);
         setError(null);
         return;
       }
 
-      // Count cases per employer
-      const employerCounts = caseData.reduce((acc, item) => {
-        const employer = item.EMPLOYER_NAME;
-        if (employer) {
-          acc[employer] = (acc[employer] || 0) + 1;
-        }
-        return acc;
-      }, {} as Record<string, number>);
-
-      console.log('Employer counts:', Object.keys(employerCounts).length, 'unique employers');
-
-      // Convert to array and sort by case count
-      const sortedEmployers = Object.entries(employerCounts)
-        .map(([employer_name, case_count]) => ({ employer_name, case_count }))
-        .sort((a, b) => b.case_count - a.case_count);
+      // Data is already aggregated by the database function
+      const sortedEmployers = employerData.map(item => ({
+        employer_name: item.employer_name,
+        case_count: Number(item.case_count)
+      }));
 
       console.log('Top 5 employers:', sortedEmployers.slice(0, 5));
+      
+      // Calculate total cases from employer counts
+      const totalCasesCount = sortedEmployers.reduce((sum, emp) => sum + emp.case_count, 0);
+      
       setEmployers(sortedEmployers);
-      setTotalCases(caseData.length);
+      setTotalCases(totalCasesCount);
       setError(null);
     } catch (err) {
       console.error('Error fetching employers:', err);

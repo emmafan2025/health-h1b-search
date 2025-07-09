@@ -18,6 +18,39 @@ export type Database = {
         Row: {
           category: string | null
           china_current: string | null
+          created_at: string
+          global_current: string | null
+          id: number
+          india_current: string | null
+          mexico_current: string | null
+          philippines_current: string | null
+        }
+        Insert: {
+          category?: string | null
+          china_current?: string | null
+          created_at?: string
+          global_current?: string | null
+          id?: number
+          india_current?: string | null
+          mexico_current?: string | null
+          philippines_current?: string | null
+        }
+        Update: {
+          category?: string | null
+          china_current?: string | null
+          created_at?: string
+          global_current?: string | null
+          id?: number
+          india_current?: string | null
+          mexico_current?: string | null
+          philippines_current?: string | null
+        }
+        Relationships: []
+      }
+      green_card_priority_dates_filing: {
+        Row: {
+          category: string | null
+          china_current: string | null
           global_current: string | null
           id: number
           india_current: string | null
@@ -123,6 +156,13 @@ export type Database = {
     Functions: {
       get_employer_counts: {
         Args: Record<PropertyKey, never>
+        Returns: {
+          employer_name: string
+          case_count: number
+        }[]
+      }
+      get_employers_by_occupation_with_counts: {
+        Args: { occupation_title?: string }
         Returns: {
           employer_name: string
           case_count: number
