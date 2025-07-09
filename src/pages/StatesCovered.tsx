@@ -36,36 +36,36 @@ const StatesCovered = () => {
     const fetchStates = async () => {
       try {
         setLoading(true);
+        console.log('Fetching states data...');
         
-        // Use SQL aggregation to get accurate counts
+        // Use the fixed get_state_counts function to get all state data
         const { data, error } = await supabase
           .rpc('get_state_counts');
 
+        console.log('States RPC result:', { dataLength: data?.length, error });
+
         if (error) {
-          // Fallback to manual counting if RPC doesn't exist
-          const { data: fallbackData, error: fallbackError } = await supabase
-            .from('healthcare_h1b_cases')
-            .select('WORKSITE_STATE')
-            .not('WORKSITE_STATE', 'is', null);
-          
-          if (fallbackError) throw fallbackError;
-          
-          const stateCounts = fallbackData.reduce((acc, item) => {
-            const state = item.WORKSITE_STATE?.trim();
-            if (state) {
-              acc[state] = (acc[state] || 0) + 1;
-            }
-            return acc;
-          }, {} as Record<string, number>);
-
-          const sortedStates = Object.entries(stateCounts)
-            .map(([state, case_count]) => ({ state, case_count }))
-            .sort((a, b) => b.case_count - a.case_count);
-
-          setStates(sortedStates);
-        } else {
-          setStates(data || []);
+          console.error('Error from get_state_counts:', error);
+          throw error;
         }
+
+        if (!data || data.length === 0) {
+          console.log('No states data found');
+          setStates([]);
+          setError(null);
+          return;
+        }
+
+        // Data is already sorted by case count in descending order
+        const statesData = data.map(item => ({
+          state: item.state,
+          case_count: Number(item.case_count)
+        }));
+
+        console.log('Top 5 states:', statesData.slice(0, 5));
+        console.log('Total states covered:', statesData.length);
+        
+        setStates(statesData);
         setError(null);
       } catch (err) {
         console.error('Error fetching states:', err);
