@@ -3,37 +3,38 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const TopRankings = () => {
+  // Real data from Supabase (2025 healthcare H1B cases)
   const topSponsors = [
-    "Mayo Clinic",
-    "Kaiser Permanente", 
-    "Johns Hopkins Hospital",
-    "Cleveland Clinic",
-    "Pfizer Inc",
-    "Johnson & Johnson",
-    "Merck & Co",
-    "Abbott Laboratories"
+    "Grandison Management, Inc.",
+    "Avant Healthcare Professionals, LLC.",
+    "UPMC Medical Education",
+    "Indiana University Health Care Associates, Inc.",
+    "The University of Iowa",
+    "MAYO CLINIC",
+    "ARUP Laboratories",
+    "Ochsner Clinic Foundation"
   ];
 
   const topJobTitles = [
-    "Clinical Research Scientist",
-    "Data Analyst - Healthcare",
-    "Biomedical Engineer", 
-    "Clinical Trial Manager",
-    "Healthcare Data Analyst",
-    "Medical Device Engineer",
-    "Pharmaceutical Scientist",
-    "Healthcare IT Specialist"
+    "Medical Technologist",
+    "Physical Therapist",
+    "Hospitalist",
+    "Hospitalist Physician",
+    "Physician",
+    "Medical Laboratory Scientist",
+    "Assistant Professor",
+    "Dentist"
   ];
 
   const topCities = [
-    "New York, NY",
     "Boston, MA",
-    "San Francisco, CA",
-    "Chicago, IL", 
-    "Philadelphia, PA",
-    "Los Angeles, CA",
-    "Houston, TX",
-    "Seattle, WA"
+    "Bronx, NY",
+    "New York, NY",
+    "Chicago, IL",
+    "Pittsburgh, PA",
+    "Cleveland, OH",
+    "Salt Lake City, UT",
+    "Brooklyn, NY"
   ];
 
   return (
