@@ -22,44 +22,41 @@ const HealthcareOccupations = () => {
     const fetchOccupations = async () => {
       try {
         setLoading(true);
+        console.log("Fetching healthcare occupations data...");
         
-        // Use SQL aggregation to get accurate counts
+        // Use the fixed get_occupation_counts function to get all occupation data
         const { data, error } = await supabase
-          .rpc('get_occupation_counts');
+          .rpc("get_occupation_counts");
+
+        console.log("Occupations RPC result:", { dataLength: data?.length, error });
 
         if (error) {
-          // Fallback to manual counting if RPC doesn't exist
-          const { data: fallbackData, error: fallbackError } = await supabase
-            .from('healthcare_h1b_cases')
-            .select('SOC_TITLE, SOC_CODE')
-            .not('SOC_TITLE', 'is', null);
-          
-          if (fallbackError) throw fallbackError;
-          
-          const occupationCounts = fallbackData.reduce((acc, item) => {
-            const occupation = item.SOC_TITLE;
-            const socCode = item.SOC_CODE || '';
-            if (occupation) {
-              const key = `${occupation}|${socCode}`;
-              if (!acc[key]) {
-                acc[key] = { occupation, soc_code: socCode, case_count: 0 };
-              }
-              acc[key].case_count++;
-            }
-            return acc;
-          }, {} as Record<string, OccupationData>);
-
-          const sortedOccupations = Object.values(occupationCounts)
-            .sort((a, b) => b.case_count - a.case_count);
-
-          setOccupations(sortedOccupations);
-        } else {
-          setOccupations(data || []);
+          console.error("Error from get_occupation_counts:", error);
+          throw error;
         }
+
+        if (!data || data.length === 0) {
+          console.log("No occupations data found");
+          setOccupations([]);
+          setError(null);
+          return;
+        }
+
+        // Data is already sorted by case count in descending order
+        const occupationsData = data.map(item => ({
+          occupation: item.occupation,
+          soc_code: item.soc_code || "",
+          case_count: Number(item.case_count)
+        }));
+
+        console.log("Top 5 occupations:", occupationsData.slice(0, 5));
+        console.log("Total unique occupations:", occupationsData.length);
+        
+        setOccupations(occupationsData);
         setError(null);
       } catch (err) {
-        console.error('Error fetching occupations:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error("Error fetching occupations:", err);
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
