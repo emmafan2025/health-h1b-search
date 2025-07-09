@@ -44,8 +44,7 @@ const HealthcareEmployers = () => {
       let query = supabase
         .from('healthcare_h1b_cases')
         .select('EMPLOYER_NAME, SOC_TITLE')
-        .not('EMPLOYER_NAME', 'is', null)
-        .limit(50000);
+        .not('EMPLOYER_NAME', 'is', null);
 
       // Filter by occupation if not "all"
       if (occupation !== "all") {
