@@ -20,7 +20,7 @@ const TOP_OCCUPATIONS = [
   { value: "lab-technologists", label: "Lab Technologists", title: "Medical and Clinical Laboratory Technologists" },
   { value: "physical-therapists", label: "Physical Therapists", title: "Physical Therapists" },
   { value: "physicians-all", label: "Physicians (All)", title: "Physicians, All Other" },
-  { value: "hospitalists", label: "Hospitalists", title: "Hospitalists" },
+  { value: "registered-nurses", label: "Registered Nurses", title: "Registered Nurses" },
   { value: "dentists", label: "Dentists", title: "Dentists, General" },
   { value: "internists", label: "Internists", title: "Internists, General" },
 ];
