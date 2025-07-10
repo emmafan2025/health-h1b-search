@@ -45,8 +45,12 @@ const Navigation = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
                       <DropdownMenuItem>Search</DropdownMenuItem>
-                      <DropdownMenuItem>Top Healthcare H1B Sponsor</DropdownMenuItem>
-                      <DropdownMenuItem>Top Healthcare H1B Job</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/healthcare-employers">Top Healthcare H1B Sponsor</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/healthcare-occupations">Top Healthcare H1B Job</Link>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </NavigationMenuItem>
