@@ -217,8 +217,8 @@ const HealthcareEmployers = () => {
                         if (!a.soc_code && b.soc_code) return 1;
                         return a.occupation.localeCompare(b.occupation);
                       })
-                      .map((occupation) => (
-                      <SelectItem key={occupation.occupation} value={occupation.occupation}>
+                      .map((occupation, index) => (
+                      <SelectItem key={`${occupation.soc_code}-${occupation.occupation}-${index}`} value={occupation.occupation}>
                         {occupation.soc_code ? `${occupation.soc_code} - ` : ''}{occupation.occupation} ({occupation.case_count.toLocaleString()} cases)
                       </SelectItem>
                     ))}
