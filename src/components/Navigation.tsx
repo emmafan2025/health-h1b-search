@@ -122,20 +122,20 @@ const Navigation = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
                     <User className="h-4 w-4 mr-2" />
-                    用户中心
+                    Account
                     <ChevronDown className="ml-1 h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border shadow-lg">
                   <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                     <LogOut className="h-4 w-4 mr-2" />
-                    退出登录
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Button className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
-                <Link to="/auth">登录</Link>
+                <Link to="/auth">Sign In</Link>
               </Button>
             )}
           </div>

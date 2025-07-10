@@ -34,20 +34,20 @@ const Auth = () => {
       
       if (error) {
         toast({
-          title: "登录失败",
-          description: error.message || "请检查您的邮箱和密码",
+          title: "Sign in failed",
+          description: error.message || "Please check your email and password",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "登录成功！",
-          description: "欢迎回到 H1B Healthcare Forum",
+          title: "Sign in successful!",
+          description: "Welcome back to H1B Healthcare Forum",
         });
       }
     } catch (error) {
       toast({
-        title: "登录失败",
-        description: "发生未知错误，请稍后重试",
+        title: "Sign in failed",
+        description: "An unknown error occurred, please try again later",
         variant: "destructive",
       });
     } finally {
@@ -69,27 +69,27 @@ const Auth = () => {
       if (error) {
         if (error.message.includes("already registered")) {
           toast({
-            title: "注册失败",
-            description: "该邮箱已被注册，请尝试登录",
+            title: "Sign up failed",
+            description: "This email is already registered, please try signing in",
             variant: "destructive",
           });
         } else {
           toast({
-            title: "注册失败",
-            description: error.message || "请检查您的信息",
+            title: "Sign up failed",
+            description: error.message || "Please check your information",
             variant: "destructive",
           });
         }
       } else {
         toast({
-          title: "注册成功！",
-          description: "请查收邮件验证您的账户",
+          title: "Sign up successful!",
+          description: "Please check your email to verify your account",
         });
       }
     } catch (error) {
       toast({
-        title: "注册失败",
-        description: "发生未知错误，请稍后重试",
+        title: "Sign up failed",
+        description: "An unknown error occurred, please try again later",
         variant: "destructive",
       });
     } finally {
@@ -103,32 +103,32 @@ const Auth = () => {
         <div className="mb-6">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            返回首页
+            Back to Home
           </Link>
         </div>
 
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-primary">H1B Healthcare Forum</CardTitle>
-            <CardDescription>登录或注册参与讨论</CardDescription>
+            <CardDescription>Sign in or register to join discussions</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">登录</TabsTrigger>
-                <TabsTrigger value="signup">注册</TabsTrigger>
+                <TabsTrigger value="signin">Sign In</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">邮箱</Label>
+                    <Label htmlFor="signin-email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signin-email"
                         type="email"
-                        placeholder="请输入邮箱"
+                        placeholder="Enter your email"
                         value={signInData.email}
                         onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
                         className="pl-10"
@@ -137,13 +137,13 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password">密码</Label>
+                    <Label htmlFor="signin-password">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signin-password"
                         type="password"
-                        placeholder="请输入密码"
+                        placeholder="Enter your password"
                         value={signInData.password}
                         onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
                         className="pl-10"
@@ -152,7 +152,7 @@ const Auth = () => {
                     </div>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "登录中..." : "登录"}
+                    {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
               </TabsContent>
@@ -160,13 +160,13 @@ const Auth = () => {
               <TabsContent value="signup" className="space-y-4">
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-username">用户名</Label>
+                    <Label htmlFor="signup-username">Username</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-username"
                         type="text"
-                        placeholder="请输入用户名（可选）"
+                        placeholder="Enter username (optional)"
                         value={signUpData.username}
                         onChange={(e) => setSignUpData({ ...signUpData, username: e.target.value })}
                         className="pl-10"
@@ -174,13 +174,13 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">邮箱</Label>
+                    <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-email"
                         type="email"
-                        placeholder="请输入邮箱"
+                        placeholder="Enter your email"
                         value={signUpData.email}
                         onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
                         className="pl-10"
@@ -189,13 +189,13 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">密码</Label>
+                    <Label htmlFor="signup-password">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="signup-password"
                         type="password"
-                        placeholder="请输入密码（至少6位）"
+                        placeholder="Enter password (at least 6 characters)"
                         value={signUpData.password}
                         onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
                         className="pl-10"
@@ -205,7 +205,7 @@ const Auth = () => {
                     </div>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "注册中..." : "注册"}
+                    {isLoading ? "Signing up..." : "Sign Up"}
                   </Button>
                 </form>
               </TabsContent>
