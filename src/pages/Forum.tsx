@@ -75,7 +75,7 @@ const Forum = () => {
   // Create new post mutation
   const createPostMutation = useMutation({
     mutationFn: async (post: NewPost) => {
-      if (!user) throw new Error("用户未登录");
+      if (!user) throw new Error("User not logged in");
       
       // Get user profile for username
       const { data: profile } = await supabase
@@ -133,8 +133,8 @@ const Forum = () => {
   const handleCreatePost = () => {
     if (!user) {
       toast({
-        title: "请先登录",
-        description: "发帖需要登录账户",
+        title: "Please login first",
+        description: "You need to login to create a post",
         variant: "destructive",
       });
       return;
@@ -142,8 +142,8 @@ const Forum = () => {
 
     if (!newPost.title.trim() || !newPost.content.trim()) {
       toast({
-        title: "请填写必填字段",
-        description: "标题和内容都是必填的",
+        title: "Please fill required fields",
+        description: "Title and content are required",
         variant: "destructive",
       });
       return;
@@ -238,34 +238,34 @@ const Forum = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
-                搜索与筛选帖子
+                Search and Filter Posts
               </CardTitle>
               {user ? (
                 <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
                   <DialogTrigger asChild>
                     <Button className="flex items-center gap-2">
                       <PlusCircle className="h-4 w-4" />
-                      发布新帖
+                      Create New Post
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                      <DialogTitle>发布新帖</DialogTitle>
+                      <DialogTitle>Create New Post</DialogTitle>
                       <DialogDescription>
-                        分享您的想法、问题或经验与社区交流
+                        Share your thoughts, questions or experiences with the community
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium">标题 *</label>
+                        <label className="text-sm font-medium">Title *</label>
                         <Input
-                          placeholder="请输入帖子标题..."
+                          placeholder="Enter post title..."
                           value={newPost.title}
                           onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium">分类</label>
+                        <label className="text-sm font-medium">Category</label>
                         <Select value={newPost.category} onValueChange={(value) => setNewPost({ ...newPost, category: value })}>
                           <SelectTrigger>
                             <SelectValue />
@@ -280,9 +280,9 @@ const Forum = () => {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm font-medium">内容 *</label>
+                        <label className="text-sm font-medium">Content *</label>
                         <Textarea
-                          placeholder="请输入帖子内容..."
+                          placeholder="Enter post content..."
                           value={newPost.content}
                           onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                           rows={6}
@@ -290,10 +290,10 @@ const Forum = () => {
                       </div>
                       <div className="flex justify-end gap-2">
                         <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
-                          取消
+                          Cancel
                         </Button>
                         <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
-                          {createPostMutation.isPending ? "发布中..." : "发布帖子"}
+                          {createPostMutation.isPending ? "Publishing..." : "Publish Post"}
                         </Button>
                       </div>
                     </div>
@@ -303,7 +303,7 @@ const Forum = () => {
                 <Button asChild className="flex items-center gap-2">
                   <Link to="/auth">
                     <LogIn className="h-4 w-4" />
-                    登录后发帖
+                    Login to Post
                   </Link>
                 </Button>
               )}
@@ -313,7 +313,7 @@ const Forum = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <Input
-                  placeholder="搜索帖子..."
+                  placeholder="Search posts..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full"
@@ -322,10 +322,10 @@ const Forum = () => {
               <div className="md:w-48">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
-                    <SelectValue placeholder="按分类筛选" />
+                    <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">所有分类</SelectItem>
+                    <SelectItem value="all">All Categories</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category.value} value={category.value}>
                         {category.label}
@@ -341,26 +341,26 @@ const Forum = () => {
         {/* Posts List */}
         {isLoading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">正在加载论坛帖子...</p>
+            <p className="text-muted-foreground">Loading forum posts...</p>
           </div>
         ) : filteredPosts.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">暂无帖子</h3>
+              <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
               <p className="text-muted-foreground mb-4">
                 {searchTerm || selectedCategory !== "all" 
-                  ? "尝试调整搜索或筛选条件"
-                  : "成为第一个在社区发帖的人！"
+                  ? "Try adjusting your search or filter criteria"
+                  : "Be the first to post in the community!"
                 }
               </p>
               {user ? (
                 <Button onClick={() => setIsNewPostOpen(true)}>
-                  发布第一个帖子
+                  Create First Post
                 </Button>
               ) : (
                 <Button asChild>
-                  <Link to="/auth">登录后发帖</Link>
+                  <Link to="/auth">Login to Post</Link>
                 </Button>
               )}
             </CardContent>
@@ -377,7 +377,7 @@ const Forum = () => {
                           {categories.find(c => c.value === post.category)?.label || post.category}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                          作者: {post.author_name}
+                          Author: {post.author_name}
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold mb-2 hover:text-primary cursor-pointer">
@@ -389,11 +389,11 @@ const Forum = () => {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-4 w-4" />
-                          {post.reply_count} 回复
+                          {post.reply_count} replies
                         </div>
                         <div className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />
-                          {post.views} 浏览
+                          {post.views} views
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
@@ -403,7 +403,7 @@ const Forum = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                       <Button variant="outline" size="sm">
-                        查看讨论
+                        View Discussion
                       </Button>
                     </div>
                   </div>
