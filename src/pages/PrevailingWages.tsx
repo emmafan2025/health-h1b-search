@@ -38,7 +38,7 @@ const PrevailingWages = () => {
           </p>
         </div>
 
-        {/* Official Tool Access */}
+        {/* Official Tool Access - Embedded */}
         <Card className="mb-8 border-primary/20">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2 text-2xl">
@@ -46,24 +46,33 @@ const PrevailingWages = () => {
               Official DOL Wage Search Tool
             </CardTitle>
             <CardDescription>
-              Access the Department of Labor's official prevailing wage database
+              Interactive access to the Department of Labor's official prevailing wage database
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <p className="text-muted-foreground">
-              Use the official Foreign Labor Application Gateway (FLAG) to search for prevailing wages 
-              by job title, location, and experience level.
-            </p>
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6" 
-              onClick={() => window.open('https://flag.dol.gov/wage-data/wage-search', '_blank')}
-            >
-              <ExternalLink className="mr-2 h-5 w-5" />
-              Access DOL Wage Search Tool
-            </Button>
-            <p className="text-sm text-muted-foreground">
-              Opens in a new tab - Official U.S. Department of Labor website
+          <CardContent>
+            <div className="relative">
+              <iframe
+                src="https://flag.dol.gov/wage-data/wage-search"
+                className="w-full h-[800px] border border-border rounded-lg"
+                title="DOL Wage Search Tool"
+                loading="lazy"
+                allow="same-origin"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              />
+              <div className="absolute top-4 right-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open('https://flag.dol.gov/wage-data/wage-search', '_blank')}
+                  className="bg-background/80 backdrop-blur-sm"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Open in New Tab
+                </Button>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground text-center mt-4">
+              If the tool doesn't load properly, click "Open in New Tab" to access it directly.
             </p>
           </CardContent>
         </Card>
