@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Building2, ArrowLeft } from "lucide-react";
+import { Building2, ArrowLeft, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -13,53 +13,94 @@ interface EmployerData {
   case_count: number;
 }
 
-// Top healthcare occupations based on H1B case volume
-const TOP_OCCUPATIONS = [
-  { value: "all", label: "All Occupations", title: "Physicians and Surgeons, All Other" },
-  { value: "physicians-surgeons", label: "Physicians & Surgeons", title: "Physicians and Surgeons, All Other" },
-  { value: "lab-technologists", label: "Lab Technologists", title: "Medical and Clinical Laboratory Technologists" },
-  { value: "physical-therapists", label: "Physical Therapists", title: "Physical Therapists" },
-  { value: "physicians-all", label: "Physicians (All)", title: "Physicians, All Other" },
-  { value: "registered-nurses", label: "Registered Nurses", title: "Registered Nurses" },
-  { value: "dentists", label: "Dentists", title: "Dentists, General" },
-  { value: "internists", label: "Internists", title: "Internists, General" },
-];
+interface OccupationData {
+  occupation: string;
+  soc_code: string;
+  case_count: number;
+}
 
 const HealthcareEmployers = () => {
   const [employers, setEmployers] = useState<EmployerData[]>([]);
+  const [occupations, setOccupations] = useState<OccupationData[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState("all");
+  const [selectedOccupation, setSelectedOccupation] = useState<string>("all");
+  const [selectedYear, setSelectedYear] = useState<string>("all");
   const [totalCases, setTotalCases] = useState(0);
 
+  // Load initial data
   useEffect(() => {
-    fetchEmployers(activeTab);
-  }, [activeTab]);
+    const loadInitialData = async () => {
+      try {
+        setLoading(true);
+        
+        // Load all occupations
+        const { data: occupationData, error: occupationError } = await supabase
+          .rpc('get_occupation_counts');
+        
+        if (occupationError) throw occupationError;
+        
+        // Load available years
+        const { data: yearData, error: yearError } = await supabase
+          .rpc('get_available_years');
+        
+        if (yearError) throw yearError;
+        
+        setOccupations(occupationData || []);
+        setAvailableYears(yearData?.map(y => y.year) || []);
+        
+        // Load employers with default filters
+        await fetchEmployers("all", "all");
+      } catch (err) {
+        console.error('Error loading initial data:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadInitialData();
+  }, []);
 
-  const fetchEmployers = async (occupation: string) => {
+  // Fetch employers when filters change
+  useEffect(() => {
+    if (occupations.length > 0) {
+      fetchEmployers(selectedOccupation, selectedYear);
+    }
+  }, [selectedOccupation, selectedYear, occupations.length]);
+
+  const fetchEmployers = async (occupation: string, year: string) => {
     try {
       setLoading(true);
-      console.log('Fetching healthcare employers for occupation:', occupation);
+      console.log('Fetching healthcare employers for occupation:', occupation, 'year:', year);
       
       // Get the occupation title for filtering
       let occupationTitle = null;
       if (occupation !== "all") {
-        const selectedOccupation = TOP_OCCUPATIONS.find(occ => occ.value === occupation);
-        occupationTitle = selectedOccupation?.title || null;
+        const selectedOcc = occupations.find(occ => occ.occupation === occupation);
+        occupationTitle = selectedOcc?.occupation || null;
       }
       
-      // Use RPC function to get employer counts, bypassing 1000-record limit
+      // Get year for filtering
+      let filterYear = null;
+      if (year !== "all") {
+        filterYear = parseInt(year);
+      }
+      
+      // Use RPC function to get employer counts with both filters
       const { data: employerData, error } = await supabase
         .rpc('get_employers_by_occupation_with_counts', {
-          occupation_title: occupationTitle
+          occupation_title: occupationTitle,
+          filter_year: filterYear
         });
       
-      console.log('RPC result:', { dataLength: employerData?.length, error, occupation });
+      console.log('RPC result:', { dataLength: employerData?.length, error, occupation, year });
       
       if (error) throw error;
       
       if (!employerData || employerData.length === 0) {
-        console.log('No employers found for occupation:', occupation);
+        console.log('No employers found for filters:', { occupation, year });
         setEmployers([]);
         setTotalCases(0);
         setError(null);
@@ -88,7 +129,17 @@ const HealthcareEmployers = () => {
     }
   };
 
-  if (loading) {
+  const getSelectedOccupationLabel = () => {
+    if (selectedOccupation === "all") return "All Occupations";
+    return selectedOccupation;
+  };
+
+  const getSelectedYearLabel = () => {
+    if (selectedYear === "all") return "All Years";
+    return selectedYear;
+  };
+
+  if (loading && occupations.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <Navigation />
@@ -102,7 +153,7 @@ const HealthcareEmployers = () => {
     );
   }
 
-  if (error) {
+  if (error && occupations.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <Navigation />
@@ -131,91 +182,126 @@ const HealthcareEmployers = () => {
           <div className="flex items-center gap-3">
             <Building2 className="h-8 w-8 text-blue-600" />
             <div>
-              <h1 className="text-3xl font-bold text-blue-800">Healthcare Employers by Occupation</h1>
-              <p className="text-gray-600">Top employers ranked by H1B sponsorship volume per occupation</p>
+              <h1 className="text-3xl font-bold text-blue-800">Healthcare Employers</h1>
+              <p className="text-gray-600">Top employers ranked by H1B sponsorship volume</p>
             </div>
           </div>
         </div>
 
-        {/* Occupation Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-6">
-            {TOP_OCCUPATIONS.map((occupation) => (
-              <TabsTrigger key={occupation.value} value={occupation.value} className="text-xs">
-                {occupation.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {TOP_OCCUPATIONS.map((occupation) => (
-            <TabsContent key={occupation.value} value={occupation.value}>
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold text-blue-800">
-                  {occupation.label} - Top Employers
-                </h2>
-                <p className="text-gray-600">
-                  {employers.length} employers found ({totalCases.toLocaleString()} total cases)
-                </p>
+        {/* Filters */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              Filters
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Occupation Filter */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Occupation</label>
+                <Select value={selectedOccupation} onValueChange={setSelectedOccupation}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select occupation" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-60">
+                    <SelectItem value="all">All Occupations</SelectItem>
+                    {occupations.map((occupation) => (
+                      <SelectItem key={occupation.occupation} value={occupation.occupation}>
+                        {occupation.occupation} ({occupation.case_count.toLocaleString()} cases)
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Loading State */}
-              {loading && (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Loading employers...</p>
-                </div>
-              )}
+              {/* Year Filter */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Year</label>
+                <Select value={selectedYear} onValueChange={setSelectedYear}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Years</SelectItem>
+                    {availableYears.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-              {/* Error State */}
-              {error && (
-                <div className="text-center py-8">
-                  <p className="text-red-600 mb-4">Failed to load data: {error}</p>
-                  <Button onClick={() => fetchEmployers(activeTab)}>Retry</Button>
-                </div>
-              )}
+        {/* Results Header */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-blue-800 mb-2">
+            {getSelectedOccupationLabel()} - {getSelectedYearLabel()}
+          </h2>
+          <p className="text-gray-600">
+            {employers.length} employers found ({totalCases.toLocaleString()} total cases)
+          </p>
+        </div>
 
-              {/* Employers List */}
-              {!loading && !error && (
-                <div className="grid gap-4">
-                  {employers.map((employer, index) => (
-                    <Card key={employer.employer_name} className="hover:shadow-lg transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
-                              <span className="text-blue-800 font-bold text-lg">#{index + 1}</span>
-                            </div>
-                            <div>
-                              <h3 className="text-lg font-semibold text-gray-800">
-                                {employer.employer_name}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {occupation.label === "All Occupations" ? "Healthcare Employer" : occupation.label}
-                              </p>
-                            </div>
-                          </div>
-                          <Badge variant="secondary" className="text-lg px-3 py-1">
-                            {employer.case_count.toLocaleString()} cases
-                          </Badge>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading employers...</p>
+          </div>
+        )}
 
-              {/* Empty State */}
-              {!loading && !error && employers.length === 0 && (
-                <Card className="text-center p-8">
-                  <CardContent>
-                    <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">No employers found for this occupation.</p>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-8">
+            <p className="text-red-600 mb-4">Failed to load data: {error}</p>
+            <Button onClick={() => fetchEmployers(selectedOccupation, selectedYear)}>Retry</Button>
+          </div>
+        )}
+
+        {/* Employers List */}
+        {!loading && !error && (
+          <div className="grid gap-4">
+            {employers.map((employer, index) => (
+              <Card key={employer.employer_name} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
+                        <span className="text-blue-800 font-bold text-lg">#{index + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {employer.employer_name}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Healthcare Employer
+                        </p>
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="text-lg px-3 py-1">
+                      {employer.case_count.toLocaleString()} cases
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && employers.length === 0 && (
+          <Card className="text-center p-8">
+            <CardContent>
+              <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">No employers found for the selected filters.</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

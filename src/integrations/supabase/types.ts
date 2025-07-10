@@ -154,6 +154,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_available_years: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          year: number
+        }[]
+      }
       get_employer_counts: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -162,7 +168,9 @@ export type Database = {
         }[]
       }
       get_employers_by_occupation_with_counts: {
-        Args: { occupation_title?: string }
+        Args:
+          | { occupation_title?: string }
+          | { occupation_title?: string; filter_year?: number }
         Returns: {
           employer_name: string
           case_count: number
