@@ -11,6 +11,7 @@ import StatesCovered from "./pages/StatesCovered";
 import HealthcareOccupations from "./pages/HealthcareOccupations";
 import VisaBulletin from "./pages/VisaBulletin";
 import H1BCaseDetails from "./pages/H1BCaseDetails";
+import PrevailingWages from "./pages/PrevailingWages";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/states-covered" element={<StatesCovered />} />
           <Route path="/healthcare-occupations" element={<HealthcareOccupations />} />
           <Route path="/current-visa-bulletin" element={<VisaBulletin />} />
+          <Route path="/prevailing-wages" element={<PrevailingWages />} />
           <Route path="/h1b-case/:caseNumber" element={<H1BCaseDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

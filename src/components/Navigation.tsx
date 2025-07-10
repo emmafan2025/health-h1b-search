@@ -75,8 +75,8 @@ const Navigation = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                    Prevailing Wages
+                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600" asChild>
+                    <Link to="/prevailing-wages">Prevailing Wages</Link>
                   </Button>
                 </NavigationMenuItem>
                 
