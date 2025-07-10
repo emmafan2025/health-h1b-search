@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -16,10 +17,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, LogOut, User } from "lucide-react";
+import { ChevronDown, LogOut, User, Globe } from "lucide-react";
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
+  const { language, setLanguage, t } = useTranslation();
 
   const handleSignOut = async () => {
     await signOut();
@@ -46,17 +48,17 @@ const Navigation = () => {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                        H1B Data
+                        {t.nav.h1bData}
                         <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
-                      <DropdownMenuItem>Search</DropdownMenuItem>
+                      <DropdownMenuItem>{t.nav.search}</DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link to="/healthcare-employers">Top Healthcare H1B Sponsor</Link>
+                        <Link to="/healthcare-employers">{t.nav.topHealthcareSponsors}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link to="/healthcare-occupations">Top Healthcare H1B Job</Link>
+                        <Link to="/healthcare-occupations">{t.nav.topHealthcareJobs}</Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -66,16 +68,16 @@ const Navigation = () => {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
-                        Green Card
+                        {t.nav.greenCard}
                         <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
-                      <DropdownMenuItem>Search</DropdownMenuItem>
-                      <DropdownMenuItem>Top Healthcare Green Card Sponsor</DropdownMenuItem>
-                      <DropdownMenuItem>Top Healthcare Green Card Job</DropdownMenuItem>
+                      <DropdownMenuItem>{t.nav.search}</DropdownMenuItem>
+                      <DropdownMenuItem>{t.nav.topGreenCardSponsors}</DropdownMenuItem>
+                      <DropdownMenuItem>{t.nav.topGreenCardJobs}</DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link to="/current-visa-bulletin">Current Visa Bulletin</Link>
+                        <Link to="/current-visa-bulletin">{t.nav.currentVisaBulletin}</Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -83,31 +85,31 @@ const Navigation = () => {
                 
                 <NavigationMenuItem>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600" asChild>
-                    <Link to="/prevailing-wages">Prevailing Wages</Link>
+                    <Link to="/prevailing-wages">{t.nav.prevailingWages}</Link>
                   </Button>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600" asChild>
-                    <Link to="/forum">Forum</Link>
+                    <Link to="/forum">{t.nav.forum}</Link>
                   </Button>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-gray-700 hover:text-blue-600">
-                    More
+                    {t.nav.more}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="p-4 w-48">
                       <div className="space-y-2">
                         <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          Resources
+                          {t.nav.resources}
                         </Button>
                         <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          FAQ
+                          {t.nav.faq}
                         </Button>
                         <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          Contact Us
+                          {t.nav.contactUs}
                         </Button>
                       </div>
                     </div>
@@ -116,26 +118,44 @@ const Navigation = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
+            {/* Language Toggle */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-blue-600">
+                  <Globe className="h-4 w-4 mr-1" />
+                  {language === 'en' ? 'EN' : '中文'}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white border shadow-lg">
+                <DropdownMenuItem onClick={() => setLanguage('en')}>
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('zh')}>
+                  中文
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             {/* Auth Section */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
                     <User className="h-4 w-4 mr-2" />
-                    Account
+                    {t.nav.account}
                     <ChevronDown className="ml-1 h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border shadow-lg">
                   <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                     <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out
+                    {t.nav.signOut}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Button className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
-                <Link to="/auth">Sign In</Link>
+                <Link to="/auth">{t.nav.signIn}</Link>
               </Button>
             )}
           </div>

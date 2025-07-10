@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/TranslationContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,15 +52,16 @@ const Forum = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const categories = [
-    { value: "general", label: "General Discussion" },
-    { value: "h1b-process", label: "H1B Process" },
-    { value: "job-search", label: "Job Search" },
-    { value: "visa-issues", label: "Visa Issues" },
-    { value: "career-advice", label: "Career Advice" },
-    { value: "immigration-law", label: "Immigration Law" },
-    { value: "success-stories", label: "Success Stories" }
+    { value: "general", label: t.forum.categories.general },
+    { value: "h1b-process", label: t.forum.categories.h1bProcess },
+    { value: "job-search", label: t.forum.categories.jobSearch },
+    { value: "visa-issues", label: t.forum.categories.visaIssues },
+    { value: "career-advice", label: t.forum.categories.careerAdvice },
+    { value: "immigration-law", label: t.forum.categories.immigrationLaw },
+    { value: "success-stories", label: t.forum.categories.successStories }
   ];
 
   // Fetch forum posts
@@ -108,14 +110,14 @@ const Forum = () => {
         category: "general"
       });
       toast({
-        title: "Post created successfully!",
-        description: "Your post has been added to the forum.",
+        title: t.forum.toast.postCreated,
+        description: t.forum.toast.postCreatedDesc,
       });
     },
     onError: (error) => {
       toast({
-        title: "Error creating post",
-        description: "Please try again later.",
+        title: t.forum.toast.errorCreating,
+        description: t.forum.toast.errorCreatingDesc,
         variant: "destructive",
       });
     },
@@ -133,8 +135,8 @@ const Forum = () => {
   const handleCreatePost = () => {
     if (!user) {
       toast({
-        title: "Please login first",
-        description: "You need to login to create a post",
+        title: t.forum.toast.pleaseLogin,
+        description: t.forum.toast.pleaseLoginDesc,
         variant: "destructive",
       });
       return;
@@ -142,8 +144,8 @@ const Forum = () => {
 
     if (!newPost.title.trim() || !newPost.content.trim()) {
       toast({
-        title: "Please fill required fields",
-        description: "Title and content are required",
+        title: t.forum.toast.fillRequired,
+        description: t.forum.toast.fillRequiredDesc,
         variant: "destructive",
       });
       return;
@@ -183,11 +185,10 @@ const Forum = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary mb-4">
-            H1B Healthcare Forum
+            {t.forum.title}
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Connect with fellow healthcare professionals navigating the H1B journey. 
-            Share experiences, ask questions, and get support from the community.
+            {t.forum.subtitle}
           </p>
         </div>
 
@@ -199,7 +200,7 @@ const Forum = () => {
                 <MessageCircle className="h-8 w-8 text-primary" />
                 <div className="ml-4">
                   <p className="text-2xl font-bold">{posts?.length || 0}</p>
-                  <p className="text-sm text-muted-foreground">Total Posts</p>
+                  <p className="text-sm text-muted-foreground">{t.forum.totalPosts}</p>
                 </div>
               </div>
             </CardContent>
@@ -212,7 +213,7 @@ const Forum = () => {
                   <p className="text-2xl font-bold">
                     {new Set(posts?.map(p => p.author_name)).size || 0}
                   </p>
-                  <p className="text-sm text-muted-foreground">Active Members</p>
+                  <p className="text-sm text-muted-foreground">{t.forum.activeMembers}</p>
                 </div>
               </div>
             </CardContent>
@@ -225,7 +226,7 @@ const Forum = () => {
                   <p className="text-2xl font-bold">
                     {posts?.reduce((sum, post) => sum + post.views, 0) || 0}
                   </p>
-                  <p className="text-sm text-muted-foreground">Total Views</p>
+                  <p className="text-sm text-muted-foreground">{t.forum.totalViews}</p>
                 </div>
               </div>
             </CardContent>
@@ -238,34 +239,34 @@ const Forum = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
-                Search and Filter Posts
+                {t.forum.searchAndFilter}
               </CardTitle>
               {user ? (
                 <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
                   <DialogTrigger asChild>
                     <Button className="flex items-center gap-2">
                       <PlusCircle className="h-4 w-4" />
-                      Create New Post
+                      {t.forum.createNewPost}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                      <DialogTitle>Create New Post</DialogTitle>
+                      <DialogTitle>{t.forum.createPost.title}</DialogTitle>
                       <DialogDescription>
-                        Share your thoughts, questions or experiences with the community
+                        {t.forum.createPost.subtitle}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium">Title *</label>
+                        <label className="text-sm font-medium">{t.forum.createPost.titleLabel}</label>
                         <Input
-                          placeholder="Enter post title..."
+                          placeholder={t.forum.createPost.titlePlaceholder}
                           value={newPost.title}
                           onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium">Category</label>
+                        <label className="text-sm font-medium">{t.forum.createPost.category}</label>
                         <Select value={newPost.category} onValueChange={(value) => setNewPost({ ...newPost, category: value })}>
                           <SelectTrigger>
                             <SelectValue />
@@ -280,9 +281,9 @@ const Forum = () => {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm font-medium">Content *</label>
+                        <label className="text-sm font-medium">{t.forum.createPost.contentLabel}</label>
                         <Textarea
-                          placeholder="Enter post content..."
+                          placeholder={t.forum.createPost.contentPlaceholder}
                           value={newPost.content}
                           onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                           rows={6}
@@ -290,10 +291,10 @@ const Forum = () => {
                       </div>
                       <div className="flex justify-end gap-2">
                         <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
-                          Cancel
+                          {t.forum.createPost.cancel}
                         </Button>
                         <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
-                          {createPostMutation.isPending ? "Publishing..." : "Publish Post"}
+                          {createPostMutation.isPending ? t.forum.createPost.publishing : t.forum.createPost.publish}
                         </Button>
                       </div>
                     </div>
@@ -303,7 +304,7 @@ const Forum = () => {
                 <Button asChild className="flex items-center gap-2">
                   <Link to="/auth">
                     <LogIn className="h-4 w-4" />
-                    Login to Post
+                    {t.forum.loginToPost}
                   </Link>
                 </Button>
               )}
@@ -313,7 +314,7 @@ const Forum = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <Input
-                  placeholder="Search posts..."
+                  placeholder={t.forum.searchPlaceholder}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full"
@@ -322,10 +323,10 @@ const Forum = () => {
               <div className="md:w-48">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Filter by category" />
+                    <SelectValue placeholder={t.forum.filterByCategory} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="all">{t.forum.allCategories}</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category.value} value={category.value}>
                         {category.label}
@@ -347,20 +348,20 @@ const Forum = () => {
           <Card>
             <CardContent className="text-center py-12">
               <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
+              <h3 className="text-lg font-semibold mb-2">{t.forum.noPostsYet}</h3>
               <p className="text-muted-foreground mb-4">
                 {searchTerm || selectedCategory !== "all" 
-                  ? "Try adjusting your search or filter criteria"
-                  : "Be the first to post in the community!"
+                  ? t.forum.tryAdjusting
+                  : t.forum.beFirstToPost
                 }
               </p>
               {user ? (
                 <Button onClick={() => setIsNewPostOpen(true)}>
-                  Create First Post
+                  {t.forum.createFirstPost}
                 </Button>
               ) : (
                 <Button asChild>
-                  <Link to="/auth">Login to Post</Link>
+                  <Link to="/auth">{t.forum.loginToPost}</Link>
                 </Button>
               )}
             </CardContent>
@@ -377,7 +378,7 @@ const Forum = () => {
                           {categories.find(c => c.value === post.category)?.label || post.category}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                          Author: {post.author_name}
+                          {t.forum.author}: {post.author_name}
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold mb-2 hover:text-primary cursor-pointer">
@@ -389,11 +390,11 @@ const Forum = () => {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-4 w-4" />
-                          {post.reply_count} replies
+                          {post.reply_count} {t.forum.replies}
                         </div>
                         <div className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />
-                          {post.views} views
+                          {post.views} {t.forum.views}
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
@@ -403,7 +404,7 @@ const Forum = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                       <Button variant="outline" size="sm">
-                        View Discussion
+                        {t.forum.viewDiscussion}
                       </Button>
                     </div>
                   </div>
