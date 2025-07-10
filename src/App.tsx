@@ -13,6 +13,7 @@ import VisaBulletin from "./pages/VisaBulletin";
 import H1BCaseDetails from "./pages/H1BCaseDetails";
 import PrevailingWages from "./pages/PrevailingWages";
 import Forum from "./pages/Forum";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/current-visa-bulletin" element={<VisaBulletin />} />
           <Route path="/prevailing-wages" element={<PrevailingWages />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/h1b-case/:caseNumber" element={<H1BCaseDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

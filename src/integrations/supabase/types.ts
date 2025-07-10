@@ -24,6 +24,7 @@ export type Database = {
           id: string
           title: string
           updated_at: string
+          user_id: string | null
           views: number
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           id?: string
           title: string
           updated_at?: string
+          user_id?: string | null
           views?: number
         }
         Update: {
@@ -46,9 +48,18 @@ export type Database = {
           id?: string
           title?: string
           updated_at?: string
+          user_id?: string | null
           views?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "forum_posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       forum_replies: {
         Row: {
@@ -59,6 +70,7 @@ export type Database = {
           id: string
           post_id: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           author_email?: string | null
@@ -68,6 +80,7 @@ export type Database = {
           id?: string
           post_id: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           author_email?: string | null
@@ -77,6 +90,7 @@ export type Database = {
           id?: string
           post_id?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -84,6 +98,13 @@ export type Database = {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "forum_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_replies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -220,6 +241,30 @@ export type Database = {
           WORKSITE_POSTAL_CODE?: string | null
           WORKSITE_STATE?: string | null
           Year?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          username?: string
         }
         Relationships: []
       }

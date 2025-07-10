@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageCircle, PlusCircle, Search, Clock, Eye, Filter, User } from "lucide-react";
+import { MessageCircle, PlusCircle, Search, Clock, Eye, Filter, User, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 
 interface ForumPost {
@@ -24,11 +26,15 @@ interface ForumPost {
   reply_count: number;
 }
 
+interface Profile {
+  id: string;
+  username: string;
+  avatar_url?: string;
+}
+
 interface NewPost {
   title: string;
   content: string;
-  author_name: string;
-  author_email: string;
   category: string;
 }
 
@@ -39,13 +45,12 @@ const Forum = () => {
   const [newPost, setNewPost] = useState<NewPost>({
     title: "",
     content: "",
-    author_name: "",
-    author_email: "",
     category: "general"
   });
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const categories = [
     { value: "general", label: "General Discussion" },
@@ -70,14 +75,23 @@ const Forum = () => {
   // Create new post mutation
   const createPostMutation = useMutation({
     mutationFn: async (post: NewPost) => {
+      if (!user) throw new Error("用户未登录");
+      
+      // Get user profile for username
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", user.id)
+        .single();
+      
       const { data, error } = await supabase
         .from("forum_posts")
         .insert([{
           title: post.title,
           content: post.content,
-          author_name: post.author_name,
-          author_email: post.author_email,
-          category: post.category
+          category: post.category,
+          author_name: profile?.username || `User_${user.id.substring(0, 8)}`,
+          user_id: user.id
         }])
         .select()
         .single();
@@ -91,8 +105,6 @@ const Forum = () => {
       setNewPost({
         title: "",
         content: "",
-        author_name: "",
-        author_email: "",
         category: "general"
       });
       toast({
@@ -119,10 +131,19 @@ const Forum = () => {
   }) || [];
 
   const handleCreatePost = () => {
-    if (!newPost.title.trim() || !newPost.content.trim() || !newPost.author_name.trim()) {
+    if (!user) {
       toast({
-        title: "Please fill in all required fields",
-        description: "Title, content, and author name are required.",
+        title: "请先登录",
+        description: "发帖需要登录账户",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newPost.title.trim() || !newPost.content.trim()) {
+      toast({
+        title: "请填写必填字段",
+        description: "标题和内容都是必填的",
         variant: "destructive",
       });
       return;
@@ -214,93 +235,85 @@ const Forum = () => {
         {/* Controls */}
         <Card className="mb-8">
           <CardHeader>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
-                Search & Filter Posts
+                搜索与筛选帖子
               </CardTitle>
-              <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
-                <DialogTrigger asChild>
-                  <Button className="flex items-center gap-2">
-                    <PlusCircle className="h-4 w-4" />
-                    New Post
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Create New Forum Post</DialogTitle>
-                    <DialogDescription>
-                      Share your thoughts, questions, or experiences with the community.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium">Title *</label>
-                      <Input
-                        placeholder="Enter post title..."
-                        value={newPost.title}
-                        onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                      />
+              {user ? (
+                <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="flex items-center gap-2">
+                      <PlusCircle className="h-4 w-4" />
+                      发布新帖
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>发布新帖</DialogTitle>
+                      <DialogDescription>
+                        分享您的想法、问题或经验与社区交流
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium">标题 *</label>
+                        <Input
+                          placeholder="请输入帖子标题..."
+                          value={newPost.title}
+                          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">分类</label>
+                        <Select value={newPost.category} onValueChange={(value) => setNewPost({ ...newPost, category: value })}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories.map((category) => (
+                              <SelectItem key={category.value} value={category.value}>
+                                {category.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">内容 *</label>
+                        <Textarea
+                          placeholder="请输入帖子内容..."
+                          value={newPost.content}
+                          onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                          rows={6}
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
+                          取消
+                        </Button>
+                        <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
+                          {createPostMutation.isPending ? "发布中..." : "发布帖子"}
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium">Category</label>
-                      <Select value={newPost.category} onValueChange={(value) => setNewPost({ ...newPost, category: value })}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category.value} value={category.value}>
-                              {category.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium">Your Name *</label>
-                      <Input
-                        placeholder="Enter your name..."
-                        value={newPost.author_name}
-                        onChange={(e) => setNewPost({ ...newPost, author_name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium">Email (optional)</label>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email..."
-                        value={newPost.author_email}
-                        onChange={(e) => setNewPost({ ...newPost, author_email: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium">Content *</label>
-                      <Textarea
-                        placeholder="Write your post content..."
-                        value={newPost.content}
-                        onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                        rows={6}
-                      />
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
-                        {createPostMutation.isPending ? "Creating..." : "Create Post"}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <Button asChild className="flex items-center gap-2">
+                  <Link to="/auth">
+                    <LogIn className="h-4 w-4" />
+                    登录后发帖
+                  </Link>
+                </Button>
+              )}
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <Input
-                  placeholder="Search posts..."
+                  placeholder="搜索帖子..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full"
@@ -309,10 +322,10 @@ const Forum = () => {
               <div className="md:w-48">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Filter by category" />
+                    <SelectValue placeholder="按分类筛选" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="all">所有分类</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category.value} value={category.value}>
                         {category.label}
@@ -328,22 +341,28 @@ const Forum = () => {
         {/* Posts List */}
         {isLoading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading forum posts...</p>
+            <p className="text-muted-foreground">正在加载论坛帖子...</p>
           </div>
         ) : filteredPosts.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No posts found</h3>
+              <h3 className="text-lg font-semibold mb-2">暂无帖子</h3>
               <p className="text-muted-foreground mb-4">
                 {searchTerm || selectedCategory !== "all" 
-                  ? "Try adjusting your search or filter criteria."
-                  : "Be the first to start a discussion in our community!"
+                  ? "尝试调整搜索或筛选条件"
+                  : "成为第一个在社区发帖的人！"
                 }
               </p>
-              <Button onClick={() => setIsNewPostOpen(true)}>
-                Create First Post
-              </Button>
+              {user ? (
+                <Button onClick={() => setIsNewPostOpen(true)}>
+                  发布第一个帖子
+                </Button>
+              ) : (
+                <Button asChild>
+                  <Link to="/auth">登录后发帖</Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
         ) : (
@@ -358,7 +377,7 @@ const Forum = () => {
                           {categories.find(c => c.value === post.category)?.label || post.category}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
-                          by {post.author_name}
+                          作者: {post.author_name}
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold mb-2 hover:text-primary cursor-pointer">
@@ -367,14 +386,14 @@ const Forum = () => {
                       <p className="text-muted-foreground line-clamp-3 mb-4">
                         {post.content}
                       </p>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-4 w-4" />
-                          {post.reply_count} replies
+                          {post.reply_count} 回复
                         </div>
                         <div className="flex items-center gap-1">
                           <Eye className="h-4 w-4" />
-                          {post.views} views
+                          {post.views} 浏览
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
@@ -384,7 +403,7 @@ const Forum = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                       <Button variant="outline" size="sm">
-                        View Discussion
+                        查看讨论
                       </Button>
                     </div>
                   </div>

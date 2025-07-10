@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -15,9 +16,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LogOut, User } from "lucide-react";
 
 const Navigation = () => {
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <nav className="w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4">
@@ -109,10 +116,28 @@ const Navigation = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
-            {/* Login Button */}
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              Log In
-            </Button>
+            {/* Auth Section */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
+                    <User className="h-4 w-4 mr-2" />
+                    用户中心
+                    <ChevronDown className="ml-1 h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white border shadow-lg">
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    退出登录
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                <Link to="/auth">登录</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
