@@ -82,7 +82,7 @@ const Navigation = () => {
                 
                 <NavigationMenuItem>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600" asChild>
-                    <Link to="/jobs">Jobs</Link>
+                    <Link to="/forum">Forum</Link>
                   </Button>
                 </NavigationMenuItem>
                 

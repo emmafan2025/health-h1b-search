@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      forum_posts: {
+        Row: {
+          author_email: string | null
+          author_name: string
+          category: string
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          author_email?: string | null
+          author_name: string
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
+      forum_replies: {
+        Row: {
+          author_email: string | null
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_email?: string | null
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       green_card_priority_dates_action: {
         Row: {
           category: string | null
@@ -174,6 +248,20 @@ export type Database = {
         Returns: {
           employer_name: string
           case_count: number
+        }[]
+      }
+      get_forum_posts_with_reply_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          title: string
+          content: string
+          author_name: string
+          category: string
+          views: number
+          created_at: string
+          updated_at: string
+          reply_count: number
         }[]
       }
       get_occupation_counts: {
