@@ -207,9 +207,19 @@ const HealthcareEmployers = () => {
                   </SelectTrigger>
                   <SelectContent className="max-h-60">
                     <SelectItem value="all">All Occupations</SelectItem>
-                    {occupations.map((occupation) => (
+                    {occupations
+                      .sort((a, b) => {
+                        // Sort by SOC code first, then by occupation name
+                        if (a.soc_code && b.soc_code) {
+                          return a.soc_code.localeCompare(b.soc_code);
+                        }
+                        if (a.soc_code && !b.soc_code) return -1;
+                        if (!a.soc_code && b.soc_code) return 1;
+                        return a.occupation.localeCompare(b.occupation);
+                      })
+                      .map((occupation) => (
                       <SelectItem key={occupation.occupation} value={occupation.occupation}>
-                        {occupation.occupation} ({occupation.case_count.toLocaleString()} cases)
+                        {occupation.soc_code ? `${occupation.soc_code} - ` : ''}{occupation.occupation} ({occupation.case_count.toLocaleString()} cases)
                       </SelectItem>
                     ))}
                   </SelectContent>
