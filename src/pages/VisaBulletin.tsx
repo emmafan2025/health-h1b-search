@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Download, Info } from "lucide-react";
+import { ArrowLeft, Calendar, Download, Info, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,106 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Navigation from "@/components/Navigation";
-
-// Current visa bulletin data (January 2025)
-const currentBulletinData = {
-  bulletinDate: "January 2025",
-  lastUpdated: "January 9, 2025",
-  finalActionDates: [
-    {
-      category: "EB-1",
-      description: "Priority Workers",
-      allCountries: "C",
-      china: "C",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-2",
-      description: "Advanced Degree Professionals",
-      allCountries: "C",
-      china: "01APR19",
-      india: "01SEP12",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-3",
-      description: "Skilled Workers",
-      allCountries: "C",
-      china: "01APR19",
-      india: "01JAN12",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-4",
-      description: "Special Immigrants",
-      allCountries: "C",
-      china: "C",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-5",
-      description: "Investors",
-      allCountries: "C",
-      china: "22NOV15",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    }
-  ],
-  filingDates: [
-    {
-      category: "EB-1",
-      description: "Priority Workers",
-      allCountries: "C",
-      china: "C",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-2",
-      description: "Advanced Degree Professionals",
-      allCountries: "C",
-      china: "01MAY19",
-      india: "01JUL13",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-3",
-      description: "Skilled Workers",
-      allCountries: "C",
-      china: "01MAY19",
-      india: "01FEB12",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-4",
-      description: "Special Immigrants",
-      allCountries: "C",
-      china: "C",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    },
-    {
-      category: "EB-5",
-      description: "Investors",
-      allCountries: "C",
-      china: "22DEC15",
-      india: "C",
-      mexico: "C",
-      philippines: "C"
-    }
-  ]
-};
+import { useVisaBulletinData } from "@/hooks/useVisaBulletinData";
 
 const healthcareInfo = [
   {
@@ -132,6 +33,7 @@ const healthcareInfo = [
 
 const VisaBulletin = () => {
   const [selectedTable, setSelectedTable] = useState<'finalAction' | 'filing'>('finalAction');
+  const { data: visaBulletinData, loading, error } = useVisaBulletinData();
 
   const formatDate = (dateStr: string) => {
     if (dateStr === 'C') return 'Current';
@@ -145,7 +47,37 @@ const VisaBulletin = () => {
     return 'text-gray-800';
   };
 
-  const currentData = selectedTable === 'finalAction' ? currentBulletinData.finalActionDates : currentBulletinData.filingDates;
+  const currentData = selectedTable === 'finalAction' ? 
+    (visaBulletinData?.finalActionDates || []) : 
+    (visaBulletinData?.filingDates || []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8 flex items-center justify-center">
+          <div className="flex items-center gap-2">
+            <Loader2 className="h-6 w-6 animate-spin" />
+            <span>Loading visa bulletin data...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Data</h1>
+            <p className="text-gray-600">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -163,8 +95,8 @@ const VisaBulletin = () => {
             <Calendar className="h-8 w-8 text-green-600" />
             <div>
               <h1 className="text-3xl font-bold text-blue-800">Current Visa Bulletin</h1>
-              <p className="text-gray-600">Green Card Priority Dates - {currentBulletinData.bulletinDate}</p>
-              <p className="text-sm text-gray-500">Last updated: {currentBulletinData.lastUpdated}</p>
+              <p className="text-gray-600">Green Card Priority Dates</p>
+              <p className="text-sm text-gray-500">Data from Supabase database</p>
             </div>
           </div>
         </div>
