@@ -16,6 +16,14 @@ export interface VisaBulletinData {
   filingDates: VisaBulletinRow[];
 }
 
+interface SyncMetadata {
+  last_sync_at: string | null;
+  sync_status: string;
+  records_updated: number;
+  error_message: string | null;
+  source_url: string | null;
+}
+
 const categoryDescriptions: { [key: string]: string } = {
   'EB-1': 'Priority Workers',
   'EB-2': 'Advanced Degree Professionals', 
@@ -28,12 +36,32 @@ const categoryDescriptions: { [key: string]: string } = {
 
 export const useVisaBulletinData = () => {
   const [data, setData] = useState<VisaBulletinData | null>(null);
+  const [syncMetadata, setSyncMetadata] = useState<SyncMetadata | null>(null);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchVisaBulletinData = async () => {
     try {
       setLoading(true);
+      setError(null);
+
+      // Fetch sync metadata
+      const { data: metaData, error: metaError } = await supabase
+        .from('visa_sync_metadata')
+        .select('*')
+        .eq('id', 1)
+        .single();
+
+      if (!metaError && metaData) {
+        setSyncMetadata({
+          last_sync_at: metaData.last_sync_at,
+          sync_status: metaData.sync_status,
+          records_updated: metaData.records_updated || 0,
+          error_message: metaData.error_message,
+          source_url: metaData.source_url
+        });
+      }
       
       // Fetch final action dates
       const { data: actionData, error: actionError } = await supabase
@@ -86,14 +114,42 @@ export const useVisaBulletinData = () => {
     }
   };
 
+  const manualSync = async () => {
+    try {
+      setSyncing(true);
+      setError(null);
+
+      const { data, error } = await supabase.functions.invoke('sync-visa-data');
+
+      if (error) {
+        throw new Error(`Sync failed: ${error.message}`);
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || 'Sync failed');
+      }
+
+      // Refresh data after successful sync
+      await fetchVisaBulletinData();
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sync failed');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   useEffect(() => {
     fetchVisaBulletinData();
   }, []);
 
   return {
     data,
+    syncMetadata,
     loading,
+    syncing,
     error,
-    refetch: fetchVisaBulletinData
+    refetch: fetchVisaBulletinData,
+    manualSync
   };
 };

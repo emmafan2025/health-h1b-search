@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Download, Info, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Download, Info, Loader2, RefreshCw, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import Navigation from "@/components/Navigation";
 import { useVisaBulletinData } from "@/hooks/useVisaBulletinData";
+import { useToast } from "@/hooks/use-toast";
 
 const healthcareInfo = [
   {
@@ -33,7 +34,8 @@ const healthcareInfo = [
 
 const VisaBulletin = () => {
   const [selectedTable, setSelectedTable] = useState<'finalAction' | 'filing'>('finalAction');
-  const { data: visaBulletinData, loading, error } = useVisaBulletinData();
+  const { data: visaBulletinData, syncMetadata, loading, syncing, error, manualSync } = useVisaBulletinData();
+  const { toast } = useToast();
 
   const formatDate = (dateStr: string) => {
     if (dateStr === 'C') return 'Current';
@@ -56,6 +58,43 @@ const VisaBulletin = () => {
     if (dateStr === 'C') return 'text-green-600 font-semibold';
     if (dateStr === 'U') return 'text-red-600';
     return 'text-gray-800';
+  };
+
+  const handleManualSync = async () => {
+    try {
+      await manualSync();
+      toast({
+        title: "Sync Successful",
+        description: "Visa bulletin data has been updated",
+      });
+    } catch (err) {
+      toast({
+        title: "Sync Failed",
+        description: err instanceof Error ? err.message : "An error occurred during sync",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const formatLastSync = (dateStr: string | null) => {
+    if (!dateStr) return 'Never synced';
+    
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffHours < 1) return 'Just now';
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${Math.floor(diffHours / 24)}d ago`;
+  };
+
+  const getSyncStatusIcon = (status: string) => {
+    switch (status) {
+      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'error': return <AlertCircle className="h-4 w-4 text-red-500" />;
+      case 'never_synced': return <Clock className="h-4 w-4 text-gray-500" />;
+      default: return <Clock className="h-4 w-4 text-yellow-500" />;
+    }
   };
 
   const currentData = selectedTable === 'finalAction' ? 
@@ -104,6 +143,13 @@ const VisaBulletin = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">No Data Available</h1>
             <p className="text-gray-600">No visa bulletin data found in the database.</p>
+            <Button 
+              onClick={handleManualSync} 
+              disabled={syncing}
+              className="mt-4"
+            >
+              {syncing ? 'Syncing...' : 'Sync Data'}
+            </Button>
           </div>
         </div>
       </div>
@@ -115,20 +161,48 @@ const VisaBulletin = () => {
       <Navigation />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link to="/">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Calendar className="h-8 w-8 text-green-600" />
-            <div>
-              <h1 className="text-3xl font-bold text-blue-800">Current Visa Bulletin</h1>
-              <p className="text-gray-600">Green Card Priority Dates</p>
-              <p className="text-sm text-gray-500">Data from Supabase database</p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link to="/">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </Button>
+            </Link>
+            <div className="flex items-center gap-3">
+              <Calendar className="h-8 w-8 text-green-600" />
+              <div>
+                <h1 className="text-3xl font-bold text-blue-800">Current Visa Bulletin</h1>
+                <p className="text-gray-600">Green Card Priority Dates</p>
+                <p className="text-sm text-gray-500">Auto-synced from external source</p>
+              </div>
             </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            {syncMetadata && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                {getSyncStatusIcon(syncMetadata.sync_status)}
+                <span>
+                  {syncMetadata.sync_status === 'success' 
+                    ? `Last updated: ${formatLastSync(syncMetadata.last_sync_at)}`
+                    : syncMetadata.sync_status === 'error'
+                    ? 'Sync error'
+                    : 'Never synced'
+                  }
+                </span>
+              </div>
+            )}
+            <Button
+              onClick={handleManualSync}
+              disabled={syncing}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+              {syncing ? 'Syncing...' : 'Manual Sync'}
+            </Button>
           </div>
         </div>
 
@@ -267,6 +341,24 @@ const VisaBulletin = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Data Source Info */}
+        {syncMetadata && (
+          <Card className="mt-8 border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-blue-800 text-sm">Data Source</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-sm text-blue-700">
+                <p>Data automatically synchronized from: {syncMetadata.source_url}</p>
+                <p>Records updated: {syncMetadata.records_updated}</p>
+                {syncMetadata.error_message && (
+                  <p className="text-red-600 mt-2">Last error: {syncMetadata.error_message}</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
