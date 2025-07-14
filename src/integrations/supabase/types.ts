@@ -268,6 +268,39 @@ export type Database = {
         }
         Relationships: []
       }
+      visa_sync_metadata: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: number
+          last_sync_at: string | null
+          records_updated: number | null
+          source_url: string | null
+          sync_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: number
+          last_sync_at?: string | null
+          records_updated?: number | null
+          source_url?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: number
+          last_sync_at?: string | null
+          records_updated?: number | null
+          source_url?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
