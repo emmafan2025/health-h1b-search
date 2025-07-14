@@ -38,6 +38,17 @@ const VisaBulletin = () => {
   const formatDate = (dateStr: string) => {
     if (dateStr === 'C') return 'Current';
     if (dateStr === 'U') return 'Unavailable';
+    
+    // Handle date format from database (YYYY-MM-DD)
+    if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: '2-digit' 
+      });
+    }
+    
     return dateStr;
   };
 
@@ -73,6 +84,26 @@ const VisaBulletin = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Data</h1>
             <p className="text-gray-600">{error}</p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              className="mt-4"
+            >
+              Retry
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!visaBulletinData || currentData.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">No Data Available</h1>
+            <p className="text-gray-600">No visa bulletin data found in the database.</p>
           </div>
         </div>
       </div>

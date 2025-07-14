@@ -18,10 +18,12 @@ export interface VisaBulletinData {
 
 const categoryDescriptions: { [key: string]: string } = {
   'EB-1': 'Priority Workers',
-  'EB-2': 'Advanced Degree Professionals',
+  'EB-2': 'Advanced Degree Professionals', 
   'EB-3': 'Skilled Workers',
   'EB-4': 'Special Immigrants',
-  'EB-5': 'Investors'
+  'EB-5': 'Investors',
+  'Other Workers': 'Other Workers',
+  'Certain Religious Workers': 'Certain Religious Workers'
 };
 
 export const useVisaBulletinData = () => {
@@ -51,15 +53,20 @@ export const useVisaBulletinData = () => {
 
       // Transform the data to match the component's expected format
       const transformData = (dbData: any[]): VisaBulletinRow[] => {
-        return dbData.map(row => ({
-          category: row.category || '',
-          description: categoryDescriptions[row.category] || '',
-          allCountries: row.global_current || 'U',
-          china: row.china_current || 'U',
-          india: row.india_current || 'U',
-          mexico: row.mexico_current || 'U',
-          philippines: row.philippines_current || 'U'
-        }));
+        console.log('Transforming data:', dbData);
+        return dbData.map(row => {
+          const transformedRow = {
+            category: row.category || '',
+            description: categoryDescriptions[row.category] || row.category || 'Unknown Category',
+            allCountries: row.global_current || 'U',
+            china: row.china_current || 'U',
+            india: row.india_current || 'U',
+            mexico: row.mexico_current || 'U',
+            philippines: row.philippines_current || 'U'
+          };
+          console.log('Transformed row:', transformedRow);
+          return transformedRow;
+        });
       };
 
       const visaBulletinData: VisaBulletinData = {
@@ -67,6 +74,7 @@ export const useVisaBulletinData = () => {
         filingDates: transformData(filingData || [])
       };
 
+      console.log('Final visa bulletin data:', visaBulletinData);
       setData(visaBulletinData);
       setError(null);
     } catch (err) {
