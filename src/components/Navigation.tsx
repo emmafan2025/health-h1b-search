@@ -96,24 +96,25 @@ const Navigation = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-gray-700 hover:text-blue-600">
-                    {t.nav.more}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="p-4 w-48">
-                      <div className="space-y-2">
-                        <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          {t.nav.resources}
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          {t.nav.faq}
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-blue-600">
-                          {t.nav.contactUs}
-                        </Button>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-gray-700 hover:text-blue-600">
+                        {t.nav.more}
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white border shadow-lg">
+                      <DropdownMenuItem>
+                        {t.nav.resources}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        {t.nav.faq}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        {t.nav.contactUs}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
