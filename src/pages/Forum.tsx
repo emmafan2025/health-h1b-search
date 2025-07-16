@@ -178,55 +178,55 @@ const Forum = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-4">
+          <h1 className="text-4xl font-bold text-blue-800 mb-4">
             {t.forum.title}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {t.forum.subtitle}
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <MessageCircle className="h-8 w-8 text-primary" />
+                <MessageCircle className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-2xl font-bold">{posts?.length || 0}</p>
-                  <p className="text-sm text-muted-foreground">{t.forum.totalPosts}</p>
+                  <p className="text-sm text-gray-600">{t.forum.totalPosts}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <User className="h-8 w-8 text-primary" />
+                <User className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-2xl font-bold">
                     {new Set(posts?.map(p => p.author_name)).size || 0}
                   </p>
-                  <p className="text-sm text-muted-foreground">{t.forum.activeMembers}</p>
+                  <p className="text-sm text-gray-600">{t.forum.activeMembers}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardContent className="pt-6">
               <div className="flex items-center">
-                <Eye className="h-8 w-8 text-primary" />
+                <Eye className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-2xl font-bold">
                     {posts?.reduce((sum, post) => sum + post.views, 0) || 0}
                   </p>
-                  <p className="text-sm text-muted-foreground">{t.forum.totalViews}</p>
+                  <p className="text-sm text-gray-600">{t.forum.totalViews}</p>
                 </div>
               </div>
             </CardContent>
@@ -234,7 +234,7 @@ const Forum = () => {
         </div>
 
         {/* Controls */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-white shadow-md">
           <CardHeader>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <CardTitle className="flex items-center gap-2">
@@ -243,8 +243,8 @@ const Forum = () => {
               </CardTitle>
               {user ? (
                 <Dialog open={isNewPostOpen} onOpenChange={setIsNewPostOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2">
+                   <DialogTrigger asChild>
+                     <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700">
                       <PlusCircle className="h-4 w-4" />
                       {t.forum.createNewPost}
                     </Button>
@@ -289,20 +289,20 @@ const Forum = () => {
                           rows={6}
                         />
                       </div>
-                      <div className="flex justify-end gap-2">
-                        <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
-                          {t.forum.createPost.cancel}
-                        </Button>
-                        <Button onClick={handleCreatePost} disabled={createPostMutation.isPending}>
+                       <div className="flex justify-end gap-2">
+                         <Button variant="outline" onClick={() => setIsNewPostOpen(false)}>
+                           {t.forum.createPost.cancel}
+                         </Button>
+                         <Button onClick={handleCreatePost} disabled={createPostMutation.isPending} className="bg-blue-600 hover:bg-blue-700">
                           {createPostMutation.isPending ? t.forum.createPost.publishing : t.forum.createPost.publish}
                         </Button>
                       </div>
                     </div>
                   </DialogContent>
                 </Dialog>
-              ) : (
-                <Button asChild className="flex items-center gap-2">
-                  <Link to="/auth">
+               ) : (
+                 <Button asChild className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700">
+                   <Link to="/auth">
                     <LogIn className="h-4 w-4" />
                     {t.forum.loginToPost}
                   </Link>
@@ -342,25 +342,25 @@ const Forum = () => {
         {/* Posts List */}
         {isLoading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading forum posts...</p>
+            <p className="text-gray-600">Loading forum posts...</p>
           </div>
         ) : filteredPosts.length === 0 ? (
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardContent className="text-center py-12">
-              <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <MessageCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">{t.forum.noPostsYet}</h3>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-gray-600 mb-4">
                 {searchTerm || selectedCategory !== "all" 
                   ? t.forum.tryAdjusting
                   : t.forum.beFirstToPost
                 }
               </p>
               {user ? (
-                <Button onClick={() => setIsNewPostOpen(true)}>
+                <Button onClick={() => setIsNewPostOpen(true)} className="bg-blue-600 hover:bg-blue-700">
                   {t.forum.createFirstPost}
                 </Button>
               ) : (
-                <Button asChild>
+                <Button asChild className="bg-blue-600 hover:bg-blue-700">
                   <Link to="/auth">{t.forum.loginToPost}</Link>
                 </Button>
               )}
@@ -369,7 +369,7 @@ const Forum = () => {
         ) : (
           <div className="space-y-4">
             {filteredPosts.map((post) => (
-              <Card key={post.id} className="hover:shadow-lg transition-shadow">
+              <Card key={post.id} className="hover:shadow-lg transition-shadow bg-white shadow-md">
                 <CardContent className="pt-6">
                   <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                     <div className="flex-1">
@@ -377,17 +377,17 @@ const Forum = () => {
                         <Badge className={getCategoryColor(post.category)}>
                           {categories.find(c => c.value === post.category)?.label || post.category}
                         </Badge>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-gray-600">
                           {t.forum.author}: {post.author_name}
                         </span>
                       </div>
-                      <h3 className="text-xl font-semibold mb-2 hover:text-primary cursor-pointer">
+                      <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 cursor-pointer">
                         {post.title}
                       </h3>
-                      <p className="text-muted-foreground line-clamp-3 mb-4">
+                      <p className="text-gray-600 line-clamp-3 mb-4">
                         {post.content}
                       </p>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-4 w-4" />
                           {post.reply_count} {t.forum.replies}
@@ -403,7 +403,7 @@ const Forum = () => {
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
                         {t.forum.viewDiscussion}
                       </Button>
                     </div>

@@ -23,23 +23,23 @@ const PrevailingWages = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl font-bold text-blue-800 mb-4">
             Prevailing Wages for Healthcare H1B
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Find the official prevailing wage rates for healthcare positions across the United States. 
             Essential information for H1B visa applications and salary negotiations.
           </p>
         </div>
 
         {/* Official Tool Access */}
-        <Card className="mb-8 border-primary/20">
+        <Card className="mb-8 bg-white shadow-lg border-0">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2 text-2xl">
               <Calculator className="h-6 w-6" />
@@ -56,7 +56,7 @@ const PrevailingWages = () => {
             </p>
             <Button 
               size="lg" 
-              className="text-lg px-8 py-6" 
+              className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700" 
               onClick={() => window.open('https://flag.dol.gov/wage-data/wage-search', '_blank')}
             >
               <ExternalLink className="mr-2 h-5 w-5" />
@@ -70,7 +70,7 @@ const PrevailingWages = () => {
 
         {/* Wage Level Explanation */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5" />
@@ -96,7 +96,7 @@ const PrevailingWages = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white shadow-md">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Info className="h-5 w-5" />
@@ -107,7 +107,7 @@ const PrevailingWages = () => {
               <ul className="space-y-3">
                 {quickFacts.map((fact, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
                     <span className="text-sm">{fact}</span>
                   </li>
                 ))}
@@ -117,7 +117,7 @@ const PrevailingWages = () => {
         </div>
 
         {/* Search Tips */}
-        <Card>
+        <Card className="bg-white shadow-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
@@ -138,11 +138,11 @@ const PrevailingWages = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Common Healthcare SOC Codes:</h4>
                   <ul className="space-y-2 text-sm">
-                    <li><code className="bg-muted px-2 py-1 rounded">29-1141</code> - Registered Nurses</li>
-                    <li><code className="bg-muted px-2 py-1 rounded">29-1021</code> - Dentists</li>
-                    <li><code className="bg-muted px-2 py-1 rounded">29-1131</code> - Veterinarians</li>
-                    <li><code className="bg-muted px-2 py-1 rounded">29-1126</code> - Respiratory Therapists</li>
-                    <li><code className="bg-muted px-2 py-1 rounded">29-1122</code> - Occupational Therapists</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1141</code> - Registered Nurses</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1021</code> - Dentists</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1131</code> - Veterinarians</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1126</code> - Respiratory Therapists</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1122</code> - Occupational Therapists</li>
                   </ul>
                 </div>
                 <div>
@@ -161,8 +161,8 @@ const PrevailingWages = () => {
         </Card>
 
         {/* Footer Note */}
-        <div className="mt-8 p-4 bg-muted/30 rounded-lg text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-8 p-4 bg-blue-50 rounded-lg text-center">
+          <p className="text-sm text-gray-600">
             <strong>Important:</strong> Prevailing wage determinations are legally binding for H1B applications. 
             Always verify the latest data from the official DOL sources. This tool provides quick access to 
             official government data but does not constitute legal advice.
