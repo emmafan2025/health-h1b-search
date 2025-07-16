@@ -114,5 +114,64 @@ export const en = {
       fillAllFields: "Please fill in all fields",
       allFieldsRequired: "All fields are required to create an account."
     }
+  },
+
+  // Search and Filters
+  search: {
+    title: "US Healthcare H1B Search",
+    subtitle: "Explore H1B case data and employer information in the healthcare industry",
+    searchPlaceholder: "Search employer name or job category...",
+    searchH1BData: "Search H1B Data",
+    advancedSearch: "Advanced Search",
+    newSearch: "New Search",
+    filter: "Filter",
+    searchResults: "Search Results",
+    recordsFound: "records found",
+    searching: "Searching...",
+    loading: "Loading H1B data...",
+    failedToLoad: "Failed to load data",
+    retry: "Retry",
+
+    // Filter labels
+    filters: {
+      title: "Advanced Search Filters",
+      jobTitle: "Job Title",
+      jobTitlePlaceholder: "Enter job title",
+      workState: "Work State",
+      selectState: "Select state",
+      allStates: "All States",
+      year: "Year",
+      selectYear: "Select year",
+      allYears: "All Years",
+      quarter: "Quarter",
+      selectQuarter: "Select quarter",
+      allQuarters: "All Quarters",
+      location: "Location (City/State)",
+      locationPlaceholder: "Enter city or state",
+      minSalary: "Min Salary ($)",
+      maxSalary: "Max Salary ($)",
+      applyFilters: "Apply Filters",
+      resetAll: "Reset All"
+    },
+
+    // Sort controls
+    sort: {
+      sortBy: "Sort by:",
+      salary: "Salary",
+      employerName: "Employer Name",
+      year: "Year",
+      createdDate: "Created Date",
+      ascending: "Ascending",
+      descending: "Descending"
+    },
+
+    // Stats
+    stats: {
+      healthcareEmployers: "Healthcare Employers",
+      h1bCases: "H1B Cases",
+      statesCovered: "States Covered",
+      occupations: "Occupations",
+      popularHealthcareEmployers: "Popular Healthcare Employers"
+    }
   }
 };

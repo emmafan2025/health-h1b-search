@@ -6,12 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { SearchFilters as SearchFiltersType } from "@/types/h1b";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 interface SearchFiltersProps {
   onApplyFilters: (filters: SearchFiltersType) => void;
 }
 
 const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState<SearchFiltersType>({
     location: "",
     minSalary: undefined,
@@ -52,27 +54,27 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
   return (
     <Card className="mb-6 shadow-md">
       <CardHeader>
-        <CardTitle className="text-lg text-blue-800">Advanced Search Filters</CardTitle>
+        <CardTitle className="text-lg text-blue-800">{t.search.filters.title}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
-            <Label>Job Title</Label>
+            <Label>{t.search.filters.jobTitle}</Label>
             <Input
-              placeholder="Enter job title"
+              placeholder={t.search.filters.jobTitlePlaceholder}
               value={filters.jobTitle || ""}
               onChange={(e) => setFilters({...filters, jobTitle: e.target.value})}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Work State</Label>
+            <Label>{t.search.filters.workState}</Label>
             <Select value={filters.state || "all"} onValueChange={(value) => setFilters({...filters, state: value === "all" ? "" : value})}>
               <SelectTrigger>
-                <SelectValue placeholder="Select state" />
+                <SelectValue placeholder={t.search.filters.selectState} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All States</SelectItem>
+                <SelectItem value="all">{t.search.filters.allStates}</SelectItem>
                 {states.map((state) => (
                   <SelectItem key={state} value={state}>{state}</SelectItem>
                 ))}
@@ -81,13 +83,13 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Year</Label>
+            <Label>{t.search.filters.year}</Label>
             <Select value={filters.year?.toString() || "all"} onValueChange={(value) => setFilters({...filters, year: value === "all" ? undefined : parseInt(value)})}>
               <SelectTrigger>
-                <SelectValue placeholder="Select year" />
+                <SelectValue placeholder={t.search.filters.selectYear} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Years</SelectItem>
+                <SelectItem value="all">{t.search.filters.allYears}</SelectItem>
                 {years.map((year) => (
                   <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                 ))}
@@ -96,13 +98,13 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Quarter</Label>
+            <Label>{t.search.filters.quarter}</Label>
             <Select value={filters.quarter || "all"} onValueChange={(value) => setFilters({...filters, quarter: value === "all" ? "" : value})}>
               <SelectTrigger>
-                <SelectValue placeholder="Select quarter" />
+                <SelectValue placeholder={t.search.filters.selectQuarter} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Quarters</SelectItem>
+                <SelectItem value="all">{t.search.filters.allQuarters}</SelectItem>
                 {quarters.map((quarter) => (
                   <SelectItem key={quarter} value={quarter}>{quarter}</SelectItem>
                 ))}
@@ -111,16 +113,16 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Location (City/State)</Label>
+            <Label>{t.search.filters.location}</Label>
             <Input
-              placeholder="Enter city or state"
+              placeholder={t.search.filters.locationPlaceholder}
               value={filters.location || ""}
               onChange={(e) => setFilters({...filters, location: e.target.value})}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Min Salary ($)</Label>
+            <Label>{t.search.filters.minSalary}</Label>
             <Input
               type="number"
               placeholder="60000"
@@ -130,7 +132,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Max Salary ($)</Label>
+            <Label>{t.search.filters.maxSalary}</Label>
             <Input
               type="number"
               placeholder="150000"
@@ -142,10 +144,10 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
         <div className="flex gap-4 mt-6">
           <Button onClick={handleApplyFilters} className="bg-blue-600 hover:bg-blue-700">
-            Apply Filters
+            {t.search.filters.applyFilters}
           </Button>
           <Button variant="outline" onClick={handleReset}>
-            Reset All
+            {t.search.filters.resetAll}
           </Button>
         </div>
       </CardContent>

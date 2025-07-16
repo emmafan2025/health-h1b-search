@@ -114,5 +114,64 @@ export const zh = {
       fillAllFields: "请填写所有字段",
       allFieldsRequired: "创建账户需要填写所有字段。"
     }
+  },
+
+  // Search and Filters
+  search: {
+    title: "美国医疗H1B搜索",
+    subtitle: "探索医疗行业的H1B案例数据和雇主信息",
+    searchPlaceholder: "搜索雇主名称或职位类别...",
+    searchH1BData: "搜索H1B数据",
+    advancedSearch: "高级搜索",
+    newSearch: "新搜索",
+    filter: "筛选",
+    searchResults: "搜索结果",
+    recordsFound: "条记录",
+    searching: "搜索中...",
+    loading: "加载H1B数据...",
+    failedToLoad: "加载数据失败",
+    retry: "重试",
+
+    // Filter labels
+    filters: {
+      title: "高级搜索筛选",
+      jobTitle: "职位名称",
+      jobTitlePlaceholder: "输入职位名称",
+      workState: "工作州",
+      selectState: "选择州",
+      allStates: "所有州",
+      year: "年份",
+      selectYear: "选择年份",
+      allYears: "所有年份",
+      quarter: "季度",
+      selectQuarter: "选择季度",
+      allQuarters: "所有季度",
+      location: "位置（城市/州）",
+      locationPlaceholder: "输入城市或州",
+      minSalary: "最低薪资（$）",
+      maxSalary: "最高薪资（$）",
+      applyFilters: "应用筛选",
+      resetAll: "重置全部"
+    },
+
+    // Sort controls
+    sort: {
+      sortBy: "排序方式：",
+      salary: "薪资",
+      employerName: "雇主名称",
+      year: "年份",
+      createdDate: "创建日期",
+      ascending: "升序",
+      descending: "降序"
+    },
+
+    // Stats
+    stats: {
+      healthcareEmployers: "医疗雇主",
+      h1bCases: "H1B案例",
+      statesCovered: "覆盖州数",
+      occupations: "职业类别",
+      popularHealthcareEmployers: "热门医疗雇主"
+    }
   }
 };
