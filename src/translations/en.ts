@@ -191,5 +191,75 @@ export const en = {
     topSponsors: "Top H1B Sponsors in Healthcare 2025",
     topJobTitles: "Top H1B Job Titles in Healthcare 2025", 
     topCities: "Top H1B Cities in Healthcare 2025"
+  },
+
+  // Prevailing Wages
+  prevailingWages: {
+    title: "Prevailing Wages for Healthcare H1B",
+    subtitle: "Find the official prevailing wage rates for healthcare positions across the United States. Essential information for H1B visa applications and salary negotiations.",
+    officialTool: {
+      title: "Official DOL Wage Search Tool",
+      subtitle: "Access the Department of Labor's official prevailing wage database",
+      description: "Use the official Foreign Labor Application Gateway (FLAG) to search for prevailing wages by job title, location, and experience level.",
+      buttonText: "Access DOL Wage Search Tool",
+      note: "Opens in a new tab - Official U.S. Department of Labor website"
+    },
+    wageLevels: {
+      title: "Wage Levels Explained",
+      level1: {
+        level: "Level I",
+        description: "Entry Level",
+        range: "10th - 25th percentile"
+      },
+      level2: {
+        level: "Level II",
+        description: "Qualified",
+        range: "25th - 50th percentile"
+      },
+      level3: {
+        level: "Level III",
+        description: "Experienced",
+        range: "50th - 75th percentile"
+      },
+      level4: {
+        level: "Level IV",
+        description: "Fully Competent",
+        range: "75th - 90th percentile"
+      }
+    },
+    quickFacts: {
+      title: "Quick Facts",
+      facts: [
+        "Prevailing wages are determined by the Department of Labor (DOL)",
+        "Wages vary by geographic area, occupation, and skill level",
+        "H1B petitions must meet or exceed the prevailing wage",
+        "Healthcare occupations often have higher prevailing wages"
+      ]
+    },
+    searchTips: {
+      title: "Search Tips for Healthcare Professionals",
+      showTips: "Show Tips",
+      hideTips: "Hide Tips",
+      commonCodes: "Common Healthcare SOC Codes:",
+      codes: {
+        nurses: "Registered Nurses",
+        dentists: "Dentists", 
+        veterinarians: "Veterinarians",
+        respiratoryTherapists: "Respiratory Therapists",
+        occupationalTherapists: "Occupational Therapists"
+      },
+      strategy: "Search Strategy:",
+      tips: [
+        "Use specific job titles from your offer letter",
+        "Select the correct geographic area (MSA/County)",
+        "Choose appropriate wage level based on experience",
+        "Verify the survey source and date",
+        "Consider both OES and alternative wage sources"
+      ]
+    },
+    footerNote: {
+      important: "Important:",
+      text: "Prevailing wage determinations are legally binding for H1B applications. Always verify the latest data from the official DOL sources. This tool provides quick access to official government data but does not constitute legal advice."
+    }
   }
 };

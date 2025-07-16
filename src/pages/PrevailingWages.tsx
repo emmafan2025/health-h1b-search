@@ -4,23 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, DollarSign, Search, Info, Calculator } from "lucide-react";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const PrevailingWages = () => {
+  const { t } = useTranslation();
   const [showTips, setShowTips] = useState(false);
 
   const wageCategories = [
-    { level: "Level I", description: "Entry Level", range: "10th - 25th percentile" },
-    { level: "Level II", description: "Qualified", range: "25th - 50th percentile" },
-    { level: "Level III", description: "Experienced", range: "50th - 75th percentile" },
-    { level: "Level IV", description: "Fully Competent", range: "75th - 90th percentile" },
+    { level: t.prevailingWages.wageLevels.level1.level, description: t.prevailingWages.wageLevels.level1.description, range: t.prevailingWages.wageLevels.level1.range },
+    { level: t.prevailingWages.wageLevels.level2.level, description: t.prevailingWages.wageLevels.level2.description, range: t.prevailingWages.wageLevels.level2.range },
+    { level: t.prevailingWages.wageLevels.level3.level, description: t.prevailingWages.wageLevels.level3.description, range: t.prevailingWages.wageLevels.level3.range },
+    { level: t.prevailingWages.wageLevels.level4.level, description: t.prevailingWages.wageLevels.level4.description, range: t.prevailingWages.wageLevels.level4.range },
   ];
 
-  const quickFacts = [
-    "Prevailing wages are determined by the Department of Labor (DOL)",
-    "Wages vary by geographic area, occupation, and skill level",
-    "H1B petitions must meet or exceed the prevailing wage",
-    "Healthcare occupations often have higher prevailing wages",
-  ];
+  const quickFacts = t.prevailingWages.quickFacts.facts;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -30,11 +27,10 @@ const PrevailingWages = () => {
         {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-blue-800 mb-4">
-            Prevailing Wages for Healthcare H1B
+            {t.prevailingWages.title}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Find the official prevailing wage rates for healthcare positions across the United States. 
-            Essential information for H1B visa applications and salary negotiations.
+            {t.prevailingWages.subtitle}
           </p>
         </div>
 
@@ -43,16 +39,15 @@ const PrevailingWages = () => {
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2 text-2xl">
               <Calculator className="h-6 w-6" />
-              Official DOL Wage Search Tool
+              {t.prevailingWages.officialTool.title}
             </CardTitle>
             <CardDescription>
-              Access the Department of Labor's official prevailing wage database
+              {t.prevailingWages.officialTool.subtitle}
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center space-y-4">
-            <p className="text-muted-foreground">
-              Use the official Foreign Labor Application Gateway (FLAG) to search for prevailing wages 
-              by job title, location, and experience level.
+            <p className="text-gray-600">
+              {t.prevailingWages.officialTool.description}
             </p>
             <Button 
               size="lg" 
@@ -60,10 +55,10 @@ const PrevailingWages = () => {
               onClick={() => window.open('https://flag.dol.gov/wage-data/wage-search', '_blank')}
             >
               <ExternalLink className="mr-2 h-5 w-5" />
-              Access DOL Wage Search Tool
+              {t.prevailingWages.officialTool.buttonText}
             </Button>
-            <p className="text-sm text-muted-foreground">
-              Opens in a new tab - Official U.S. Department of Labor website
+            <p className="text-sm text-gray-600">
+              {t.prevailingWages.officialTool.note}
             </p>
           </CardContent>
         </Card>
@@ -74,7 +69,7 @@ const PrevailingWages = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5" />
-                Wage Levels Explained
+                {t.prevailingWages.wageLevels.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -100,7 +95,7 @@ const PrevailingWages = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Info className="h-5 w-5" />
-                Quick Facts
+                {t.prevailingWages.quickFacts.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -121,7 +116,7 @@ const PrevailingWages = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
-              Search Tips for Healthcare Professionals
+              {t.prevailingWages.searchTips.title}
             </CardTitle>
             <Button 
               variant="ghost" 
@@ -129,30 +124,28 @@ const PrevailingWages = () => {
               onClick={() => setShowTips(!showTips)}
               className="ml-auto"
             >
-              {showTips ? 'Hide' : 'Show'} Tips
+              {showTips ? t.prevailingWages.searchTips.hideTips : t.prevailingWages.searchTips.showTips}
             </Button>
           </CardHeader>
           {showTips && (
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold mb-3">Common Healthcare SOC Codes:</h4>
+                  <h4 className="font-semibold mb-3">{t.prevailingWages.searchTips.commonCodes}</h4>
                   <ul className="space-y-2 text-sm">
-                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1141</code> - Registered Nurses</li>
-                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1021</code> - Dentists</li>
-                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1131</code> - Veterinarians</li>
-                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1126</code> - Respiratory Therapists</li>
-                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1122</code> - Occupational Therapists</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1141</code> - {t.prevailingWages.searchTips.codes.nurses}</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1021</code> - {t.prevailingWages.searchTips.codes.dentists}</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1131</code> - {t.prevailingWages.searchTips.codes.veterinarians}</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1126</code> - {t.prevailingWages.searchTips.codes.respiratoryTherapists}</li>
+                    <li><code className="bg-blue-50 px-2 py-1 rounded text-blue-800">29-1122</code> - {t.prevailingWages.searchTips.codes.occupationalTherapists}</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-3">Search Strategy:</h4>
+                  <h4 className="font-semibold mb-3">{t.prevailingWages.searchTips.strategy}</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>• Use specific job titles from your offer letter</li>
-                    <li>• Select the correct geographic area (MSA/County)</li>
-                    <li>• Choose appropriate wage level based on experience</li>
-                    <li>• Verify the survey source and date</li>
-                    <li>• Consider both OES and alternative wage sources</li>
+                    {t.prevailingWages.searchTips.tips.map((tip, index) => (
+                      <li key={index}>• {tip}</li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -163,9 +156,7 @@ const PrevailingWages = () => {
         {/* Footer Note */}
         <div className="mt-8 p-4 bg-blue-50 rounded-lg text-center">
           <p className="text-sm text-gray-600">
-            <strong>Important:</strong> Prevailing wage determinations are legally binding for H1B applications. 
-            Always verify the latest data from the official DOL sources. This tool provides quick access to 
-            official government data but does not constitute legal advice.
+            <strong>{t.prevailingWages.footerNote.important}</strong> {t.prevailingWages.footerNote.text}
           </p>
         </div>
       </div>

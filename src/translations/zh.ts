@@ -191,5 +191,75 @@ export const zh = {
     topSponsors: "2025年医疗H1B顶级雇主",
     topJobTitles: "2025年医疗H1B顶级职位",
     topCities: "2025年医疗H1B顶级城市"
+  },
+
+  // Prevailing Wages
+  prevailingWages: {
+    title: "医疗H1B现行工资",
+    subtitle: "查找美国医疗职位的官方现行工资标准。H1B签证申请和薪资谈判的必备信息。",
+    officialTool: {
+      title: "官方DOL工资搜索工具",
+      subtitle: "访问劳工部官方现行工资数据库",
+      description: "使用官方外国劳工申请门户(FLAG)按职位名称、地点和经验水平搜索现行工资。",
+      buttonText: "访问DOL工资搜索工具",
+      note: "在新标签页中打开 - 美国劳工部官方网站"
+    },
+    wageLevels: {
+      title: "工资等级说明",
+      level1: {
+        level: "一级",
+        description: "入门级",
+        range: "第10-25百分位"
+      },
+      level2: {
+        level: "二级", 
+        description: "合格级",
+        range: "第25-50百分位"
+      },
+      level3: {
+        level: "三级",
+        description: "有经验级",
+        range: "第50-75百分位"
+      },
+      level4: {
+        level: "四级",
+        description: "完全胜任级",
+        range: "第75-90百分位"
+      }
+    },
+    quickFacts: {
+      title: "快速了解",
+      facts: [
+        "现行工资由劳工部(DOL)确定",
+        "工资因地理区域、职业和技能水平而异",
+        "H1B申请必须达到或超过现行工资",
+        "医疗职业通常具有较高的现行工资"
+      ]
+    },
+    searchTips: {
+      title: "医疗专业人士搜索技巧",
+      showTips: "显示技巧",
+      hideTips: "隐藏技巧",
+      commonCodes: "常见医疗SOC代码：",
+      codes: {
+        nurses: "注册护士",
+        dentists: "牙医",
+        veterinarians: "兽医",
+        respiratoryTherapists: "呼吸治疗师",
+        occupationalTherapists: "职业治疗师"
+      },
+      strategy: "搜索策略：",
+      tips: [
+        "使用聘用函中的具体职位名称",
+        "选择正确的地理区域(MSA/县)",
+        "根据经验选择合适的工资等级",
+        "验证调查来源和日期",
+        "考虑OES和其他工资来源"
+      ]
+    },
+    footerNote: {
+      important: "重要提示：",
+      text: "现行工资确定对H1B申请具有法律约束力。请始终从官方DOL来源验证最新数据。此工具提供快速访问官方政府数据，但不构成法律建议。"
+    }
   }
 };
