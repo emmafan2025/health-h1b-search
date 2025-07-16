@@ -173,5 +173,23 @@ export const en = {
       occupations: "Occupations",
       popularHealthcareEmployers: "Popular Healthcare Employers"
     }
+  },
+
+  // Email Subscription  
+  email: {
+    title: "H1B and Immigration Updates Newsletter",
+    subtitle: "Subscribe and get H1B, Green Card, USCIS, and fresh data updates delivered to your inbox.",
+    placeholder: "Enter your email address",
+    subscribe: "Subscribe",
+    thankYou: "Thank You!",
+    successMessage: "You've successfully subscribed to our H1B and Immigration Updates Newsletter.",
+    privacy: "We respect your privacy. Unsubscribe at any time."
+  },
+
+  // Rankings
+  rankings: {
+    topSponsors: "Top H1B Sponsors in Healthcare 2025",
+    topJobTitles: "Top H1B Job Titles in Healthcare 2025", 
+    topCities: "Top H1B Cities in Healthcare 2025"
   }
 };

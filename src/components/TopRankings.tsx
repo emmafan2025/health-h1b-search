@@ -1,8 +1,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "@/contexts/TranslationContext";
 
 const TopRankings = () => {
+  const { t } = useTranslation();
   // Real data from Supabase (2025 healthcare H1B cases)
   const topSponsors = [
     "Grandison Management, Inc.",
@@ -45,7 +47,7 @@ const TopRankings = () => {
           <Card className="bg-white shadow-md">
             <CardHeader className="pb-3">
               <CardTitle className="text-base text-center text-blue-800">
-                Top H1B Sponsors in Healthcare 2025
+                {t.rankings.topSponsors}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -66,7 +68,7 @@ const TopRankings = () => {
           <Card className="bg-white shadow-md">
             <CardHeader className="pb-3">
               <CardTitle className="text-base text-center text-blue-800">
-                Top H1B Job Titles in Healthcare 2025
+                {t.rankings.topJobTitles}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -87,7 +89,7 @@ const TopRankings = () => {
           <Card className="bg-white shadow-md">
             <CardHeader className="pb-3">
               <CardTitle className="text-base text-center text-blue-800">
-                Top H1B Cities in Healthcare 2025
+                {t.rankings.topCities}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">

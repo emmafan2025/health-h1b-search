@@ -173,5 +173,23 @@ export const zh = {
       occupations: "职业类别",
       popularHealthcareEmployers: "热门医疗雇主"
     }
+  },
+
+  // Email Subscription
+  email: {
+    title: "H1B和移民更新通讯",
+    subtitle: "订阅并获取H1B、绿卡、USCIS和最新数据更新到您的邮箱。",
+    placeholder: "输入您的邮箱地址",
+    subscribe: "订阅",
+    thankYou: "谢谢您！",
+    successMessage: "您已成功订阅我们的H1B和移民更新通讯。",
+    privacy: "我们尊重您的隐私。随时可以取消订阅。"
+  },
+
+  // Rankings
+  rankings: {
+    topSponsors: "2025年医疗H1B顶级雇主",
+    topJobTitles: "2025年医疗H1B顶级职位",
+    topCities: "2025年医疗H1B顶级城市"
   }
 };
