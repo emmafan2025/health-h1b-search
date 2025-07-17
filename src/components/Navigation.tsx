@@ -53,7 +53,9 @@ const Navigation = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
-                      <DropdownMenuItem>{t.nav.search}</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/">{t.nav.search}</Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link to="/healthcare-employers">{t.nav.topHealthcareSponsors}</Link>
                       </DropdownMenuItem>
