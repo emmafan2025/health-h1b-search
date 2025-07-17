@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Sparkles, Building2, MapPin, Calendar, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/Navigation";
 import SearchFilters from "@/components/SearchFilters";
 import PaginationControls from "@/components/PaginationControls";
@@ -75,60 +76,165 @@ const GreenCardSearch = () => {
     }
   };
 
+  // 模拟统计数据
+  const stats = [
+    { icon: Building2, label: "Active Sponsors", value: "12,450+", color: "text-purple-600" },
+    { icon: MapPin, label: "States Covered", value: "50", color: "text-blue-600" },
+    { icon: Calendar, label: "Applications Tracked", value: "45,230+", color: "text-green-600" },
+    { icon: TrendingUp, label: "Success Rate", value: "89%", color: "text-orange-600" }
+  ];
+
+  // 热门搜索标签
+  const popularTags = [
+    "Software Engineer", "Data Scientist", "Product Manager", 
+    "Healthcare", "Finance", "Tech Companies", "New York", "California"
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
       <Navigation />
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-purple-800 mb-6">
-            {t.greenCard.title}
-          </h1>
-
-          <div className="flex space-x-2 mb-4">
-            <div className="relative flex-grow">
-              <Input 
-                type="text" 
-                placeholder={t.greenCard.searchPlaceholder}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyPress}
-                className="pr-10"
-              />
-              <Search 
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-500" 
-              />
+      
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10"></div>
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Sparkles className="h-4 w-4" />
+              Latest Green Card Data 2025
             </div>
-            <Button 
-              variant="outline" 
-              className="text-purple-700 border-purple-300 hover:bg-purple-50"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="mr-2 h-4 w-4" /> {t.greenCard.filters}
-            </Button>
-          </div>
+            
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
+              {t.greenCard.title}
+            </h1>
+            
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+              Discover green card sponsoring employers, track priority dates, and find your path to permanent residency
+            </p>
 
-          {showFilters && (
-            <Card className="mb-4 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle>{t.greenCard.advancedFilters}</CardTitle>
+            {/* Enhanced Search Bar */}
+            <div className="relative max-w-2xl mx-auto mb-8">
+              <div className="relative">
+                <Input 
+                  type="text" 
+                  placeholder={t.greenCard.searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  className="h-16 text-lg pl-6 pr-32 border-2 border-purple-200 focus:border-purple-400 rounded-2xl shadow-lg"
+                />
+                <div className="absolute right-2 top-2 flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                    onClick={() => setShowFilters(!showFilters)}
+                  >
+                    <Filter className="mr-2 h-4 w-4" /> 
+                    Filters
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={handleSearch}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6"
+                  >
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Popular Tags */}
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              <span className="text-sm text-gray-500 mr-4">Popular searches:</span>
+              {popularTags.map((tag, index) => (
+                <Badge 
+                  key={index}
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-purple-100 transition-colors"
+                  onClick={() => {
+                    setSearchQuery(tag);
+                    handleSearch();
+                  }}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="container mx-auto px-4 -mt-8 mb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((stat, index) => (
+              <Card key={index} className="text-center p-6 bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
+                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      {showFilters && (
+        <div className="container mx-auto px-4 mb-8">
+          <div className="max-w-4xl mx-auto">
+            <Card className="bg-white/90 backdrop-blur-sm border-0 shadow-xl">
+              <CardHeader className="border-b border-gray-100">
+                <CardTitle className="text-lg font-semibold text-gray-800">
+                  {t.greenCard.advancedFilters}
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <SearchFilters onApplyFilters={(filters) => performSearch(filters, 1)} />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+
+      {/* Results Section */}
+      <div className="container mx-auto px-4 pb-12">
+        <div className="max-w-6xl mx-auto">
+          {loading && (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+              <p className="mt-4 text-gray-600">{t.common.loading}</p>
+            </div>
+          )}
+          
+          {error && (
+            <Card className="bg-red-50 border-red-200">
+              <CardContent className="p-6 text-center">
+                <p className="text-red-600">{t.common.error}</p>
               </CardContent>
             </Card>
           )}
 
-          {loading && <div>{t.common.loading}</div>}
-          {error && <div>{t.common.error}</div>}
-
-          {showResults && greenCardData.length === 0 && (
-            <div className="text-center text-purple-600">
-              {t.greenCard.noResults}
-            </div>
+          {showResults && greenCardData.length === 0 && !loading && (
+            <Card className="bg-gray-50">
+              <CardContent className="p-12 text-center">
+                <div className="text-gray-400 mb-4">
+                  <Search className="h-16 w-16 mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  {t.greenCard.noResults}
+                </h3>
+                <p className="text-gray-500">
+                  Try adjusting your search terms or filters
+                </p>
+              </CardContent>
+            </Card>
           )}
 
           {showResults && greenCardData.length > 0 && (
-            <>
+            <div className="space-y-6">
               <SortControls 
                 sortBy={sortBy} 
                 sortOrder={sortOrder} 
@@ -137,10 +243,12 @@ const GreenCardSearch = () => {
                   setSortOrder(newSortOrder);
                 }}
               />
+              
               {/* TODO: 创建专门的绿卡搜索结果组件 */}
-              <div className="mt-4">
-                {/* 搜索结果列表 */}
+              <div className="space-y-4">
+                {/* 搜索结果列表将在这里显示 */}
               </div>
+              
               <PaginationControls
                 pagination={paginationInfo}
                 onPageChange={(page: number) => performSearch(currentFilters, page)}
@@ -149,7 +257,7 @@ const GreenCardSearch = () => {
                   performSearch(currentFilters, 1);
                 }}
               />
-            </>
+            </div>
           )}
         </div>
       </div>
