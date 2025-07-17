@@ -100,11 +100,11 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
         <Navigation />
         <div className="flex items-center justify-center pt-32">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
             <p className="text-gray-600 text-lg">{t.search.loading}</p>
           </div>
         </div>
@@ -114,13 +114,13 @@ const Index = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
         <Navigation />
         <div className="flex items-center justify-center pt-32">
           <Card className="bg-red-50 border-red-200 max-w-md">
             <CardContent className="p-8 text-center">
               <p className="text-red-600 mb-4">{t.search.failedToLoad}</p>
-              <Button onClick={() => window.location.reload()} variant="outline">
+              <Button onClick={() => window.location.reload()} variant="outline" className="border-purple-200 text-purple-600 hover:bg-purple-50">
                 {t.search.retry}
               </Button>
             </CardContent>
@@ -132,7 +132,7 @@ const Index = () => {
 
   if (showResults) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
@@ -142,7 +142,7 @@ const Index = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => setShowResults(false)}
-                  className="text-blue-600 hover:bg-blue-50"
+                  className="text-purple-600 hover:bg-purple-50"
                 >
                   ← {t.search.newSearch}
                 </Button>
@@ -154,11 +154,11 @@ const Index = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="pl-12 h-12 text-lg border-2 border-gray-200 focus:border-blue-500"
+                      className="pl-12 h-12 text-lg border-2 border-gray-200 focus:border-purple-500"
                     />
                   </div>
                 </div>
-                <Button onClick={handleSearch} className="bg-blue-600 hover:bg-blue-700 px-6">
+                <Button onClick={handleSearch} className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-6">
                   {t.search.filter}
                 </Button>
               </div>
@@ -177,7 +177,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                className="border-purple-200 text-purple-600 hover:bg-purple-50"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 {t.search.advancedSearch}
@@ -212,7 +212,7 @@ const Index = () => {
       icon: Building2, 
       label: t.search.stats.healthcareEmployers, 
       value: `${dataStats.totalEmployers.toLocaleString()}+`, 
-      color: "from-blue-500 to-blue-600",
+      color: "from-purple-600 to-blue-600",
       link: "/healthcare-employers",
       trend: "+12%" 
     },
@@ -220,7 +220,7 @@ const Index = () => {
       icon: Users, 
       label: t.search.stats.h1bCases, 
       value: `${dataStats.totalCases.toLocaleString()}+`, 
-      color: "from-green-500 to-green-600",
+      color: "from-purple-500 to-indigo-600",
       link: "/h1b-cases",
       trend: "+8%" 
     },
@@ -228,7 +228,7 @@ const Index = () => {
       icon: MapPin, 
       label: t.search.stats.statesCovered, 
       value: dataStats.statesCovered.toString(), 
-      color: "from-purple-500 to-purple-600",
+      color: "from-indigo-500 to-blue-600",
       link: "/states-covered",
       trend: "50" 
     },
@@ -236,7 +236,7 @@ const Index = () => {
       icon: Briefcase, 
       label: t.search.stats.occupations, 
       value: dataStats.totalOccupations.toString(), 
-      color: "from-orange-500 to-orange-600",
+      color: "from-blue-500 to-purple-600",
       link: "/healthcare-occupations",
       trend: "+15%" 
     }
@@ -248,34 +248,34 @@ const Index = () => {
       title: "H1B Data",
       description: "Search comprehensive H1B case database",
       icon: Search,
-      color: "from-blue-500 to-blue-600",
+      color: "from-purple-600 to-blue-600",
       action: () => setShowResults(true)
     },
     {
       title: "Green Card Search",
       description: "Find green card sponsoring employers",
       icon: Star,
-      color: "from-purple-500 to-purple-600",
+      color: "from-indigo-600 to-purple-600",
       link: "/green-card-search"
     },
     {
       title: "Prevailing Wages",
       description: "Check official wage requirements",
       icon: TrendingUp,
-      color: "from-green-500 to-green-600",
+      color: "from-blue-600 to-indigo-600",
       link: "/prevailing-wages"
     },
     {
       title: "Forum",
       description: "Connect with healthcare professionals",
       icon: Users,
-      color: "from-orange-500 to-orange-600",
+      color: "from-purple-500 to-blue-500",
       link: "/forum"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
       <Navigation />
       
       {/* Main Content Container - Unified Design */}
@@ -283,12 +283,12 @@ const Index = () => {
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="text-center py-20">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
+            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
               <Sparkles className="h-4 w-4" />
               Latest H1B Healthcare Data 2025
             </div>
             
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
               {t.search.title}
             </h1>
             
@@ -307,14 +307,14 @@ const Index = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="pl-16 h-16 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl"
+                      className="pl-16 h-16 text-lg border-2 border-gray-200 focus:border-purple-500 rounded-xl"
                     />
                   </div>
                   <div className="flex gap-4 justify-center">
-                    <Button 
+                     <Button 
                       onClick={handleSearch}
                       size="lg"
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 text-lg"
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-8 text-lg"
                     >
                       <Search className="mr-2 h-5 w-5" />
                       {t.search.searchH1BData}
@@ -323,7 +323,7 @@ const Index = () => {
                       variant="outline"
                       size="lg"
                       onClick={() => setShowFilters(!showFilters)}
-                      className="border-blue-200 text-blue-600 hover:bg-blue-50 px-8 text-lg"
+                      className="border-purple-200 text-purple-600 hover:bg-purple-50 px-8 text-lg"
                     >
                       <Filter className="h-5 w-5 mr-2" />
                       {t.search.advancedSearch}
@@ -421,7 +421,7 @@ const Index = () => {
                     <Badge 
                       key={employer}
                       variant="outline" 
-                      className="cursor-pointer hover:bg-blue-50 text-blue-700 border-blue-200 px-4 py-2 text-sm transition-all hover:shadow-md hover:scale-105"
+                      className="cursor-pointer hover:bg-purple-50 text-purple-700 border-purple-200 px-4 py-2 text-sm transition-all hover:shadow-md hover:scale-105"
                       onClick={() => {
                         setSearchQuery(employer);
                         handleSearch();

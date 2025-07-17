@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
+import { Mail, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/contexts/TranslationContext";
 
 const EmailSubscription = () => {
@@ -23,12 +23,14 @@ const EmailSubscription = () => {
 
   if (isSubscribed) {
     return (
-      <div className="w-full bg-blue-50 py-8">
+      <div className="w-full bg-gradient-to-r from-purple-50 to-blue-50 py-12">
         <div className="container mx-auto px-4">
-          <Card className="max-w-2xl mx-auto bg-white shadow-md">
+          <Card className="max-w-2xl mx-auto bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-2xl overflow-hidden">
             <CardContent className="p-8 text-center">
-              <Mail className="h-12 w-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{t.email.thankYou}</h3>
+              <div className="bg-gradient-to-br from-purple-600 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-3">{t.email.thankYou}</h3>
               <p className="text-gray-600">{t.email.successMessage}</p>
             </CardContent>
           </Card>
@@ -38,16 +40,19 @@ const EmailSubscription = () => {
   }
 
   return (
-    <div className="w-full bg-blue-50 py-8">
+    <div className="w-full bg-gradient-to-r from-purple-50 to-blue-50 py-12">
       <div className="container mx-auto px-4">
-        <Card className="max-w-2xl mx-auto bg-white shadow-md">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl text-blue-800 flex items-center justify-center gap-2">
-              <Mail className="h-6 w-6" />
+        <Card className="max-w-2xl mx-auto bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-2xl overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-blue-600"></div>
+          <CardHeader className="text-center pt-8">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent flex items-center justify-center gap-3">
+              <div className="bg-gradient-to-br from-purple-600 to-blue-600 w-10 h-10 rounded-full flex items-center justify-center">
+                <Mail className="h-5 w-5 text-white" />
+              </div>
               {t.email.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-8">
             <p className="text-gray-600 text-center mb-6">
               {t.email.subtitle}
             </p>
@@ -57,10 +62,13 @@ const EmailSubscription = () => {
                 placeholder={t.email.placeholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1"
+                className="flex-1 h-12 border-2 border-gray-200 focus:border-purple-400 rounded-xl"
                 required
               />
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-6">
+              <Button 
+                type="submit" 
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-6 rounded-xl"
+              >
                 {t.email.subscribe}
               </Button>
             </form>
