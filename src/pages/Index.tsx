@@ -385,8 +385,8 @@ const Index = () => {
                   >
                     {action.link ? (
                       <Link to={action.link} className="block h-full">
-                        <CardContent className="p-6 text-center h-full flex flex-col justify-center">
-                          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${action.color} mb-4`}>
+                        <CardContent className="p-6 text-center h-full flex flex-col justify-center items-center">
+                          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${action.color} mb-4 mx-auto`}>
                             <action.icon className="h-6 w-6 text-white" />
                           </div>
                           <h3 className="font-semibold text-gray-800 mb-2">{action.title}</h3>
@@ -394,8 +394,8 @@ const Index = () => {
                         </CardContent>
                       </Link>
                     ) : (
-                      <CardContent className="p-6 text-center h-full flex flex-col justify-center">
-                        <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${action.color} mb-4`}>
+                      <CardContent className="p-6 text-center h-full flex flex-col justify-center items-center">
+                        <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${action.color} mb-4 mx-auto`}>
                           <action.icon className="h-6 w-6 text-white" />
                         </div>
                         <h3 className="font-semibold text-gray-800 mb-2">{action.title}</h3>
