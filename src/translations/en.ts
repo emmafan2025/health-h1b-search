@@ -261,5 +261,24 @@ export const en = {
       important: "Important:",
       text: "Prevailing wage determinations are legally binding for H1B applications. Always verify the latest data from the official DOL sources. This tool provides quick access to official government data but does not constitute legal advice."
     }
+  },
+  greenCard: {
+    title: "Green Card Sponsors Search Engine",
+    searchPlaceholder: "Search green card sponsors, companies or positions...",
+    filters: "Filters",
+    advancedFilters: "Advanced Filters",
+    noResults: "No results found",
+    results: "Search Results",
+    company: "Company",
+    position: "Position", 
+    location: "Location",
+    priority: "Priority Date",
+    category: "Application Category"
+  },
+  common: {
+    loading: "Loading...",
+    error: "Error loading data",
+    search: "Search",
+    clear: "Clear"
   }
 };

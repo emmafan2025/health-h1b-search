@@ -261,5 +261,24 @@ export const zh = {
       important: "重要提示：",
       text: "现行工资确定对H1B申请具有法律约束力。请始终从官方DOL来源验证最新数据。此工具提供快速访问官方政府数据，但不构成法律建议。"
     }
+  },
+  greenCard: {
+    title: "绿卡赞助商搜索引擎",
+    searchPlaceholder: "搜索绿卡赞助商、公司或职位...",
+    filters: "过滤器",
+    advancedFilters: "高级过滤器",
+    noResults: "没有找到相关结果",
+    results: "搜索结果",
+    company: "公司",
+    position: "职位",
+    location: "地点",
+    priority: "优先级日期",
+    category: "申请类别"
+  },
+  common: {
+    loading: "加载中...",
+    error: "加载出错",
+    search: "搜索",
+    clear: "清除"
   }
 };

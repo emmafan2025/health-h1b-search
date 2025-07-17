@@ -73,7 +73,9 @@ const Navigation = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
-                      <DropdownMenuItem>{t.nav.search}</DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/green-card-search">{t.nav.search}</Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem>{t.nav.topGreenCardSponsors}</DropdownMenuItem>
                       <DropdownMenuItem>{t.nav.topGreenCardJobs}</DropdownMenuItem>
                       <DropdownMenuItem asChild>
