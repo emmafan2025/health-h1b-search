@@ -263,7 +263,7 @@ export const en = {
     }
   },
   greenCard: {
-    title: "Green Card Sponsors Search Engine",
+    title: "Green Card Sponsors Search",
     searchPlaceholder: "Search green card sponsors, companies or positions...",
     filters: "Filters",
     advancedFilters: "Advanced Filters",

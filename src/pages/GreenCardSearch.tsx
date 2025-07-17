@@ -76,11 +76,11 @@ const GreenCardSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-emerald-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
       <Navigation />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-emerald-800 mb-6">
+          <h1 className="text-3xl font-bold text-purple-800 mb-6">
             {t.greenCard.title}
           </h1>
 
@@ -95,12 +95,12 @@ const GreenCardSearch = () => {
                 className="pr-10"
               />
               <Search 
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-emerald-500" 
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-500" 
               />
             </div>
             <Button 
               variant="outline" 
-              className="text-emerald-700 border-emerald-300 hover:bg-emerald-50"
+              className="text-purple-700 border-purple-300 hover:bg-purple-50"
               onClick={() => setShowFilters(!showFilters)}
             >
               <Filter className="mr-2 h-4 w-4" /> {t.greenCard.filters}
@@ -122,7 +122,7 @@ const GreenCardSearch = () => {
           {error && <div>{t.common.error}</div>}
 
           {showResults && greenCardData.length === 0 && (
-            <div className="text-center text-emerald-600">
+            <div className="text-center text-purple-600">
               {t.greenCard.noResults}
             </div>
           )}

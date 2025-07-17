@@ -263,7 +263,7 @@ export const zh = {
     }
   },
   greenCard: {
-    title: "绿卡赞助商搜索引擎",
+    title: "绿卡赞助商搜索",
     searchPlaceholder: "搜索绿卡赞助商、公司或职位...",
     filters: "过滤器",
     advancedFilters: "高级过滤器",
