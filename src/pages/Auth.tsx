@@ -9,13 +9,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/TranslationContext";
 import { Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [signInData, setSignInData] = useState({ email: "", password: "" });
   const [signUpData, setSignUpData] = useState({ email: "", password: "", username: "" });
   
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, signInWithGoogle, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -99,6 +100,28 @@ const Auth = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast({
+          title: "Google Sign In Error",
+          description: error.message || "Failed to sign in with Google",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Google Sign In Error", 
+        description: "Failed to sign in with Google",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -157,6 +180,27 @@ const Auth = () => {
                     {isLoading ? t.auth.signingIn : t.auth.signIn}
                   </Button>
                 </form>
+                
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                
+                <Button
+                  variant="outline"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                  className="w-full"
+                >
+                  <FcGoogle className="mr-2 h-4 w-4" />
+                  Google
+                </Button>
               </TabsContent>
 
               <TabsContent value="signup" className="space-y-4">
@@ -210,6 +254,27 @@ const Auth = () => {
                     {isLoading ? t.auth.signingUp : t.auth.signUp}
                   </Button>
                 </form>
+                
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                
+                <Button
+                  variant="outline"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                  className="w-full"
+                >
+                  <FcGoogle className="mr-2 h-4 w-4" />
+                  Google
+                </Button>
               </TabsContent>
             </Tabs>
           </CardContent>
