@@ -103,17 +103,28 @@ export const useH1BData = () => {
         .from('healthcare_h1b_cases')
         .select('*', { count: 'exact' });
 
+      // Sanitize search input: limit length, remove SQL wildcards
+      const sanitizeInput = (input: string): string => {
+        let sanitized = input.trim().slice(0, 100);
+        sanitized = sanitized.replace(/[%_\\]/g, '');
+        return sanitized;
+      };
+
       // Apply search filters - use proper OR query syntax
       if (filters?.searchQuery && filters.searchQuery.trim()) {
-        const searchTerm = filters.searchQuery.trim();
-        console.log(`Applying search filter for term: "${searchTerm}"`);
-        queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%,JOB_TITLE.ilike.%${searchTerm}%`);
+        const searchTerm = sanitizeInput(filters.searchQuery);
+        if (searchTerm) {
+          console.log(`Applying search filter for term: "${searchTerm}"`);
+          queryBuilder = queryBuilder.or(`SOC_TITLE.ilike.%${searchTerm}%,EMPLOYER_NAME.ilike.%${searchTerm}%,JOB_TITLE.ilike.%${searchTerm}%`);
+        }
       }
 
       // Apply location filter - use proper OR query syntax
       if (filters?.location && filters.location.trim()) {
-        const locationTerm = filters.location.trim();
-        queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
+        const locationTerm = sanitizeInput(filters.location);
+        if (locationTerm) {
+          queryBuilder = queryBuilder.or(`WORKSITE_CITY.ilike.%${locationTerm}%,WORKSITE_STATE.ilike.%${locationTerm}%`);
+        }
       }
 
       // Apply salary range filters
@@ -129,7 +140,10 @@ export const useH1BData = () => {
 
       // Apply job title filter
       if (filters?.jobTitle && filters.jobTitle.trim()) {
-        queryBuilder = queryBuilder.ilike('JOB_TITLE', `%${filters.jobTitle}%`);
+        const jobTitleTerm = sanitizeInput(filters.jobTitle);
+        if (jobTitleTerm) {
+          queryBuilder = queryBuilder.ilike('JOB_TITLE', `%${jobTitleTerm}%`);
+        }
       }
 
       // Apply state filter
