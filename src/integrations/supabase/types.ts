@@ -16,7 +16,6 @@ export type Database = {
     Tables: {
       forum_posts: {
         Row: {
-          author_email: string | null
           author_name: string
           category: string
           content: string
@@ -28,7 +27,6 @@ export type Database = {
           views: number
         }
         Insert: {
-          author_email?: string | null
           author_name: string
           category?: string
           content: string
@@ -40,7 +38,6 @@ export type Database = {
           views?: number
         }
         Update: {
-          author_email?: string | null
           author_name?: string
           category?: string
           content?: string
@@ -63,7 +60,6 @@ export type Database = {
       }
       forum_replies: {
         Row: {
-          author_email: string | null
           author_name: string
           content: string
           created_at: string
@@ -73,7 +69,6 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          author_email?: string | null
           author_name: string
           content: string
           created_at?: string
@@ -83,7 +78,6 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          author_email?: string | null
           author_name?: string
           content?: string
           created_at?: string
