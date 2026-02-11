@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -310,54 +310,60 @@ export type Database = {
     }
     Functions: {
       get_available_years: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           year: number
         }[]
       }
       get_employer_counts: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          employer_name: string
           case_count: number
+          employer_name: string
         }[]
       }
-      get_employers_by_occupation_with_counts: {
-        Args:
-          | { occupation_title?: string }
-          | { occupation_title?: string; filter_year?: number }
-        Returns: {
-          employer_name: string
-          case_count: number
-        }[]
-      }
+      get_employers_by_occupation_with_counts:
+        | {
+            Args: { occupation_title?: string }
+            Returns: {
+              case_count: number
+              employer_name: string
+            }[]
+          }
+        | {
+            Args: { filter_year?: number; occupation_title?: string }
+            Returns: {
+              case_count: number
+              employer_name: string
+            }[]
+          }
       get_forum_posts_with_reply_counts: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          id: string
-          title: string
-          content: string
           author_name: string
           category: string
-          views: number
+          content: string
           created_at: string
-          updated_at: string
+          id: string
           reply_count: number
+          title: string
+          updated_at: string
+          views: number
         }[]
       }
       get_occupation_counts: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
+          case_count: number
           occupation: string
           soc_code: string
-          case_count: number
         }[]
       }
       get_state_counts: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          state: string
           case_count: number
+          state: string
         }[]
       }
     }
