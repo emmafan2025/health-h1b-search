@@ -102,6 +102,26 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Validate authorization - require service role key or a sync secret token
+  const authHeader = req.headers.get('Authorization');
+  const syncToken = req.headers.get('X-Sync-Token');
+  const expectedSyncToken = Deno.env.get('SYNC_SECRET_TOKEN');
+  const expectedAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+  const expectedServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+  const bearerToken = authHeader?.replace('Bearer ', '');
+  const isAuthorized =
+    bearerToken === expectedServiceKey ||
+    bearerToken === expectedAnonKey ||
+    (expectedSyncToken && syncToken === expectedSyncToken);
+
+  if (!isAuthorized) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     console.log('Starting visa data sync...');
 
