@@ -105,145 +105,51 @@ export type Database = {
       }
       green_card_perm_cases: {
         Row: {
-          accept_alt_combo: string | null
-          accept_alt_combo_ed_other: string | null
-          accept_alt_combo_education: string | null
-          accept_alt_combo_education_yrs: number | null
-          accept_alt_field_of_study: string | null
-          accept_alt_job_title: string | null
-          accept_alt_major_fld_of_study: string | null
-          accept_alt_occupation: string | null
-          accept_alt_occupation_months: number | null
-          accept_foreign_education: string | null
-          add_recruit_information: string | null
-          agent_attorney_address_1: string | null
-          agent_attorney_address_2: string | null
-          agent_attorney_city: string | null
-          agent_attorney_country: string | null
-          agent_attorney_email: string | null
-          agent_attorney_firm_name: string | null
-          agent_attorney_name: string | null
-          agent_attorney_phone: string | null
-          agent_attorney_phone_ext: string | null
-          agent_attorney_postal_code: string | null
-          agent_attorney_state_province: string | null
-          app_for_college_u_teacher: string | null
-          bargaining_rep_notified: string | null
-          basic_recruitment_process: string | null
-          campus_placement_from_date: string | null
-          campus_placement_to_date: string | null
           case_number: string | null
           case_status: string | null
-          class_of_admission: string | null
-          combination_occupation: string | null
-          competitive_process: string | null
-          country_of_citizenship: string | null
           created_at: string | null
           decision_date: string | null
-          emp_contact_address_1: string | null
-          emp_contact_address_2: string | null
-          emp_contact_city: string | null
-          emp_contact_country: string | null
-          emp_contact_email: string | null
-          emp_contact_name: string | null
-          emp_contact_phone: string | null
-          emp_contact_postal_code: string | null
-          emp_contact_state_province: string | null
           emp_decl_title: string | null
           emp_info_decl_name: string | null
-          emp_received_payment: string | null
           emp_year_commenced_business: number | null
-          employee_ref_prog_from_date: string | null
-          employee_referral_prog_to_date: string | null
           employer_address_1: string | null
           employer_address_2: string | null
           employer_city: string | null
           employer_completed_application: string | null
           employer_country: string | null
-          employer_fein: string | null
           employer_name: string | null
           employer_num_employees: number | null
           employer_phone: string | null
           employer_phone_ext: string | null
           employer_postal_code: string | null
           employer_state_province: string | null
-          employer_website_from_date: string | null
-          employer_website_to_date: string | null
           first_advertisement_start_date: string | null
           first_newspaper_name: string | null
-          foreign_language_required: string | null
           foreign_worker_alt_ed_exp: string | null
           foreign_worker_alt_occ_exp: string | null
-          foreign_worker_birth_country: string | null
           foreign_worker_curr_employed: string | null
-          foreign_worker_ed_inst_add_1: string | null
-          foreign_worker_ed_inst_add_2: string | null
-          foreign_worker_ed_inst_city: string | null
           foreign_worker_ed_inst_country: string | null
           foreign_worker_ed_inst_post_cd: string | null
-          foreign_worker_ed_inst_state_p: string | null
-          foreign_worker_education: string | null
-          foreign_worker_education_other: string | null
           foreign_worker_empl_pay_for_ed: string | null
           foreign_worker_exp_with_empl: string | null
-          foreign_worker_info_major: string | null
-          foreign_worker_inst_of_ed: string | null
-          foreign_worker_live_in_dom_ser: string | null
-          foreign_worker_live_in_dom_svc_cnt: number | null
-          foreign_worker_live_on_prem: string | null
           foreign_worker_req_experience: string | null
           foreign_worker_training_comp: string | null
-          foreign_worker_yrs_ed_comp: number | null
-          fw_ownership_interest: string | null
-          job_education_min_other: string | null
-          job_fair_from_date: string | null
-          job_fair_to_date: string | null
-          job_opp_requirements_normal: string | null
-          job_search_website_from_date: string | null
-          job_search_website_to_date: string | null
           job_title: string | null
-          layoff_in_past_six_months: string | null
-          local_ethnic_paper_from_date: string | null
-          local_ethnic_paper_to_date: string | null
-          major_field_of_study: string | null
           minimum_education: string | null
-          naics_code: string | null
-          offered_to_appl_foreign_worker: string | null
-          on_campus_recruiting_from_date: string | null
-          on_campus_recruiting_to_date: string | null
-          orig_file_date: string | null
-          payment_details: string | null
-          posted_notice_at_worksite: string | null
           preparer_email: string | null
           preparer_name: string | null
           preparer_title: string | null
-          previous_swa_case_number_state: string | null
-          pro_org_ad_from_date: string | null
-          pro_org_advertisement_to_date: string | null
-          professional_occupation: string | null
-          pvt_employment_firm_from_date: string | null
-          pvt_employment_firm_to_date: string | null
           pw_determination_date: string | null
           pw_expiration_date: string | null
           pw_skill_level: string | null
           pw_soc_code: string | null
           pw_soc_title: string | null
-          pw_source_name_other: string | null
           pw_track_number: string | null
           pw_unit_of_pay: string | null
           pw_wage: number | null
           pw_wage_source: string | null
-          radio_tv_ad_from_date: string | null
-          radio_tv_ad_to_date: string | null
           received_date: string | null
           record_id: string
-          refile: string | null
-          required_experience: string | null
-          required_experience_months: number | null
-          required_field_of_training: string | null
-          required_training: string | null
-          required_training_months: number | null
-          schd_a_sheepherder: string | null
           second_ad_start_date: string | null
           second_advertisement_type: string | null
           second_newspaper_ad_name: string | null
@@ -251,9 +157,6 @@ export type Database = {
           sunday_edition_newspaper: string | null
           swa_job_order_end_date: string | null
           swa_job_order_start_date: string | null
-          teacher_pub_journal_name: string | null
-          teacher_select_date: string | null
-          us_workers_considered: string | null
           wage_offer_from: number | null
           wage_offer_to: number | null
           wage_offer_unit_of_pay: string | null
@@ -264,145 +167,51 @@ export type Database = {
           worksite_state: string | null
         }
         Insert: {
-          accept_alt_combo?: string | null
-          accept_alt_combo_ed_other?: string | null
-          accept_alt_combo_education?: string | null
-          accept_alt_combo_education_yrs?: number | null
-          accept_alt_field_of_study?: string | null
-          accept_alt_job_title?: string | null
-          accept_alt_major_fld_of_study?: string | null
-          accept_alt_occupation?: string | null
-          accept_alt_occupation_months?: number | null
-          accept_foreign_education?: string | null
-          add_recruit_information?: string | null
-          agent_attorney_address_1?: string | null
-          agent_attorney_address_2?: string | null
-          agent_attorney_city?: string | null
-          agent_attorney_country?: string | null
-          agent_attorney_email?: string | null
-          agent_attorney_firm_name?: string | null
-          agent_attorney_name?: string | null
-          agent_attorney_phone?: string | null
-          agent_attorney_phone_ext?: string | null
-          agent_attorney_postal_code?: string | null
-          agent_attorney_state_province?: string | null
-          app_for_college_u_teacher?: string | null
-          bargaining_rep_notified?: string | null
-          basic_recruitment_process?: string | null
-          campus_placement_from_date?: string | null
-          campus_placement_to_date?: string | null
           case_number?: string | null
           case_status?: string | null
-          class_of_admission?: string | null
-          combination_occupation?: string | null
-          competitive_process?: string | null
-          country_of_citizenship?: string | null
           created_at?: string | null
           decision_date?: string | null
-          emp_contact_address_1?: string | null
-          emp_contact_address_2?: string | null
-          emp_contact_city?: string | null
-          emp_contact_country?: string | null
-          emp_contact_email?: string | null
-          emp_contact_name?: string | null
-          emp_contact_phone?: string | null
-          emp_contact_postal_code?: string | null
-          emp_contact_state_province?: string | null
           emp_decl_title?: string | null
           emp_info_decl_name?: string | null
-          emp_received_payment?: string | null
           emp_year_commenced_business?: number | null
-          employee_ref_prog_from_date?: string | null
-          employee_referral_prog_to_date?: string | null
           employer_address_1?: string | null
           employer_address_2?: string | null
           employer_city?: string | null
           employer_completed_application?: string | null
           employer_country?: string | null
-          employer_fein?: string | null
           employer_name?: string | null
           employer_num_employees?: number | null
           employer_phone?: string | null
           employer_phone_ext?: string | null
           employer_postal_code?: string | null
           employer_state_province?: string | null
-          employer_website_from_date?: string | null
-          employer_website_to_date?: string | null
           first_advertisement_start_date?: string | null
           first_newspaper_name?: string | null
-          foreign_language_required?: string | null
           foreign_worker_alt_ed_exp?: string | null
           foreign_worker_alt_occ_exp?: string | null
-          foreign_worker_birth_country?: string | null
           foreign_worker_curr_employed?: string | null
-          foreign_worker_ed_inst_add_1?: string | null
-          foreign_worker_ed_inst_add_2?: string | null
-          foreign_worker_ed_inst_city?: string | null
           foreign_worker_ed_inst_country?: string | null
           foreign_worker_ed_inst_post_cd?: string | null
-          foreign_worker_ed_inst_state_p?: string | null
-          foreign_worker_education?: string | null
-          foreign_worker_education_other?: string | null
           foreign_worker_empl_pay_for_ed?: string | null
           foreign_worker_exp_with_empl?: string | null
-          foreign_worker_info_major?: string | null
-          foreign_worker_inst_of_ed?: string | null
-          foreign_worker_live_in_dom_ser?: string | null
-          foreign_worker_live_in_dom_svc_cnt?: number | null
-          foreign_worker_live_on_prem?: string | null
           foreign_worker_req_experience?: string | null
           foreign_worker_training_comp?: string | null
-          foreign_worker_yrs_ed_comp?: number | null
-          fw_ownership_interest?: string | null
-          job_education_min_other?: string | null
-          job_fair_from_date?: string | null
-          job_fair_to_date?: string | null
-          job_opp_requirements_normal?: string | null
-          job_search_website_from_date?: string | null
-          job_search_website_to_date?: string | null
           job_title?: string | null
-          layoff_in_past_six_months?: string | null
-          local_ethnic_paper_from_date?: string | null
-          local_ethnic_paper_to_date?: string | null
-          major_field_of_study?: string | null
           minimum_education?: string | null
-          naics_code?: string | null
-          offered_to_appl_foreign_worker?: string | null
-          on_campus_recruiting_from_date?: string | null
-          on_campus_recruiting_to_date?: string | null
-          orig_file_date?: string | null
-          payment_details?: string | null
-          posted_notice_at_worksite?: string | null
           preparer_email?: string | null
           preparer_name?: string | null
           preparer_title?: string | null
-          previous_swa_case_number_state?: string | null
-          pro_org_ad_from_date?: string | null
-          pro_org_advertisement_to_date?: string | null
-          professional_occupation?: string | null
-          pvt_employment_firm_from_date?: string | null
-          pvt_employment_firm_to_date?: string | null
           pw_determination_date?: string | null
           pw_expiration_date?: string | null
           pw_skill_level?: string | null
           pw_soc_code?: string | null
           pw_soc_title?: string | null
-          pw_source_name_other?: string | null
           pw_track_number?: string | null
           pw_unit_of_pay?: string | null
           pw_wage?: number | null
           pw_wage_source?: string | null
-          radio_tv_ad_from_date?: string | null
-          radio_tv_ad_to_date?: string | null
           received_date?: string | null
           record_id?: string
-          refile?: string | null
-          required_experience?: string | null
-          required_experience_months?: number | null
-          required_field_of_training?: string | null
-          required_training?: string | null
-          required_training_months?: number | null
-          schd_a_sheepherder?: string | null
           second_ad_start_date?: string | null
           second_advertisement_type?: string | null
           second_newspaper_ad_name?: string | null
@@ -410,9 +219,6 @@ export type Database = {
           sunday_edition_newspaper?: string | null
           swa_job_order_end_date?: string | null
           swa_job_order_start_date?: string | null
-          teacher_pub_journal_name?: string | null
-          teacher_select_date?: string | null
-          us_workers_considered?: string | null
           wage_offer_from?: number | null
           wage_offer_to?: number | null
           wage_offer_unit_of_pay?: string | null
@@ -423,145 +229,51 @@ export type Database = {
           worksite_state?: string | null
         }
         Update: {
-          accept_alt_combo?: string | null
-          accept_alt_combo_ed_other?: string | null
-          accept_alt_combo_education?: string | null
-          accept_alt_combo_education_yrs?: number | null
-          accept_alt_field_of_study?: string | null
-          accept_alt_job_title?: string | null
-          accept_alt_major_fld_of_study?: string | null
-          accept_alt_occupation?: string | null
-          accept_alt_occupation_months?: number | null
-          accept_foreign_education?: string | null
-          add_recruit_information?: string | null
-          agent_attorney_address_1?: string | null
-          agent_attorney_address_2?: string | null
-          agent_attorney_city?: string | null
-          agent_attorney_country?: string | null
-          agent_attorney_email?: string | null
-          agent_attorney_firm_name?: string | null
-          agent_attorney_name?: string | null
-          agent_attorney_phone?: string | null
-          agent_attorney_phone_ext?: string | null
-          agent_attorney_postal_code?: string | null
-          agent_attorney_state_province?: string | null
-          app_for_college_u_teacher?: string | null
-          bargaining_rep_notified?: string | null
-          basic_recruitment_process?: string | null
-          campus_placement_from_date?: string | null
-          campus_placement_to_date?: string | null
           case_number?: string | null
           case_status?: string | null
-          class_of_admission?: string | null
-          combination_occupation?: string | null
-          competitive_process?: string | null
-          country_of_citizenship?: string | null
           created_at?: string | null
           decision_date?: string | null
-          emp_contact_address_1?: string | null
-          emp_contact_address_2?: string | null
-          emp_contact_city?: string | null
-          emp_contact_country?: string | null
-          emp_contact_email?: string | null
-          emp_contact_name?: string | null
-          emp_contact_phone?: string | null
-          emp_contact_postal_code?: string | null
-          emp_contact_state_province?: string | null
           emp_decl_title?: string | null
           emp_info_decl_name?: string | null
-          emp_received_payment?: string | null
           emp_year_commenced_business?: number | null
-          employee_ref_prog_from_date?: string | null
-          employee_referral_prog_to_date?: string | null
           employer_address_1?: string | null
           employer_address_2?: string | null
           employer_city?: string | null
           employer_completed_application?: string | null
           employer_country?: string | null
-          employer_fein?: string | null
           employer_name?: string | null
           employer_num_employees?: number | null
           employer_phone?: string | null
           employer_phone_ext?: string | null
           employer_postal_code?: string | null
           employer_state_province?: string | null
-          employer_website_from_date?: string | null
-          employer_website_to_date?: string | null
           first_advertisement_start_date?: string | null
           first_newspaper_name?: string | null
-          foreign_language_required?: string | null
           foreign_worker_alt_ed_exp?: string | null
           foreign_worker_alt_occ_exp?: string | null
-          foreign_worker_birth_country?: string | null
           foreign_worker_curr_employed?: string | null
-          foreign_worker_ed_inst_add_1?: string | null
-          foreign_worker_ed_inst_add_2?: string | null
-          foreign_worker_ed_inst_city?: string | null
           foreign_worker_ed_inst_country?: string | null
           foreign_worker_ed_inst_post_cd?: string | null
-          foreign_worker_ed_inst_state_p?: string | null
-          foreign_worker_education?: string | null
-          foreign_worker_education_other?: string | null
           foreign_worker_empl_pay_for_ed?: string | null
           foreign_worker_exp_with_empl?: string | null
-          foreign_worker_info_major?: string | null
-          foreign_worker_inst_of_ed?: string | null
-          foreign_worker_live_in_dom_ser?: string | null
-          foreign_worker_live_in_dom_svc_cnt?: number | null
-          foreign_worker_live_on_prem?: string | null
           foreign_worker_req_experience?: string | null
           foreign_worker_training_comp?: string | null
-          foreign_worker_yrs_ed_comp?: number | null
-          fw_ownership_interest?: string | null
-          job_education_min_other?: string | null
-          job_fair_from_date?: string | null
-          job_fair_to_date?: string | null
-          job_opp_requirements_normal?: string | null
-          job_search_website_from_date?: string | null
-          job_search_website_to_date?: string | null
           job_title?: string | null
-          layoff_in_past_six_months?: string | null
-          local_ethnic_paper_from_date?: string | null
-          local_ethnic_paper_to_date?: string | null
-          major_field_of_study?: string | null
           minimum_education?: string | null
-          naics_code?: string | null
-          offered_to_appl_foreign_worker?: string | null
-          on_campus_recruiting_from_date?: string | null
-          on_campus_recruiting_to_date?: string | null
-          orig_file_date?: string | null
-          payment_details?: string | null
-          posted_notice_at_worksite?: string | null
           preparer_email?: string | null
           preparer_name?: string | null
           preparer_title?: string | null
-          previous_swa_case_number_state?: string | null
-          pro_org_ad_from_date?: string | null
-          pro_org_advertisement_to_date?: string | null
-          professional_occupation?: string | null
-          pvt_employment_firm_from_date?: string | null
-          pvt_employment_firm_to_date?: string | null
           pw_determination_date?: string | null
           pw_expiration_date?: string | null
           pw_skill_level?: string | null
           pw_soc_code?: string | null
           pw_soc_title?: string | null
-          pw_source_name_other?: string | null
           pw_track_number?: string | null
           pw_unit_of_pay?: string | null
           pw_wage?: number | null
           pw_wage_source?: string | null
-          radio_tv_ad_from_date?: string | null
-          radio_tv_ad_to_date?: string | null
           received_date?: string | null
           record_id?: string
-          refile?: string | null
-          required_experience?: string | null
-          required_experience_months?: number | null
-          required_field_of_training?: string | null
-          required_training?: string | null
-          required_training_months?: number | null
-          schd_a_sheepherder?: string | null
           second_ad_start_date?: string | null
           second_advertisement_type?: string | null
           second_newspaper_ad_name?: string | null
@@ -569,9 +281,6 @@ export type Database = {
           sunday_edition_newspaper?: string | null
           swa_job_order_end_date?: string | null
           swa_job_order_start_date?: string | null
-          teacher_pub_journal_name?: string | null
-          teacher_select_date?: string | null
-          us_workers_considered?: string | null
           wage_offer_from?: number | null
           wage_offer_to?: number | null
           wage_offer_unit_of_pay?: string | null
