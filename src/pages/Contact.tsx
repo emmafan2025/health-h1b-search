@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Copy, ExternalLink, Clock, Check, BookOpen } from "lucide-react";
+import xhsQrCode from "@/assets/xiaohongshu-qr.jpg";
 
 const CONTACT_EMAIL = "pengxiaowanli.service@gmail.com";
 const XHS_ACCOUNT = "鹏霄万里 康复留学";
@@ -167,9 +168,8 @@ const Contact = () => {
                   {copiedXhs ? t.contact.email.copied : t.contact.xiaohongshu.copyName}
                 </Button>
                 <p className="text-xs text-muted-foreground">{t.contact.xiaohongshu.searchNote}</p>
-                {/* QR placeholder */}
-                <div className="mt-2 border-2 border-dashed border-border rounded-lg p-6 flex items-center justify-center text-xs text-muted-foreground">
-                  {t.contact.xiaohongshu.qrPlaceholder}
+                <div className="mt-2">
+                  <img src={xhsQrCode} alt={t.contact.xiaohongshu.qrPlaceholder} className="w-full max-w-[200px] rounded-lg mx-auto" />
                 </div>
               </CardContent>
             </Card>
