@@ -111,8 +111,8 @@ const Navigation = () => {
                       <DropdownMenuItem>
                         {t.nav.resources}
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        {t.nav.faq}
+                      <DropdownMenuItem asChild>
+                        <Link to="/faq/h1b">{t.nav.faq}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         {t.nav.contactUs}
