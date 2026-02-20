@@ -108,8 +108,8 @@ const Navigation = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white border shadow-lg">
-                      <DropdownMenuItem>
-                        {t.nav.resources}
+                      <DropdownMenuItem asChild>
+                        <Link to="/resources">{t.nav.resources}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link to="/faq/h1b">{t.nav.faq}</Link>

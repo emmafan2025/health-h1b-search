@@ -17,6 +17,7 @@ import Forum from "./pages/Forum";
 import Auth from "./pages/Auth";
 import GreenCardSearch from "./pages/GreenCardSearch";
 import H1BFaq from "./pages/H1BFaq";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/green-card-search" element={<GreenCardSearch />} />
             <Route path="/faq/h1b" element={<H1BFaq />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/h1b-case/:caseNumber" element={<H1BCaseDetails />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
