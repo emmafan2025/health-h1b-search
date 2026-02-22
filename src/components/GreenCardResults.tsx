@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, MapPin, DollarSign, Briefcase, GraduationCap, Calendar } from "lucide-react";
+import { Building2, MapPin, DollarSign, Briefcase, Calendar } from "lucide-react";
 import { GreenCardCase } from "@/hooks/useGreenCardData";
 
 interface GreenCardResultsProps {
@@ -30,11 +30,10 @@ const GreenCardResults = ({ data }: GreenCardResultsProps) => {
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div className="flex-1 space-y-3">
-                {/* Employer & Status */}
                 <div className="flex items-start gap-3 flex-wrap">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                     <Building2 className="h-5 w-5 text-purple-600 shrink-0" />
-                    {item.employer_name || "Unknown Employer"}
+                    {item.emp_business_name || "Unknown Employer"}
                   </h3>
                   {item.case_status && (
                     <Badge className={`${statusColor(item.case_status)} border-0`}>
@@ -43,28 +42,23 @@ const GreenCardResults = ({ data }: GreenCardResultsProps) => {
                   )}
                 </div>
 
-                {/* Job Title */}
                 {item.job_title && (
                   <p className="text-base text-gray-700 flex items-center gap-2">
                     <Briefcase className="h-4 w-4 text-gray-400 shrink-0" />
                     {item.job_title}
-                    {item.pw_soc_title && <span className="text-sm text-gray-500">({item.pw_soc_title})</span>}
+                    {item.pwd_soc_title && <span className="text-sm text-gray-500">({item.pwd_soc_title})</span>}
                   </p>
                 )}
 
-                {/* Location */}
                 <div className="flex items-center gap-4 text-sm text-gray-600 flex-wrap">
-                  {(item.worksite_city || item.worksite_state) && (
+                  {(item.primary_worksite_city || item.primary_worksite_state) && (
                     <span className="flex items-center gap-1">
                       <MapPin className="h-4 w-4 text-blue-500" />
-                      {[item.worksite_city, item.worksite_state].filter(Boolean).join(", ")}
+                      {[item.primary_worksite_city, item.primary_worksite_state].filter(Boolean).join(", ")}
                     </span>
                   )}
-                  {item.minimum_education && (
-                    <span className="flex items-center gap-1">
-                      <GraduationCap className="h-4 w-4 text-orange-500" />
-                      {item.minimum_education}
-                    </span>
+                  {item.occupation_type && (
+                    <span className="text-sm text-gray-500">{item.occupation_type}</span>
                   )}
                   {item.decision_date && (
                     <span className="flex items-center gap-1">
@@ -75,19 +69,18 @@ const GreenCardResults = ({ data }: GreenCardResultsProps) => {
                 </div>
               </div>
 
-              {/* Salary */}
               <div className="text-right shrink-0">
-                {item.wage_offer_from && (
+                {item.job_opp_wage_from && (
                   <div className="flex items-center gap-1 justify-end">
                     <DollarSign className="h-4 w-4 text-green-600" />
                     <span className="text-lg font-bold text-green-700">
-                      {formatSalary(item.wage_offer_from, item.wage_offer_unit_of_pay)}
+                      {formatSalary(item.job_opp_wage_from, item.job_opp_wage_per)}
                     </span>
                   </div>
                 )}
-                {item.wage_offer_to && item.wage_offer_to !== item.wage_offer_from && (
+                {item.job_opp_wage_to && item.job_opp_wage_to !== item.job_opp_wage_from && (
                   <p className="text-sm text-gray-500">
-                    up to {formatSalary(item.wage_offer_to, item.wage_offer_unit_of_pay)}
+                    up to {formatSalary(item.job_opp_wage_to, item.job_opp_wage_per)}
                   </p>
                 )}
                 {item.case_number && (

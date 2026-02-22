@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,8 +16,7 @@ const US_STATES = [
   "VA","WA","WV","WI","WY","DC"
 ];
 
-const CASE_STATUSES = ["Certified", "Denied", "Withdrawn"];
-const EDUCATION_LEVELS = ["None", "High School", "Associate's", "Bachelor's", "Master's", "Doctorate", "Other"];
+const CASE_STATUSES = ["Certified", "Certified-Expired", "Denied", "Withdrawn"];
 
 const GreenCardSearchFilters = ({ onApplyFilters }: Props) => {
   const [filters, setFilters] = useState<GreenCardFilters>({});
@@ -92,18 +90,7 @@ const GreenCardSearchFilters = ({ onApplyFilters }: Props) => {
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>Minimum Education</Label>
-        <Select value={filters.minimumEducation || "all"} onValueChange={(v) => setFilters({ ...filters, minimumEducation: v === "all" ? "" : v })}>
-          <SelectTrigger><SelectValue placeholder="Select education" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            {EDUCATION_LEVELS.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="flex items-end gap-3 lg:col-span-2">
+      <div className="flex items-end gap-3 lg:col-span-3">
         <Button onClick={handleApply} className="bg-purple-600 hover:bg-purple-700">Apply Filters</Button>
         <Button variant="outline" onClick={handleReset}>Reset All</Button>
       </div>

@@ -9,26 +9,23 @@ export interface GreenCardFilters {
   caseStatus?: string;
   minSalary?: number;
   maxSalary?: number;
-  minimumEducation?: string;
 }
 
 export interface GreenCardCase {
   record_id: string;
   case_number: string | null;
   case_status: string | null;
-  employer_name: string | null;
-  employer_city: string | null;
-  employer_state_province: string | null;
+  emp_business_name: string | null;
+  emp_city: string | null;
+  emp_state: string | null;
   job_title: string | null;
-  pw_soc_title: string | null;
-  pw_wage: number | null;
-  pw_unit_of_pay: string | null;
-  wage_offer_from: number | null;
-  wage_offer_to: number | null;
-  wage_offer_unit_of_pay: string | null;
-  worksite_city: string | null;
-  worksite_state: string | null;
-  minimum_education: string | null;
+  pwd_soc_title: string | null;
+  job_opp_wage_from: number | null;
+  job_opp_wage_to: number | null;
+  job_opp_wage_per: string | null;
+  primary_worksite_city: string | null;
+  primary_worksite_state: string | null;
+  occupation_type: string | null;
   decision_date: string | null;
   received_date: string | null;
 }
@@ -60,16 +57,15 @@ export const useGreenCardData = (): UseGreenCardDataReturn => {
     try {
       let query = supabase
         .from("green_card_perm_cases")
-        .select("record_id, case_number, case_status, employer_name, employer_city, employer_state_province, job_title, pw_soc_title, pw_wage, pw_unit_of_pay, wage_offer_from, wage_offer_to, wage_offer_unit_of_pay, worksite_city, worksite_state, minimum_education, decision_date, received_date", { count: "exact" });
+        .select("record_id, case_number, case_status, emp_business_name, emp_city, emp_state, job_title, pwd_soc_title, job_opp_wage_from, job_opp_wage_to, job_opp_wage_per, primary_worksite_city, primary_worksite_state, occupation_type, decision_date, received_date", { count: "exact" });
 
-      // Apply filters
       const sq = filters.searchQuery?.trim();
       if (sq) {
-        query = query.or(`employer_name.ilike.%${sq}%,job_title.ilike.%${sq}%,pw_soc_title.ilike.%${sq}%`);
+        query = query.or(`emp_business_name.ilike.%${sq}%,job_title.ilike.%${sq}%,pwd_soc_title.ilike.%${sq}%`);
       }
 
       if (filters.employerName?.trim()) {
-        query = query.ilike("employer_name", `%${filters.employerName.trim()}%`);
+        query = query.ilike("emp_business_name", `%${filters.employerName.trim()}%`);
       }
 
       if (filters.jobTitle?.trim()) {
@@ -77,7 +73,7 @@ export const useGreenCardData = (): UseGreenCardDataReturn => {
       }
 
       if (filters.state) {
-        query = query.eq("worksite_state", filters.state);
+        query = query.eq("primary_worksite_state", filters.state);
       }
 
       if (filters.caseStatus) {
@@ -85,22 +81,16 @@ export const useGreenCardData = (): UseGreenCardDataReturn => {
       }
 
       if (filters.minSalary) {
-        query = query.gte("wage_offer_from", filters.minSalary);
+        query = query.gte("job_opp_wage_from", filters.minSalary);
       }
 
       if (filters.maxSalary) {
-        query = query.lte("wage_offer_from", filters.maxSalary);
+        query = query.lte("job_opp_wage_from", filters.maxSalary);
       }
 
-      if (filters.minimumEducation) {
-        query = query.eq("minimum_education", filters.minimumEducation);
-      }
-
-      // Sorting
-      const sortColumn = sortBy === 'wage' ? 'wage_offer_from' : sortBy === 'employer' ? 'employer_name' : sortBy === 'date' ? 'decision_date' : 'wage_offer_from';
+      const sortColumn = sortBy === 'wage' ? 'job_opp_wage_from' : sortBy === 'employer' ? 'emp_business_name' : sortBy === 'date' ? 'decision_date' : 'job_opp_wage_from';
       query = query.order(sortColumn, { ascending: sortOrder === 'asc', nullsFirst: false });
 
-      // Pagination
       const from = (page - 1) * pageSize;
       query = query.range(from, from + pageSize - 1);
 
