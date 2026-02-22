@@ -109,186 +109,87 @@ export type Database = {
           case_status: string | null
           created_at: string | null
           decision_date: string | null
-          emp_decl_title: string | null
-          emp_info_decl_name: string | null
-          emp_year_commenced_business: number | null
-          employer_address_1: string | null
-          employer_address_2: string | null
-          employer_city: string | null
-          employer_completed_application: string | null
-          employer_country: string | null
-          employer_name: string | null
-          employer_num_employees: number | null
-          employer_phone: string | null
-          employer_phone_ext: string | null
-          employer_postal_code: string | null
-          employer_state_province: string | null
-          first_advertisement_start_date: string | null
-          first_newspaper_name: string | null
-          foreign_worker_alt_ed_exp: string | null
-          foreign_worker_alt_occ_exp: string | null
-          foreign_worker_curr_employed: string | null
-          foreign_worker_ed_inst_country: string | null
-          foreign_worker_ed_inst_post_cd: string | null
-          foreign_worker_empl_pay_for_ed: string | null
-          foreign_worker_exp_with_empl: string | null
-          foreign_worker_req_experience: string | null
-          foreign_worker_training_comp: string | null
+          emp_addr1: string | null
+          emp_addr2: string | null
+          emp_business_name: string | null
+          emp_city: string | null
+          emp_country: string | null
+          emp_postcode: string | null
+          emp_state: string | null
+          job_opp_wage_conditions: string | null
+          job_opp_wage_from: number | null
+          job_opp_wage_per: string | null
+          job_opp_wage_to: number | null
           job_title: string | null
-          minimum_education: string | null
-          preparer_email: string | null
-          preparer_name: string | null
-          preparer_title: string | null
-          pw_determination_date: string | null
-          pw_expiration_date: string | null
-          pw_skill_level: string | null
-          pw_soc_code: string | null
-          pw_soc_title: string | null
-          pw_track_number: string | null
-          pw_unit_of_pay: string | null
-          pw_wage: number | null
-          pw_wage_source: string | null
+          occupation_type: string | null
+          primary_worksite_addr1: string | null
+          primary_worksite_bls_area: string | null
+          primary_worksite_city: string | null
+          primary_worksite_postal_code: string | null
+          primary_worksite_state: string | null
+          primary_worksite_type: string | null
+          pwd_soc_code: string | null
+          pwd_soc_title: string | null
           received_date: string | null
           record_id: string
-          second_ad_start_date: string | null
-          second_advertisement_type: string | null
-          second_newspaper_ad_name: string | null
-          specific_skills: string | null
-          sunday_edition_newspaper: string | null
-          swa_job_order_end_date: string | null
-          swa_job_order_start_date: string | null
-          wage_offer_from: number | null
-          wage_offer_to: number | null
-          wage_offer_unit_of_pay: string | null
-          worksite_address_1: string | null
-          worksite_address_2: string | null
-          worksite_city: string | null
-          worksite_postal_code: string | null
-          worksite_state: string | null
         }
         Insert: {
           case_number?: string | null
           case_status?: string | null
           created_at?: string | null
           decision_date?: string | null
-          emp_decl_title?: string | null
-          emp_info_decl_name?: string | null
-          emp_year_commenced_business?: number | null
-          employer_address_1?: string | null
-          employer_address_2?: string | null
-          employer_city?: string | null
-          employer_completed_application?: string | null
-          employer_country?: string | null
-          employer_name?: string | null
-          employer_num_employees?: number | null
-          employer_phone?: string | null
-          employer_phone_ext?: string | null
-          employer_postal_code?: string | null
-          employer_state_province?: string | null
-          first_advertisement_start_date?: string | null
-          first_newspaper_name?: string | null
-          foreign_worker_alt_ed_exp?: string | null
-          foreign_worker_alt_occ_exp?: string | null
-          foreign_worker_curr_employed?: string | null
-          foreign_worker_ed_inst_country?: string | null
-          foreign_worker_ed_inst_post_cd?: string | null
-          foreign_worker_empl_pay_for_ed?: string | null
-          foreign_worker_exp_with_empl?: string | null
-          foreign_worker_req_experience?: string | null
-          foreign_worker_training_comp?: string | null
+          emp_addr1?: string | null
+          emp_addr2?: string | null
+          emp_business_name?: string | null
+          emp_city?: string | null
+          emp_country?: string | null
+          emp_postcode?: string | null
+          emp_state?: string | null
+          job_opp_wage_conditions?: string | null
+          job_opp_wage_from?: number | null
+          job_opp_wage_per?: string | null
+          job_opp_wage_to?: number | null
           job_title?: string | null
-          minimum_education?: string | null
-          preparer_email?: string | null
-          preparer_name?: string | null
-          preparer_title?: string | null
-          pw_determination_date?: string | null
-          pw_expiration_date?: string | null
-          pw_skill_level?: string | null
-          pw_soc_code?: string | null
-          pw_soc_title?: string | null
-          pw_track_number?: string | null
-          pw_unit_of_pay?: string | null
-          pw_wage?: number | null
-          pw_wage_source?: string | null
+          occupation_type?: string | null
+          primary_worksite_addr1?: string | null
+          primary_worksite_bls_area?: string | null
+          primary_worksite_city?: string | null
+          primary_worksite_postal_code?: string | null
+          primary_worksite_state?: string | null
+          primary_worksite_type?: string | null
+          pwd_soc_code?: string | null
+          pwd_soc_title?: string | null
           received_date?: string | null
           record_id?: string
-          second_ad_start_date?: string | null
-          second_advertisement_type?: string | null
-          second_newspaper_ad_name?: string | null
-          specific_skills?: string | null
-          sunday_edition_newspaper?: string | null
-          swa_job_order_end_date?: string | null
-          swa_job_order_start_date?: string | null
-          wage_offer_from?: number | null
-          wage_offer_to?: number | null
-          wage_offer_unit_of_pay?: string | null
-          worksite_address_1?: string | null
-          worksite_address_2?: string | null
-          worksite_city?: string | null
-          worksite_postal_code?: string | null
-          worksite_state?: string | null
         }
         Update: {
           case_number?: string | null
           case_status?: string | null
           created_at?: string | null
           decision_date?: string | null
-          emp_decl_title?: string | null
-          emp_info_decl_name?: string | null
-          emp_year_commenced_business?: number | null
-          employer_address_1?: string | null
-          employer_address_2?: string | null
-          employer_city?: string | null
-          employer_completed_application?: string | null
-          employer_country?: string | null
-          employer_name?: string | null
-          employer_num_employees?: number | null
-          employer_phone?: string | null
-          employer_phone_ext?: string | null
-          employer_postal_code?: string | null
-          employer_state_province?: string | null
-          first_advertisement_start_date?: string | null
-          first_newspaper_name?: string | null
-          foreign_worker_alt_ed_exp?: string | null
-          foreign_worker_alt_occ_exp?: string | null
-          foreign_worker_curr_employed?: string | null
-          foreign_worker_ed_inst_country?: string | null
-          foreign_worker_ed_inst_post_cd?: string | null
-          foreign_worker_empl_pay_for_ed?: string | null
-          foreign_worker_exp_with_empl?: string | null
-          foreign_worker_req_experience?: string | null
-          foreign_worker_training_comp?: string | null
+          emp_addr1?: string | null
+          emp_addr2?: string | null
+          emp_business_name?: string | null
+          emp_city?: string | null
+          emp_country?: string | null
+          emp_postcode?: string | null
+          emp_state?: string | null
+          job_opp_wage_conditions?: string | null
+          job_opp_wage_from?: number | null
+          job_opp_wage_per?: string | null
+          job_opp_wage_to?: number | null
           job_title?: string | null
-          minimum_education?: string | null
-          preparer_email?: string | null
-          preparer_name?: string | null
-          preparer_title?: string | null
-          pw_determination_date?: string | null
-          pw_expiration_date?: string | null
-          pw_skill_level?: string | null
-          pw_soc_code?: string | null
-          pw_soc_title?: string | null
-          pw_track_number?: string | null
-          pw_unit_of_pay?: string | null
-          pw_wage?: number | null
-          pw_wage_source?: string | null
+          occupation_type?: string | null
+          primary_worksite_addr1?: string | null
+          primary_worksite_bls_area?: string | null
+          primary_worksite_city?: string | null
+          primary_worksite_postal_code?: string | null
+          primary_worksite_state?: string | null
+          primary_worksite_type?: string | null
+          pwd_soc_code?: string | null
+          pwd_soc_title?: string | null
           received_date?: string | null
           record_id?: string
-          second_ad_start_date?: string | null
-          second_advertisement_type?: string | null
-          second_newspaper_ad_name?: string | null
-          specific_skills?: string | null
-          sunday_edition_newspaper?: string | null
-          swa_job_order_end_date?: string | null
-          swa_job_order_start_date?: string | null
-          wage_offer_from?: number | null
-          wage_offer_to?: number | null
-          wage_offer_unit_of_pay?: string | null
-          worksite_address_1?: string | null
-          worksite_address_2?: string | null
-          worksite_city?: string | null
-          worksite_postal_code?: string | null
-          worksite_state?: string | null
         }
         Relationships: []
       }
