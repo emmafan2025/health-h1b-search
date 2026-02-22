@@ -130,8 +130,10 @@ export type Database = {
           primary_worksite_type: string | null
           pwd_soc_code: string | null
           pwd_soc_title: string | null
+          quarter: string | null
           received_date: string | null
           record_id: string
+          year: string | null
         }
         Insert: {
           case_number?: string | null
@@ -159,8 +161,10 @@ export type Database = {
           primary_worksite_type?: string | null
           pwd_soc_code?: string | null
           pwd_soc_title?: string | null
+          quarter?: string | null
           received_date?: string | null
           record_id?: string
+          year?: string | null
         }
         Update: {
           case_number?: string | null
@@ -188,8 +192,10 @@ export type Database = {
           primary_worksite_type?: string | null
           pwd_soc_code?: string | null
           pwd_soc_title?: string | null
+          quarter?: string | null
           received_date?: string | null
           record_id?: string
+          year?: string | null
         }
         Relationships: []
       }

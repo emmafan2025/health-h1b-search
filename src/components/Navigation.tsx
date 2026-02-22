@@ -66,7 +66,6 @@ const Navigation = () => {
                   </DropdownMenu>
                 </NavigationMenuItem>
                 
-                {/* Green Card menu - hidden for now
                 <NavigationMenuItem>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -79,15 +78,12 @@ const Navigation = () => {
                       <DropdownMenuItem asChild>
                         <Link to="/green-card-search">{t.nav.search}</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>{t.nav.topGreenCardSponsors}</DropdownMenuItem>
-                      <DropdownMenuItem>{t.nav.topGreenCardJobs}</DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link to="/current-visa-bulletin">{t.nav.currentVisaBulletin}</Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </NavigationMenuItem>
-                */}
                 
                 <NavigationMenuItem>
                   <Button variant="ghost" className="text-gray-700 hover:text-blue-600" asChild>
