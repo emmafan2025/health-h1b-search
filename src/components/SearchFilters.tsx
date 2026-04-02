@@ -38,6 +38,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
       state: "",
       year: undefined,
       quarter: "",
+      employerType: "",
     };
     setFilters(resetFilters);
     onApplyFilters(resetFilters);
