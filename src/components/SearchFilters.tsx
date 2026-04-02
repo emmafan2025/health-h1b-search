@@ -120,6 +120,21 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
           </div>
 
           <div className="space-y-2">
+            <Label>Employer Type</Label>
+            <Select value={filters.employerType || "all"} onValueChange={(value) => setFilters({...filters, employerType: value === "all" ? "" : value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {employerTypes.map((type) => (
+                  <SelectItem key={type} value={type}>{type}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
             <Label>{t.search.filters.location}</Label>
             <Input
               placeholder={t.search.filters.locationPlaceholder}

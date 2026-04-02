@@ -151,6 +151,11 @@ export const useH1BData = () => {
         queryBuilder = queryBuilder.eq('WORKSITE_STATE', filters.state);
       }
 
+      // Apply employer type filter
+      if (filters?.employerType && filters.employerType.trim()) {
+        queryBuilder = queryBuilder.eq('employer_type', filters.employerType);
+      }
+
       // Apply year filter
       if (filters?.year) {
         queryBuilder = queryBuilder.eq('Year', filters.year);
