@@ -48,7 +48,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
     "VA", "WA", "AZ", "MA", "GA", "IN", "TN", "MO", "MD", "WI"
   ];
 
-  const years = [2020, 2021, 2022, 2023, 2024, 2025];
+  const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
 
   return (
