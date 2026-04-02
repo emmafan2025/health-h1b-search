@@ -53,6 +53,11 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
   const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
 
+  const employerTypes = [
+    "Hospital/Medical Center", "University/Academic", "Health System", "Clinic",
+    "For-Profit", "Non-Profit", "Government", "Government/VA", "Staffing/Consulting", "Other"
+  ];
+
   return (
     <Card className="mb-6 shadow-md">
       <CardHeader>
