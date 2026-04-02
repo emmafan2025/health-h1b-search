@@ -1,0 +1,1 @@
+CREATE POLICY "Temp allow insert for data import" ON public.healthcare_h1b_cases FOR INSERT TO anon WITH CHECK (true);
