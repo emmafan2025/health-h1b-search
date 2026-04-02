@@ -22,6 +22,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
     state: "",
     year: undefined,
     quarter: "",
+    employerType: "",
   });
 
   const handleApplyFilters = () => {
@@ -37,6 +38,7 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
       state: "",
       year: undefined,
       quarter: "",
+      employerType: "",
     };
     setFilters(resetFilters);
     onApplyFilters(resetFilters);
@@ -50,6 +52,11 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
 
   const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
+
+  const employerTypes = [
+    "Hospital/Medical Center", "University/Academic", "Health System", "Clinic",
+    "For-Profit", "Non-Profit", "Government", "Government/VA", "Staffing/Consulting", "Other"
+  ];
 
   return (
     <Card className="mb-6 shadow-md">
@@ -107,6 +114,21 @@ const SearchFilters = ({ onApplyFilters }: SearchFiltersProps) => {
                 <SelectItem value="all">{t.search.filters.allQuarters}</SelectItem>
                 {quarters.map((quarter) => (
                   <SelectItem key={quarter} value={quarter}>{quarter}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Employer Type</Label>
+            <Select value={filters.employerType || "all"} onValueChange={(value) => setFilters({...filters, employerType: value === "all" ? "" : value})}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {employerTypes.map((type) => (
+                  <SelectItem key={type} value={type}>{type}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

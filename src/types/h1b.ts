@@ -20,6 +20,7 @@ export interface H1BCase {
   Year?: number;
   Quarter?: string;
   TRADE_NAME_DBA?: string;
+  employer_type?: string;
 }
 
 export interface SearchFilters {
