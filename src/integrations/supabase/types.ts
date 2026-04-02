@@ -267,6 +267,7 @@ export type Database = {
           BEGIN_DATE: string | null
           CASE_NUMBER: string
           EMPLOYER_NAME: string | null
+          employer_type: string | null
           END_DATE: string | null
           FULL_TIME_POSITION: string | null
           JOB_TITLE: string | null
@@ -290,6 +291,7 @@ export type Database = {
           BEGIN_DATE?: string | null
           CASE_NUMBER: string
           EMPLOYER_NAME?: string | null
+          employer_type?: string | null
           END_DATE?: string | null
           FULL_TIME_POSITION?: string | null
           JOB_TITLE?: string | null
@@ -313,6 +315,7 @@ export type Database = {
           BEGIN_DATE?: string | null
           CASE_NUMBER?: string
           EMPLOYER_NAME?: string | null
+          employer_type?: string | null
           END_DATE?: string | null
           FULL_TIME_POSITION?: string | null
           JOB_TITLE?: string | null
